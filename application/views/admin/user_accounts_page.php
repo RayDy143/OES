@@ -1,15 +1,16 @@
 <div class="cell bg-white p-6 mr-4">
     <div class="row">
-        <button type="button" class="button bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</button>
+        <a type="button" href="javascript:history.back();" class="button drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
     </div>
     <div class="row">
         <ul class="cell breadcrumbs" style="margin-bottom:0px;">
-            <li class="page-item"><a href="#" class="page-link">Home</a></li>
+            <li class="page-item"><a href="<?php echo base_url('index.php/AdminStart'); ?>" class="page-link">Home</a></li>
+            <li class="page-item"><a href="#" class="page-link">Masterfile</a></li>
             <li class="page-item"><a href="#" class="page-link">User Accounts</a></li>
         </ul>
         <div class="stub">
-            <button type="button" name="button" onclick="Metro.dialog.open('#demoDialog1')" class="button bg-darkBlue fg-white">New User</button>
-            <button type="button" name="button" class="button bg-darkBlue fg-white">Import</button>
+            <button type="button" name="button" onclick="Metro.dialog.open('#demoDialog1')" class="button drop-shadow bg-darkBlue fg-white">New User</button>
+            <button type="button" name="button" class="button bg-darkBlue fg-white drop-shadow">Import</button>
         </div>
     </div>
     <div class="row">
@@ -132,21 +133,40 @@
                     var _htmlContent='';
                     gUserData=_data;
                     for (var i = 0; i < _length; i++) {
-                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
-                                        +'<div class="card">'
-                                            +'<div class="card-header">'
-                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
-                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                        if(_data[i].Filename==null){
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/default_prof_pic.png"); ?>'+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-content p-2">'
-                                                +'<img src="'+'<?php echo base_url(); ?>'+'assets/uploads/Picture/'+_data[i].Email+'" style="width: 100%">'
+                                        +'</div>';
+                        }else{
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow" style="1522725235nancy">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/"); ?>'+_data[i].Filename+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-footer useractions">'
-                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
-                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</div>';
+                                        +'</div>';
+                        }
+
                         $("#userContainer").empty().append(_htmlContent);
                     }
                 }
@@ -175,21 +195,40 @@
                     var _htmlContent='';
                     gUserData=_data;
                     for (var i = 0; i < _length; i++) {
-                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
-                                        +'<div class="card">'
-                                            +'<div class="card-header">'
-                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
-                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                        if(_data[i].Filename==null){
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/default_prof_pic.png"); ?>'+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-content p-2">'
-                                                +'<img src="'+'<?php echo base_url("assets/1522725235nancy.jpg"); ?>'+'" style="width: 100%">'
+                                        +'</div>';
+                        }else{
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow" style="1522725235nancy">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/"); ?>'+_data[i].Filename+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-footer useractions">'
-                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
-                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</div>';
+                                        +'</div>';
+                        }
+
                         $("#userContainer").empty().append(_htmlContent);
                     }
                 }
@@ -218,21 +257,39 @@
                     var _htmlContent='';
                     gUserData=_data;
                     for (var i = 0; i < _length; i++) {
-                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
-                                        +'<div class="card">'
-                                            +'<div class="card-header">'
-                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
-                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                        if(_data[i].Filename==null){
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/default_prof_pic.png"); ?>'+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-content p-2">'
-                                                +'<img src="'+'<?php echo base_url("assets/1522725235nancy.jpg"); ?>'+'" style="width: 100%">'
+                                        +'</div>';
+                        }else{
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow" style="1522725235nancy">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/"); ?>'+_data[i].Filename+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-footer useractions">'
-                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
-                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</div>';
+                                        +'</div>';
+                        }
                         $("#userContainer").empty().append(_htmlContent);
                     }
                 }
@@ -261,22 +318,40 @@
                     $("#userContainer").empty();
                     gUserData=_data;
                     for (var i = 0; i < _length; i++) {
-                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
-                                        +'<div class="card">'
-                                            +'<div class="card-header">'
-                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
-                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                        if(_data[i].Filename==null){
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/default_prof_pic.png"); ?>'+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-content p-2">'
-                                                +'<img src="" style="width: 100%">'
+                                        +'</div>';
+                        }else{
+                            _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                            +'<div class="card win-shadow" style="1522725235nancy">'
+                                                +'<div class="card-header">'
+                                                    +'<div class="avatar">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/"); ?>'+_data[i].Filename+'">'
+                                                    +'</div>'
+                                                    +'<div class="name text-ellipsis">'+_data[i].Email+'</div>'
+                                                    +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                                +'</div>'
+                                                +'<div class="card-footer useractions">'
+                                                    +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
+                                                    +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                                +'</div>'
                                             +'</div>'
-                                            +'<div class="card-footer useractions">'
-                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
-                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</div>';
-                        $("#userContainer").append(_htmlContent);
+                                        +'</div>';
+                        }
+                        $("#userContainer").empty().append(_htmlContent);
                     }
                 }
             },

@@ -55,11 +55,11 @@
     </style>
 </head>
 <body class="h-vh-100">
-    <div class="pos-fixed fixed-top app-bar-wrapper z-top bg-blue">
+    <div class="pos-fixed fixed-top app-bar-wrapper z-top bg-blue drop-shadow">
         <header class="container-fluid pos-relative app-bar-expand-md fg-white bg-darkBlue" data-role="appbar">
             <a href="#" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
             <div class="app-bar-container ml-auto order-2 order-md-3">
-                <a href="#" class="app-bar-item">Home</a>
+                <a href="#" class="app-bar-item"><strong>Home</strong></a>
                 <a href="#" class="app-bar-item"><span class="mif-bell"></span></a>
                 <div class="app-bar-container">
                     <a class="app-bar-item dropdown-toggle marker-light" href="#"><span class="mif-plus"></span></a>
@@ -74,14 +74,17 @@
                 </div>
 
                 <div class="app-bar-container">
-                    <a class="app-bar-item dropdown-toggle marker-light pl-1 pr-5" href="#">
-                        <img data-default="mm" class="rounded" data-role="gravatar" data-email="alfeche492@gmail.com" data-size="25">
+                    <a class="app-bar-item dropdown-toggle marker-light pl-1 pr-5" href="#"><strong><?php echo $_SESSION['Firstname'].' '.$_SESSION['Lastname']; ?></strong>
                     </a>
                     <ul class="v-menu place-right bg-darkBlue fg-white" data-role="dropdown">
-                        <li><a href="">Signed as <strong>olton</strong></a></li>
-                        <li><a href="">Your profile</a></li>
+                        <li><a href="" class="no-hover">Signed as <strong><?php echo $_SESSION['Email'] ?></strong></a></li>
+                        <li><div class="img-container mx-auto">
+                                <img src="<?php echo base_url('assets/uploads/Picture/').$_SESSION['Filename'];?>">
+                            </div>
+                        </li>
+                        <li><a href="">My profile</a></li>
                         <li class="divider"></li>
-                        <li><a href="">Log out</a></li>
+                        <li><a href="<?php echo base_url('index.php/Login/Logout'); ?>">Log out</a></li>
                     </ul>
                 </div>
             </div>
@@ -89,7 +92,7 @@
     </div>
     <div class="grid mt-13" id="hero">
         <div class="row">
-            <div class="stub bg-dark">
+            <div class="stub bg-dark drop-shadow">
                 <ul class="sidenav-m3 bg-dark fg-white">
                     <li class="title">Masterfile</li>
                     <li><a class="active" href="#"><span class="mif-home icon"></span>User Accounts</a></li>
