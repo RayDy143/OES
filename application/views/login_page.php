@@ -42,7 +42,7 @@
     </style>
 </head>
 <body class="h-vh-100 bg-brandColor2">
-    <form class="login-form bg-white p-6 mx-auto border bd-default win-shadow"
+    <form id="frmLogin" class="login-form bg-white p-6 mx-auto border bd-default win-shadow"
           data-role="validator"
           action="javascript:"
           data-clear-invalid="2000"
@@ -52,16 +52,32 @@
         <h2 class="text-light">Login to OES</h2>
         <hr class="thin mt-4 mb-4 bg-white">
         <div class="form-group">
-            <input type="text" data-role="input" data-prepend="<span class='mif-envelop'>" placeholder="Enter your email..." data-validate="required email">
+            <input type="text" name="Email" data-role="input" data-prepend="<span class='mif-envelop'>" placeholder="Enter your email..." data-validate="required email">
         </div>
         <div class="form-group">
-            <input type="password" data-role="input" data-prepend="<span class='mif-key'>" placeholder="Enter your password..." data-validate="required minlength=6">
+            <input type="password" name="Password" data-role="input" data-prepend="<span class='mif-key'>" placeholder="Enter your password..." data-validate="required minlength=6">
         </div>
         <div class="form-group mt-10">
             <input type="checkbox" data-role="checkbox" data-caption="Remember me" class="place-right">
-            <button class="button primary">Login</button>
+            <button type="submit" class="button primary">Login</button>
         </div>
     </form>
+
+        <div class="dialog" id="verificationDialog" data-role="dialog">
+            <form id="frmVerifiction" action="javascript:" method="post">
+                <div class="dialog-title">We have sent a verification code to your email.</div>
+                <div class="dialog-content">
+                    <div class="form-group">
+                        <label for="Code">Enter verification code</label>
+                        <input type="text" id="Code">
+                    </div>
+                </div>
+                <div class="dialog-actions">
+                    <a class="button alert place-right" href="javascript:history.back()">Disagree</a>
+                    <button id="btnVerify" class="button primary place-right">Agree</button>
+                </div>
+            </form>
+        </div>
 
     <script src="<?php echo base_url(); ?>assets/metro/js/jquery-3.3.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
@@ -75,10 +91,69 @@
         }
 
         function validateForm(){
-            $(".login-form").animate({
-                opacity: 0
+            $.ajax({
+                type: 'ajax',
+                method:'POST',
+                url: '<?php echo base_url() ?>index.php/Login/authenticate',
+                async: false,
+                dataType: 'json',
+                data: $("#frmLogin").serialize(),
+                success: function(data){
+                    if(data.success){
+                        if(data.Status=="Verified"){
+                            window.location.replace("<?php echo base_url();?>index.php/AdminStart");
+                        }else{
+                            /*$.Notify({
+                                caption: 'Login failed!',
+                                content: 'It looks like the credendtials you\'ve entered was not verified.',
+                                type: 'alert'
+                            });*/
+                           /* window.location.replace("<?php echo base_url();?>index.php/FirstTimeLogin");*/
+                            //metroDialog.open('#VerifyDialog');
+                            Metro.dialog.open("#verificationDialog");
+                            $(".login-form").animate({
+                                opacity: 0
+                            });
+                        }
+                    }else{
+                        var html_content =
+                        "<p>It looks like the credendtials you\'ve entered was not registered.";
+                         Metro.infobox.create(html_content,"alert",{
+                             overlay:true
+                         });
+                    }
+                },
+                error: function(){
+                    alert('Could not get Data from Database');
+                }
             });
         }
+        $(document).ready(function(){
+            $('#btnVerify').click(function(){
+                $.ajax({
+                    type: 'ajax',
+                    method:'POST',
+                    url: '<?php echo base_url() ?>index.php/Login/checkCodeValidity',
+                    async: false,
+                    dataType: 'json',
+                    data: {Code:$("#Code").val()},
+                    success: function(data){
+                        if(data.success){
+                            window.location.replace("<?php echo base_url();?>index.php/FirstTimeLogin");
+                        }else{
+                            var html_content =
+                            "<p>It looks like the code you've entered might already expired or not valid.</p>";
+                             Metro.infobox.create(html_content,"alert",{
+                                 overlay:true
+                             });
+                        }
+                    },
+                    error: function(){
+                        alert('Could not get Data from Database');
+                    }
+                });
+            });
+        });
     </script>
 
 </body>

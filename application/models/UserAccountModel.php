@@ -11,8 +11,8 @@
 		public function getAllUsers(){
 			/*$this->db->where('Status!=','Deleted');
 			$query=$this->db->get('user');*/
-			$uid=$_SESSION['UserID'];
-			$query=$this->db->query("SELECT * from useraccount inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.Status!='Deleted' and useraccount.UserID!=$uid");
+			//$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from useraccount inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1'");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{
@@ -37,8 +37,26 @@
 			}
 		}
 		public function getUserByType($id){
-			$uid=$_SESSION['UserID'];
-			$query=$this->db->query("SELECT * from useraccount inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.Status!='Deleted' and useraccount.UserTypeID='$id' and useraccount.UserID!=$uid");
+			//$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from useraccount inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserTypeID='$id'");
+			if($query->num_rows()>0){
+				return $query->result_array();
+			}else{
+				return false;
+			}
+		}
+		public function getUserByDepartment($id){
+			//$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from useraccount inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$id'");
+			if($query->num_rows()>0){
+				return $query->result_array();
+			}else{
+				return false;
+			}
+		}
+		public function getUserByTypeAndDepartment($typeid,$depid){
+			//$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from useraccount inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$depid' and usertype.UserTypeID='$typeid'");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{

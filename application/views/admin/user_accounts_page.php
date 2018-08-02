@@ -1,4 +1,4 @@
-<div class="cell bg-white p-6 mr-4" style="height:100%;overflow-x:auto;">
+<div class="cell bg-white p-6 mr-4">
     <div class="row">
         <button type="button" class="button bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</button>
     </div>
@@ -12,7 +12,6 @@
             <button type="button" name="button" class="button bg-darkBlue fg-white">Import</button>
         </div>
     </div>
-    <hr class="row thick bg-black">
     <div class="row">
         <div class="stub">
             <h3>User Accounts</h3>
@@ -23,19 +22,21 @@
                     <label class="place-right mt-1" for="">Filter by Role:</label>
                 </div>
                 <div class="cell">
-                    <select data-role="select">
+                    <select class="filter" id="cmbFilterUsertype">
+                        <option value="All">All</option>
                         <option value="1">Admin</option>
                         <option value="2">Evaluator</option>
                     </select>
                 </div>
                 <div class="cell">
-                    <label class="place-right mt-1" for="">Filter by department:</label>
+                    <label class="place-right mt-1">Filter by department:</label>
                 </div>
                 <div class="cell">
-                    <select data-role="select">
+                    <select class="filter" id="cmbFilterDepartment">
+                        <option value="All">All</option>
                         <?php
                             foreach ($dep as $row) {
-                                echo '<option value="'.$row['DepartmentID'].'">'.$row['DepartmentName'].'</option>';
+                                    echo '<option value="'.$row['DepartmentID'].'">'.$row['DepartmentName'].'</option>';
                             }
                          ?>
                     </select>
@@ -44,22 +45,8 @@
         </div>
     </div>
     <hr class="row thick bg-black">
-    <div class="row">
-        <?php foreach ($user as $row){
-            echo '<div class="stub mx-auto" style="width:270px;">';
-                echo '<div class="card p-5">';
-                    echo '<div class="card-header">';
-                        echo '<div class="text-ellipsis">'.$row['Email'].'</div>';
-                        echo '<div class="date">'.$row['DepartmentName'].'</div>';
-                    echo '</div>';
-                    echo '<div class="card-footer">';
-                        echo '<button class="button bg-darkBlue fg-white mif-info"></button>';
-                        echo '<button class="button alert mif-bin"></button>';
-                    echo '</div>';
-                echo '</div>';
-            echo '</div>';
-        }
-        ?>
+    <div class="row" id="userContainer">
+
     </div>
 </div>
     <div class="dialog" data-role="dialog" id="demoDialog1">
@@ -77,13 +64,18 @@
                         <option value="2">Evaluator</option>
                     </select>
                 </div>
-                <div class="form-group no-visible" id="depContainer">
+                <div class="form-group" id="depContainer">
                     <label for="cmbDepartment">Select Department</label>
                     <select data-role="select"  id="cmbDepartment">
                         <?php
-                            foreach ($dep as $row) {
+                        foreach ($dep as $row) {
+                            if($row['DepartmentName']=="Admin"){
+                                echo '<option selected value="'.$row['DepartmentID'].'">'.$row['DepartmentName'].'</option>';
+                            }else{
                                 echo '<option value="'.$row['DepartmentID'].'">'.$row['DepartmentName'].'</option>';
                             }
+                        }
+
                          ?>
                     </select>
                 </div>
@@ -113,6 +105,7 @@
                      Metro.infobox.create(html_content,"success",{
                          overlay:true
                      });
+                     getAllUserAccounts();
                 }
             },
             error: function()
@@ -125,14 +118,229 @@
             }
         });
     }
+    function getAllUserAccounts(){
+        $.ajax({
+            method:"POST",
+            type:"ajax",
+            url:'<?php echo base_url("index.php/UserAccounts/getAllUser") ?>',
+            dataType:"json",
+            success:function(response){
+                if(response.success){
+                    $("#userContainer").empty();
+                    var _data=response.user;
+                    var _length=_data.length;
+                    var _htmlContent='';
+                    gUserData=_data;
+                    for (var i = 0; i < _length; i++) {
+                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                        +'<div class="card">'
+                                            +'<div class="card-header">'
+                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
+                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                            +'</div>'
+                                            +'<div class="card-content p-2">'
+                                                +'<img src="'+'<?php echo base_url(); ?>'+'assets/uploads/Picture/'+_data[i].Email+'" style="width: 100%">'
+                                            +'</div>'
+                                            +'<div class="card-footer useractions">'
+                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
+                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                            +'</div>'
+                                        +'</div>'
+                                    +'</div>';
+                        $("#userContainer").empty().append(_htmlContent);
+                    }
+                }
+            },
+            error:function(){
+                var html_content =
+                "<p>There were some issues on retreiving data from the database you should contact you system administrator.</p>";
+                 Metro.infobox.create(html_content,"alert",{
+                     overlay:true
+                 });
+            }
+        });
+    }
+    function getAllUserAccountsByType(id){
+        $.ajax({
+            method:"POST",
+            type:"ajax",
+            url:'<?php echo base_url("index.php/UserAccounts/getUserByType") ?>',
+            dataType:"json",
+            data:{ID:id},
+            success:function(response){
+                if(response.success){
+                    $("#userContainer").empty();
+                    var _data=response.user;
+                    var _length=_data.length;
+                    var _htmlContent='';
+                    gUserData=_data;
+                    for (var i = 0; i < _length; i++) {
+                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                        +'<div class="card">'
+                                            +'<div class="card-header">'
+                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
+                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                            +'</div>'
+                                            +'<div class="card-content p-2">'
+                                                +'<img src="'+'<?php echo base_url("assets/1522725235nancy.jpg"); ?>'+'" style="width: 100%">'
+                                            +'</div>'
+                                            +'<div class="card-footer useractions">'
+                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
+                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                            +'</div>'
+                                        +'</div>'
+                                    +'</div>';
+                        $("#userContainer").empty().append(_htmlContent);
+                    }
+                }
+            },
+            error:function(){
+                var html_content =
+                "<p>There were some issues on retreiving data from the database you should contact you system administrator.</p>";
+                 Metro.infobox.create(html_content,"alert",{
+                     overlay:true
+                 });
+            }
+        });
+    }
+    function getAllUserAccountsByTypeAndDepartment(typeid,depid){
+        $.ajax({
+            method:"POST",
+            type:"ajax",
+            url:'<?php echo base_url("index.php/UserAccounts/getUserByTypeAndDepartment") ?>',
+            dataType:"json",
+            data:{TypeID:typeid,DepID:depid},
+            success:function(response){
+                if(response.success){
+                    $("#userContainer").empty();
+                    var _data=response.user;
+                    var _length=_data.length;
+                    var _htmlContent='';
+                    gUserData=_data;
+                    for (var i = 0; i < _length; i++) {
+                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                        +'<div class="card">'
+                                            +'<div class="card-header">'
+                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
+                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                            +'</div>'
+                                            +'<div class="card-content p-2">'
+                                                +'<img src="'+'<?php echo base_url("assets/1522725235nancy.jpg"); ?>'+'" style="width: 100%">'
+                                            +'</div>'
+                                            +'<div class="card-footer useractions">'
+                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
+                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                            +'</div>'
+                                        +'</div>'
+                                    +'</div>';
+                        $("#userContainer").empty().append(_htmlContent);
+                    }
+                }
+            },
+            error:function(){
+                var html_content =
+                "<p>There were some issues on retreiving data from the database you should contact you system administrator.</p>";
+                 Metro.infobox.create(html_content,"alert",{
+                     overlay:true
+                 });
+            }
+        });
+    }
+    function getAllUserAccountsByDepartment(id){
+        $.ajax({
+            method:"POST",
+            type:"ajax",
+            url:'<?php echo base_url("index.php/UserAccounts/getUserByDepartment") ?>',
+            dataType:"json",
+            data:{ID:id},
+            success:function(response){
+                if(response.success){
+                    var _data=response.user;
+                    var _length=_data.length;
+                    var _htmlContent='';
+                    $("#userContainer").empty();
+                    gUserData=_data;
+                    for (var i = 0; i < _length; i++) {
+                        _htmlContent+='<div class="stub mx-auto" style="width:270px;">'
+                                        +'<div class="card">'
+                                            +'<div class="card-header">'
+                                                +'<div class="text-ellipsis">'+_data[i].Email+'</div>'
+                                                +'<div class="date center">'+_data[i].DepartmentName+'</div>'
+                                            +'</div>'
+                                            +'<div class="card-content p-2">'
+                                                +'<img src="" style="width: 100%">'
+                                            +'</div>'
+                                            +'<div class="card-footer useractions">'
+                                                +'<button id="Info'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</button>'
+                                                +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
+                                            +'</div>'
+                                        +'</div>'
+                                    +'</div>';
+                        $("#userContainer").append(_htmlContent);
+                    }
+                }
+            },
+            error:function(){
+                var html_content =
+                "<p>There were some issues on retreiving data from the database you should contact you system administrator.</p>";
+                 Metro.infobox.create(html_content,"alert",{
+                     overlay:true
+                 });
+            }
+        });
+    }
     $(document).ready(function(){
+        var gUserData=[];
+        getAllUserAccounts();
+        $(".filter").change(function(){
+            if($("#cmbFilterUsertype").val()=="All" && $("#cmbFilterDepartment").val()=="All"){
+                getAllUserAccounts();
+            }else{
+                if($("#cmbFilterUsertype").val()=="All"){
+                    getAllUserAccountsByDepartment($("#cmbFilterDepartment").val());
+                }else if($("#cmbFilterDepartment").val()=="All"){
+                    getAllUserAccountsByType($("#cmbFilterUsertype").val());
+                }else{
+                    getAllUserAccountsByTypeAndDepartment($("#cmbFilterUsertype").val(),$("#cmbFilterDepartment").val());
+                }
+            }
+        });
+        $("body").on("click","button.delete",function(){
+            var _stringId=$(this).attr("id");
+            var _id=_stringId.split('Delete')[1];
+            $.ajax({
+                method:"POST",
+                type:"ajax",
+                url:'<?php echo base_url("index.php/UserAccounts/deleteUser"); ?>',
+                dataType:"json",
+                data:{ID:_id},
+                success:function(response){
+                    if(response.success){
+                        var html_content ="<p>You have successfully deleted the user.</p>";
+                         Metro.infobox.create(html_content,"success",{
+                             overlay:true
+                         });
+                         getAllUserAccounts();
+                    }
+                },
+                error:function(){
+                    var html_content="<p>There were some issues in deleteting the user.</p>";
+                     Metro.infobox.create(html_content,"info",{
+                         overlay:true
+                     });
+                }
+            });
+        });
+        $("#depContainer").hide();
         $("#cmbUserType").change(function(){
             if($("#cmbUserType").val()=="2"){
-                $("#depContainer").removeClass("no-visible");
+                $("#depContainer").show();
+                var select = $("#cmbDepartment").data('select');
+                select.val("1");
             }else{
                  var select = $("#cmbDepartment").data('select');
                  select.val("4");
-                 $("#depContainer").addClass("no-visible");
+                 $("#depContainer").hide();
 
             }
         });

@@ -46,12 +46,15 @@
         table td [class*=mif-] {
             margin: 0 4px;
         }
-        a:hover{
-            background-color: #CE352C;
+        .sidenav-m3 a{
+            background-color: inherit;
+        }
+        .sidenav-m3 a:hover{
+            background-color: #0077a3;
         }
     </style>
 </head>
-<body class="h-vh-100" style="overflow:hidden;">
+<body class="h-vh-100">
     <div class="pos-fixed fixed-top app-bar-wrapper z-top bg-blue">
         <header class="container-fluid pos-relative app-bar-expand-md fg-white bg-darkBlue" data-role="appbar">
             <a href="#" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
@@ -72,7 +75,7 @@
 
                 <div class="app-bar-container">
                     <a class="app-bar-item dropdown-toggle marker-light pl-1 pr-5" href="#">
-                        <img class="rounded" data-role="gravatar" data-email="sergey@pimenov.com.ua" data-size="25">
+                        <img data-default="mm" class="rounded" data-role="gravatar" data-email="alfeche492@gmail.com" data-size="25">
                     </a>
                     <ul class="v-menu place-right bg-darkBlue fg-white" data-role="dropdown">
                         <li><a href="">Signed as <strong>olton</strong></a></li>
@@ -84,10 +87,10 @@
             </div>
         </header>
     </div>
-    <div class="grid mt-13 bg-light" id="hero" style="height: 100%;overflow:auto;">
+    <div class="grid mt-13" id="hero">
         <div class="row">
-            <div class="stub">
-                <ul class="sidenav-m3">
+            <div class="stub bg-dark">
+                <ul class="sidenav-m3 bg-dark fg-white">
                     <li class="title">Masterfile</li>
                     <li><a class="active" href="#"><span class="mif-home icon"></span>User Accounts</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>NAS</a></li>
@@ -99,7 +102,6 @@
                     <li><a href="#"><span class="mif-list icon"></span>Evaluation Question</a></li>
                     <li class="title">Reports</li>
                     <li><a href="#"><span class="mif-list icon"></span>Evaluation Result</a></li>
-                    <li><a href="#"><span class="mif-list icon"></span>Renewal Remarks</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>Renewal Remarks</a></li>
                 </ul>
             </div>

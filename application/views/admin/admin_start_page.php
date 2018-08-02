@@ -330,7 +330,7 @@
     <div class="tile-area tile-area-scheme-dark fg-white" style="height: 100%; max-height: 100% !important;">
         <h1 class="tile-area-title">Admin-Start</h1>
         <div class="tile-area-controls">
-            <a href="<?php echo base_url('index.php/MyProfile') ?>" class="image-button icon-right bg-transparent fg-dark bg-hover-red no-border"><span class="sub-header no-margin text-dark"><!--<?php echo $_SESSION['Firstname'].' '.$_SESSION['Lastname']; ?>--></span> <span class="icon mif-user"></span></a>
+            <a href="<?php echo base_url('index.php/MyProfile') ?>" class="image-button icon-right bg-transparent fg-dark bg-hover-red no-border"><span class="sub-header no-margin text-dark"><?php echo $_SESSION['Firstname'].' '.$_SESSION['Lastname']; ?></span> <span class="icon mif-user"></span></a>
             <button class="square-button bg-transparent fg-dark bg-hover-red no-border" onclick="showCharms('#charmSearch')"><span class="mif-search"></span></button>
             <button class="square-button bg-transparent fg-dark bg-hover-red no-border" onclick="showCharms('#charmSettings')"><span class="mif-cog"></span></button>
             <a href="#" onclick="ShowDialog()" class="square-button bg-transparent fg-dark bg-hover-red no-border"><span class="mif-switch"></span></a>
