@@ -36,7 +36,7 @@
         <div class="cell-4">
             <div class="card">
                 <div class="img-container thumbnail">
-                    <img src="<?php echo base_url('assets/uploads/Picture/').$info[0]['Filename'];?>">
+                    <img src="<?php if($info) {echo base_url('assets/uploads/Picture/').$info[0]['Filename'];}else{echo base_url('assets/uploads/Picture/default_prof_pic.png');}?>">
                 </div>
             </div>
         </div>

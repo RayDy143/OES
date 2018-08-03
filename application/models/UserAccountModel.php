@@ -11,8 +11,8 @@
 		public function getAllUsers(){
 			/*$this->db->where('Status!=','Deleted');
 			$query=$this->db->get('user');*/
-			//$uid=$_SESSION['UserID'];
-			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID right join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1'");
+			$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID right join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserID!='$uid'");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{
@@ -37,8 +37,8 @@
 			}
 		}
 		public function getUserByType($id){
-			//$uid=$_SESSION['UserID'];
-			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserTypeID='$id'");
+			$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserTypeID='$id' and useraccount.UserID!='$uid'");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{
@@ -46,17 +46,27 @@
 			}
 		}
 		public function getUserByDepartment($id){
-			//$uid=$_SESSION['UserID'];
-			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$id'");
+			$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$id' and useraccount.UserID!='$uid'");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{
 				return false;
 			}
 		}
+		public function restoreUser($where){
+			$data = array('IsDeleted' => 0 );
+			$this->db->where($where);
+			$this->db->update('useraccount',$data);
+			if($this->db->affected_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		public function getUserByTypeAndDepartment($typeid,$depid){
-			//$uid=$_SESSION['UserID'];
-			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$depid' and usertype.UserTypeID='$typeid'");
+			$uid=$_SESSION['UserID'];
+			$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$depid' and usertype.UserTypeID='$typeid' and useraccount.UserID!='$uid'");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{
@@ -64,8 +74,38 @@
 			}
 		}
 		public function CreateUser($data){
-			$query=$this->db->insert('useraccount',$data);
-			if($query){
+			$this->db->insert('useraccount',$data);
+			if($this->db->affected_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function delete($where){
+			$this->db->where($where);
+			$this->db->delete('userinfo');
+			$this->db->where($where);
+			$this->db->delete('useruploadedpicture');
+			$this->db->where($where);
+			$this->db->delete('userverificationcode');
+			$this->db->where($where);
+			$this->db->delete('useraccount');
+		}
+		public function AddAsNewUser($email,$data){
+			$query = $this->db->query("SELECT UserID FROM useraccount where Email='$email' LIMIT 1");
+			$row = $query->row_array();
+			$where = array('UserID' => $row['UserID']);
+			$this->delete($where);
+			$this->db->insert('useraccount',$data);
+			if($this->db->affected_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function checkEmailExistence($email){
+			$query=$this->db->query("SELECT * FROM useraccount where Email='$email'");
+			if($query->num_rows()>0){
 				return true;
 			}else{
 				return false;

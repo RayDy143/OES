@@ -25,6 +25,14 @@
 				return false;
 			}
 		}
+		function getUserAccountInfo($id){
+			$query=$this->db->query("SELECT * from department inner join useraccount on department.DepartmentID=useraccount.DepartmentID left join userinfo on useraccount.UserID=userinfo.UserID left join useruploadedpicture on useraccount.UserID=useruploadedpicture.UserID left join uploadedpicture on useruploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where useraccount.UserID='$id'");
+			if($query){
+				return $query->row();
+			}else{
+				return false;
+			}
+		}
 		function editInfo($fields,$where){
 			$this->db->where($where);
 			$this->db->update('userinfo',$fields);

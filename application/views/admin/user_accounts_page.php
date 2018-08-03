@@ -92,32 +92,108 @@
 
 <script>
     function submitForm(){
-        $.ajax({
-            method:'POST',
-            type:'ajax',
-            url:'<?php echo base_url("index.php/UserAccounts/AddNewUser"); ?>',
-            data: {Email:$("#Email").val(),cmbDepartment:$("#cmbDepartment").val(),UserTypeID:$("#cmbUserType").val()},
-            dataType:'json',
-            success:function(response){
-                if(response.success){
-                    Metro.dialog.close("#demoDialog1");
+        if(checkEmailExistence($("#Email").val())==true){
+            Metro.dialog.close(".dialog");
+            Metro.dialog.create({
+               title: "This user was recently registered to this system and have beed deleted!",
+               content: "<div>Would you like to add this user as a new user or just restore this user?</div>",
+               clsDialog: "bg-red fg-white",
+               actions: [
+                   {
+                       caption: "Add as new",
+                       cls: "js-dialog-close",
+                       onclick: function(){
+                           $.ajax({
+                               method:'POST',
+                               type:'ajax',
+                               url:'<?php echo base_url("index.php/UserAccounts/AddAsNewUser"); ?>',
+                               data: {Email:$("#Email").val(),cmbDepartment:$("#cmbDepartment").val(),UserTypeID:$("#cmbUserType").val()},
+                               dataType:'json',
+                               success:function(response){
+                                   if(response.success){
+                                       Metro.dialog.close("#demoDialog1");
+                                       var html_content =
+                                       "<p>Adding of user was successful</p>";
+                                        Metro.infobox.create(html_content,"success",{
+                                            overlay:true
+                                        });
+                                        getAllUserAccounts();
+                                   }
+                               },
+                               error: function()
+                               {
+                                   var html_content =
+                                   "<p>Adding of user was unsuccessful. Please contact your system administrator immediately.</p>";
+                                    Metro.infobox.create(html_content,"alert",{
+                                        overlay:true
+                                    });
+                               }
+                           });
+                       }
+                   },
+                   {
+                       caption: "Restore user",
+                       cls: "js-dialog-close",
+                       onclick: function(){
+                           $.ajax({
+                               method:'POST',
+                               type:'ajax',
+                               url:'<?php echo base_url("index.php/UserAccounts/restoreUser") ?>',
+                               dataType:'json',
+                               data:{Email:$("#Email").val()},
+                               success:function(response){
+                                   var html_content =
+                                   "<p>Successfully restored.</p>";
+                                    Metro.infobox.create(html_content,"success",{
+                                        overlay:true
+                                    });
+                                    $(".filter").change();
+                               },
+                               error:function(){
+                                   var html_content =
+                                   "<p>System error. Please immediately contact your system administrator.</p>";
+                                    Metro.infobox.create(html_content,"alert",{
+                                        overlay:true
+                                    });
+                               }
+                           });
+                       }
+                   },
+                   {
+                       caption: "Cancel",
+                       cls: "js-dialog-close"
+                   }
+               ]
+           });
+        }else{
+            $.ajax({
+                method:'POST',
+                type:'ajax',
+                url:'<?php echo base_url("index.php/UserAccounts/AddNewUser"); ?>',
+                data: {Email:$("#Email").val(),cmbDepartment:$("#cmbDepartment").val(),UserTypeID:$("#cmbUserType").val()},
+                dataType:'json',
+                success:function(response){
+                    if(response.success){
+                        Metro.dialog.close("#demoDialog1");
+                        var html_content =
+                        "<p>Adding of user was successful</p>";
+                         Metro.infobox.create(html_content,"success",{
+                             overlay:true
+                         });
+                         getAllUserAccounts();
+                    }
+                },
+                error: function()
+                {
                     var html_content =
-                    "<p>Adding of user was successful</p>";
-                     Metro.infobox.create(html_content,"success",{
+                    "<p>Adding of user was unsuccessful. Please contact your system administrator immediately.</p>";
+                     Metro.infobox.create(html_content,"alert",{
                          overlay:true
                      });
-                     getAllUserAccounts();
                 }
-            },
-            error: function()
-            {
-                var html_content =
-                "<p>Adding of user was unsuccessful</p>";
-                 Metro.infobox.create(html_content,"alert",{
-                     overlay:true
-                 });
-            }
-        });
+            });
+        }
+
     }
     function getAllUserAccounts(){
         $.ajax({
@@ -144,7 +220,7 @@
                                                     +'<div class="date center">'+_data[i].DepartmentName+'</div>'
                                                 +'</div>'
                                                 +'<div class="card-footer useractions">'
-                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Edit'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</a>'
                                                     +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
                                                 +'</div>'
                                             +'</div>'
@@ -160,7 +236,7 @@
                                                     +'<div class="date center">'+_data[i].DepartmentName+'</div>'
                                                 +'</div>'
                                                 +'<div class="card-footer useractions">'
-                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Edit'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</a>'
                                                     +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
                                                 +'</div>'
                                             +'</div>'
@@ -206,7 +282,7 @@
                                                     +'<div class="date center">'+_data[i].DepartmentName+'</div>'
                                                 +'</div>'
                                                 +'<div class="card-footer useractions">'
-                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Edit'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</a>'
                                                     +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
                                                 +'</div>'
                                             +'</div>'
@@ -222,7 +298,7 @@
                                                     +'<div class="date center">'+_data[i].DepartmentName+'</div>'
                                                 +'</div>'
                                                 +'<div class="card-footer useractions">'
-                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Edit'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</a>'
                                                     +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
                                                 +'</div>'
                                             +'</div>'
@@ -268,7 +344,7 @@
                                                     +'<div class="date center">'+_data[i].DepartmentName+'</div>'
                                                 +'</div>'
                                                 +'<div class="card-footer useractions">'
-                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Edit'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</a>'
                                                     +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
                                                 +'</div>'
                                             +'</div>'
@@ -284,7 +360,7 @@
                                                     +'<div class="date center">'+_data[i].DepartmentName+'</div>'
                                                 +'</div>'
                                                 +'<div class="card-footer useractions">'
-                                                    +'<a href="'+'<?php echo base_url("index.php/UserInfo/index/") ?>'+_data[i].UserID+'" class="button bg-darkBlue fg-white mif-info"> Info</a>'
+                                                    +'<button id="Edit'+_data[i].UserID+'" class="button edit bg-darkBlue fg-white mif-info"> Info</a>'
                                                     +'<button id="Delete'+_data[i].UserID+'" class="button delete alert mif-bin"> Delete</button>'
                                                 +'</div>'
                                             +'</div>'
@@ -364,6 +440,32 @@
             }
         });
     }
+    function checkEmailExistence(email){
+        var DoesEmailExist=false;
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/UserAccounts/checkEmailExistence"); ?>',
+            dataType:'json',
+            data:{Email:email},
+            async:false,
+            success:function(response){
+                if(response.success){
+                    DoesEmailExist=true;
+                }else{
+                    DoesEmailExist=false;
+                }
+            },
+            error:function(){
+                var html_content =
+                "<p>There were some issues on the database you should contact you system administrator.</p>";
+                 Metro.infobox.create(html_content,"alert",{
+                     overlay:true
+                 });
+            }
+        });
+        return DoesEmailExist;
+    }
     $(document).ready(function(){
         var gUserData=[];
         getAllUserAccounts();
@@ -380,31 +482,111 @@
                 }
             }
         });
-        $("body").on("click","button.delete",function(){
+        $("body").on("click","button.edit",function(){
             var _stringId=$(this).attr("id");
-            var _id=_stringId.split('Delete')[1];
+            var _id=_stringId.split('Edit')[1];
+            var _content='';
             $.ajax({
-                method:"POST",
-                type:"ajax",
-                url:'<?php echo base_url("index.php/UserAccounts/deleteUser"); ?>',
-                dataType:"json",
+                type:'ajax',
+                method:'POST',
+                url:'<?php echo base_url("index.php/UserAccounts/getUserAccountInfo"); ?>',
                 data:{ID:_id},
+                dataType:'json',
+                async:false,
                 success:function(response){
                     if(response.success){
-                        var html_content ="<p>You have successfully deleted the user.</p>";
-                         Metro.infobox.create(html_content,"success",{
-                             overlay:true
-                         });
-                         getAllUserAccounts();
+                        if(response.info.IsFirstLogin==1){
+                            var html_content =
+                            "<p>The user has not logged in and provided his/her information.</p>";
+                             Metro.infobox.create(html_content,"alert",{
+                                 overlay:true
+                             });
+                        }else{
+                            _content='<div class="grid">'
+                                            +'<div class="row">'
+                                                +'<div class="cell">'
+                                                    +'<div class="img-container thumbnail rounded mx-auto" style="width:30%">'
+                                                        +'<img src="'+'<?php echo base_url("assets/uploads/Picture/") ?>'+response.info.Filename+'">'
+                                                    +'</div>'
+                                                    +'<hr class="thick bg-darkBlue">'
+                                                    +'<strong> Email : '+response.info.Email+'</strong>'
+                                                    +'<hr class="thick bg-darkBlue">'
+                                                    +'<strong> Name : '+response.info.Firstname+' '+response.info.Middlename+' '+response.info.Lastname+'</strong>'
+                                                    +'<hr class="thick bg-darkBlue">'
+                                                    +'<strong> Address : '+response.info.Address+'</strong>'
+                                                    +'<hr class="thick bg-darkBlue">'
+                                                    +'<strong> Birthdate : '+response.info.Birthdate+'</strong>'
+                                                    +'<hr class="thick bg-darkBlue">'
+                                                    +'<strong> Gender : '+response.info.Gender+'</strong>'
+                                                    +'<hr class="thick bg-darkBlue">'
+                                                    +'<strong> Contact Number : '+response.info.ContactNumber+'</strong>'
+                                                +'</div>'
+                                            +'</div>'
+                                    +'</div>';
+                        }
                     }
                 },
                 error:function(){
-                    var html_content="<p>There were some issues in deleteting the user.</p>";
-                     Metro.infobox.create(html_content,"info",{
-                         overlay:true
-                     });
+
                 }
             });
+            if(_content!=''){
+                Metro.dialog.create({
+                    content:_content,
+                    actions: [
+                        {
+                            caption: "Close",
+                            cls: "js-dialog-close primary"
+                        }
+                    ]
+                });
+            }
+        });
+        $("body").on("click","button.delete",function(){
+            var _stringId=$(this).attr("id");
+            var _id=_stringId.split('Delete')[1];
+            Metro.dialog.create({
+               title: "Are you sure you want to delete this user?",
+               content: "<div>This process cant be undone.</div>",
+               actions: [
+                   {
+                       caption: "Agree",
+                       cls: "js-dialog-close alert",
+                       onclick: function(){
+                           $.ajax({
+                               method:"POST",
+                               type:"ajax",
+                               url:'<?php echo base_url("index.php/UserAccounts/deleteUser"); ?>',
+                               dataType:"json",
+                               data:{ID:_id},
+                               success:function(response){
+                                   if(response.success){
+                                       var html_content ="<p>You have successfully deleted the user.</p>";
+                                        Metro.infobox.create(html_content,"success",{
+                                            overlay:true
+                                        });
+                                        $(".filter").change();
+                                   }
+                               },
+                               error:function(){
+                                   var html_content="<p>There were some issues in deleteting the user.</p>";
+                                    Metro.infobox.create(html_content,"info",{
+                                        overlay:true
+                                    });
+                               }
+                           });
+                       }
+                   },
+                   {
+                       caption: "Disagree",
+                       cls: "js-dialog-close",
+                       onclick: function(){
+
+                       }
+                   }
+               ]
+           });
+
         });
         $("#depContainer").hide();
         $("#cmbUserType").change(function(){

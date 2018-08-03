@@ -116,6 +116,11 @@
                             });
                         }
                     }else{
+                        var form  = $($('#frmLogin'));
+                        form.addClass("ani-ring");
+                        setTimeout(function(){
+                            form.removeClass("ani-ring");
+                        }, 1000);
                         var html_content =
                         "<p>It looks like the credendtials you\'ve entered was not registered.";
                          Metro.infobox.create(html_content,"alert",{

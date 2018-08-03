@@ -27,7 +27,7 @@
 		}
     }
     function authenticate(){
-		$fields = array('Email' => $this->input->post('Email'),'Password' => $this->input->post('Password') );
+		$fields = array('Email' => $this->input->post('Email'),'Password' => $this->input->post('Password'),'IsDeleted'=>0 );
 		$datas['data']=$this->UserAccountModel->Authenticate($fields);
 		$data['success']=false;
 		if($datas['data']){
