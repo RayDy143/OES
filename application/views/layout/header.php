@@ -95,9 +95,9 @@
             <div class="stub bg-dark drop-shadow">
                 <ul class="sidenav-m3 bg-dark fg-white">
                     <li class="title">Masterfile</li>
-                    <li><a class="active" href="#"><span class="mif-home icon"></span>User Accounts</a></li>
+                    <li><a class="active" href="<?php echo base_url('index.php/UserAccounts') ?>"><span class="mif-home icon"></span>User Accounts</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>NAS</a></li>
-                    <li><a href="#"><span class="mif-list icon"></span>Department</a></li>
+                    <li><a href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>Scheduler</a></li>
                     <li class="title">Evaluation Components</li>
                     <li><a href="#"><span class="mif-list icon"></span>Attendance</a></li>

@@ -4,10 +4,27 @@
 	 */
 	class DepartmentModel extends CI_Model
 	{
+		public function getDepartment(){
+			$query=$this->db->query('SELECT * FROM department where IsDeleted=0');
+			if($query->num_rows()>0){
+				return $query->result_array();
+			}else{
+				return false;
+			}
+		}
 		public function getAllDepartment(){
 			$query=$this->db->get('department');
-			if($query){
+			if($query->num_rows()>0){
 				return $query->result_array();
+			}else{
+				return false;
+			}
+		}
+		public function renameDepartment($where,$fields){
+			$this->db->where($where);
+			$this->db->update('department',$fields);
+			if($this->db->affected_rows()>0){
+				return true;
 			}else{
 				return false;
 			}
@@ -20,9 +37,10 @@
 				return false;
 			}
 		}
-		public function DeleteDepartment($userid){
-			$this->db->where('DepartmentID',$userid);
-			$this->db->delete('department');
+		public function DeleteDepartment($id){
+			$this->db->where('DepartmentID',$id);
+			$where = array('IsDeleted' => 1 );
+			$this->db->update('department',$where);
 			if($this->db->affected_rows()>0){
 				return true;
 			}else{
