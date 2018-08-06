@@ -13,8 +13,13 @@
             $this->load->model('UserInfoModel');
         }
         function index(){
+            $data['Title']="OES-User Accounts";
+            $data['useraccounts']="active";
+            $data['nas']="";
+            $data['department']="";
+            $data['scheduler']="";
             $data['dep']=$this->DepartmentModel->getAllDepartment();
-            $this->load->view('layout/header');
+            $this->load->view('layout/header',$data);
             $this->load->view('admin/user_accounts_page',$data);
         }
         public function getUserInfo(){

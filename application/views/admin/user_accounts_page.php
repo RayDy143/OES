@@ -45,7 +45,7 @@
             </div>
         </div>
     </div>
-    <hr class="row thick bg-black">
+    <hr class="row thick bg-black drop-shadow">
     <div class="row" id="userContainer">
 
     </div>

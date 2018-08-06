@@ -20,8 +20,8 @@
             <input type="text" class="win-shadow" data-role="search">
         </div>
     </div>
-    <hr class="row thick bg-black">
-    <div class="row">
+    <hr class="row thick bg-black drop-shadow">
+    <div class="row bg-light">
         <div class="cell">
             <div class="row" id="depContainer">
 
@@ -83,29 +83,88 @@
     var gDepartment=[];
     getAddDepartment();
     function validateAddDepartmentForm() {
-        $.ajax({
-            method:'POST',
-            type:'ajax',
-            url:'<?php echo base_url("index.php/Department/AddDepartment") ?>',
-            data:$("#frmAddDepartment").serialize(),
-            success:function(response){
-                Metro.dialog.close('#AddDepartmentDialog');
+        if(checkDepartmentExistence()){
+            Metro.dialog.create({
+            title: "Department already existed!",
+            content: "<div>There might be a chance that it has been deleted but you can choose to restore it.</div>",
+            actions: [
+                {
+                    caption: "Restore",
+                    cls: "js-dialog-close alert",
+                    onclick: function(){
+                        $.ajax({
+                            method:'POST',
+                            type:'ajax',
+                            url:'<?php echo base_url("index.php/Department/restoreDepartment") ?>',
+                            data:$("#frmAddDepartment").serialize(),
+                            success:function(response){
+                                Metro.dialog.close('#AddDepartmentDialog');
+                                    var html_content =
+                                    "<p>Successfully Added.</p>";
+                                     Metro.infobox.create(html_content,"success",{
+                                         overlay:true
+                                     })
+                                     getAddDepartment();
+
+                            },
+                            error:function(){
+                                var html_content =
+                                "<p>System error. Please contact you system administrator immediately.</p>";
+                                 Metro.infobox.create(html_content,"success",{
+                                     overlay:true
+                                 });
+                            }
+                        });
+                    }
+                },
+                {
+                    caption: "Cancel",
+                    cls: "js-dialog-close"
+                }
+            ]
+        });
+        }else{
+            $.ajax({
+                method:'POST',
+                type:'ajax',
+                url:'<?php echo base_url("index.php/Department/AddDepartment") ?>',
+                data:$("#frmAddDepartment").serialize(),
+                success:function(response){
+                    Metro.dialog.close('#AddDepartmentDialog');
+                        var html_content =
+                        "<p>Successfully Added.</p>";
+                         Metro.infobox.create(html_content,"success",{
+                             overlay:true
+                         })
+                         getAddDepartment();
+
+                },
+                error:function(){
                     var html_content =
-                    "<p>Successfully Added.</p>";
+                    "<p>System error. Please contact you system administrator immediately.</p>";
                      Metro.infobox.create(html_content,"success",{
                          overlay:true
-                     })
-                     getAddDepartment();
-
-            },
-            error:function(){
-                var html_content =
-                "<p>System error. Please contact you system administrator immediately.</p>";
-                 Metro.infobox.create(html_content,"success",{
-                     overlay:true
-                 });
+                     });
+                }
+            });
+        }
+    }
+    function checkDepartmentExistence(){
+        var HasExisted=false;
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Department/getDepartmentExistence") ?>',
+            data:$("#frmAddDepartment").serialize(),
+            dataType:'json',
+            async:false,
+            success:function(response){
+                if(response.success){
+                    HasExisted=true;
+                }
             }
-        })
+        });
+        return HasExisted;
     }
     function validateEditDepartmentForm() {
         $.ajax({
@@ -144,9 +203,27 @@
                     gDepartment=_data;
                     $("#depContainer").empty();
                     for (var i = 0; i < _data.length; i++) {
+                        var _evalhtml='';
+                        $.ajax({
+                            type:'ajax',
+                            method:'POST',
+                            url:'<?php echo base_url("index.php/Department/getDepartmentEvaluator") ?>',
+                            dataType:'json',
+                            data:{ID:_data[i].DepartmentID},
+                            async:false,
+                            success:function(response){
+                                var _eval=response.evaluator;
+                                for (var i = 0; i < _eval.length; i++) {
+                                    _evalhtml+='<br/>-'+_eval[i].Firstname+' '+_eval[i].Lastname;
+                                }
+                            },
+                            error:function(){
+
+                            }
+                        });
                         _html+='<div class="cell-lg-4 cell-md-6 cell-sm-12 mt-2">'
-                                    +'<div class="win-shadow" data-cls-title="bg-darkBlue fg-white" data-role="panel" data-title-caption="'+_data[i].DepartmentName+'" data-collapsible="true" data-collapsed="true">'
-                                        +'<strong>Evaluator</strong>'
+                                    +'<div class="win-shadow" data-cls-title="bg-darkBlue fg-white" data-role="panel" data-title-caption="'+_data[i].DepartmentName+'" data-collapsible="true" data-collapsed="false">'
+                                        +'<strong>Evaluator: '+_evalhtml+'</strong>'
                                         +'<hr class="thick bg-darkBlue"/>'
                                         +'<strong>Scholars </strong>'
                                         +'<hr class="thick bg-darkBlue"/>'

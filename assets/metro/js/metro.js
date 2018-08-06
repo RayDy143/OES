@@ -10,7 +10,7 @@
     } else {
         factory( jQuery );
     }
-}(function( jQuery ) { 
+}(function( jQuery ) {
 'use strict';
 
 var $ = jQuery;
@@ -2018,7 +2018,7 @@ var Locales = {
             "save": "Save"
         }
     },
-    
+
     'cn-ZH': {
         "calendar": {
             "months": [
@@ -2054,8 +2054,8 @@ var Locales = {
             "save": "保存"
         }
     },
-    
-    
+
+
     'de-DE': {
         "calendar": {
             "months": [
