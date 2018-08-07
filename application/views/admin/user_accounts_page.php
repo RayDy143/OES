@@ -1,4 +1,4 @@
-<div class="cell bg-white p-6 mr-4">
+<div class="cell bg-white p-6 ml-2" style="overflow:auto;">
     <div class="row">
         <a type="button" href="javascript:history.back();" class="button drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
     </div>
@@ -47,6 +47,7 @@
     </div>
     <hr class="row thick bg-black drop-shadow">
     <div class="row" id="userContainer">
+        <span class="mif-spinner2 mif-5x ani-spin mx-auto"></span>
 
     </div>
 </div>
@@ -467,6 +468,17 @@
         return DoesEmailExist;
     }
     $(document).ready(function(){
+        $(window).on("load",function(){
+            $('body').mCustomScrollbar({
+                scrollButtons:{enable:true,scrollType:"stepped"},
+				keyboard:{scrollType:"stepped"},
+				mouseWheel:{scrollAmount:188},
+				theme:"rounded-dark",
+				autoExpandScrollbar:true,
+				snapAmount:188,
+				snapOffset:65
+    		});
+        });
         var gUserData=[];
         getAllUserAccounts();
         $(".filter").change(function(){
@@ -497,7 +509,7 @@
                     if(response.success){
                         if(response.info.IsFirstLogin==1){
                             var html_content =
-                            "<p>The user has not logged in and provided his/her information.</p>";
+                            "<p>The user has not logged in and provided his or her information.</p>";
                              Metro.infobox.create(html_content,"alert",{
                                  overlay:true
                              });

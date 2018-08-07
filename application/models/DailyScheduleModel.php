@@ -27,6 +27,15 @@
                 return false;
             }
         }
+        public function delete($where){
+            $this->db->where($where);
+            $this->db->delete('dailyschedule');
+            if($this->db->affected_rows()>0){
+                return true;
+            }else{
+                return false;
+            }
+        }
         public function update($where,$fields)
         {
             $this->db->where($where);

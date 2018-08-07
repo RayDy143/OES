@@ -40,6 +40,8 @@
 			}
 		}
 		public function getAllDepartment(){
+			$where = array('IsDeleted' => 0 );
+			$this->db->where($where);
 			$query=$this->db->get('department');
 			if($query->num_rows()>0){
 				return $query->result_array();

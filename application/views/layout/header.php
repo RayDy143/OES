@@ -29,9 +29,11 @@
     <link rel="icon" href="<?php echo base_url(); ?>assets/metro/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/mdtimepicker.css') ?>">
     <link href="<?php echo base_url(); ?>assets/metro/css/metro-all.css?ver=@@b-version" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/plugins/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
     <script src="<?php echo base_url(); ?>assets/metro/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/mdtimepicker.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url('assets/plugins/jquery.mCustomScrollbar.min.js') ?>"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
     <title><?php echo $Title; ?></title>
 
@@ -68,12 +70,10 @@
                 <div class="app-bar-container">
                     <a class="app-bar-item dropdown-toggle marker-light" href="#"><span class="mif-plus"></span></a>
                     <ul class="d-menu place-right bg-darkBlue fg-white" data-role="dropdown">
-                        <li><a href="">New repository</a></li>
-                        <li><a href="">Import repository</a></li>
-                        <li><a href="">New gist</a></li>
-                        <li><a href="">New organization</a></li>
+                        <li><a href="">Help</a></li>
+
                         <li class="divider"></li>
-                        <li><a href="">New issue</a></li>
+                        <li><a href="">Help</a></li>
                     </ul>
                 </div>
 
@@ -94,7 +94,7 @@
             </div>
         </header>
     </div>
-    <div class="grid mt-13">
+    <div class="grid mt-13" style="margin-bottom:0px;">
         <div class="row" style="height:100%;">
             <div class="stub bg-dark drop-shadow">
                 <ul class="sidenav-m3 bg-dark fg-white">

@@ -1,4 +1,4 @@
-<div class="cell bg-white p-6 mr-4">
+<div class="cell bg-white p-6 ml-2">
     <div class="row">
         <a type="button" href="javascript:history.back();" class="button drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
     </div>
@@ -24,6 +24,7 @@
     <div class="row bg-light">
         <div class="cell">
             <div class="row" id="depContainer">
+                <span class="mif-spinner2 mif-5x ani-spin mx-auto"></span>
 
             </div>
         </div>
@@ -241,6 +242,18 @@
         })
     }
     $(document).ready(function(){
+        $(window).on("load",function(){
+            $('body').mCustomScrollbar({
+                scrollButtons:{enable:true,scrollType:"stepped"},
+				keyboard:{scrollType:"stepped"},
+				mouseWheel:{scrollAmount:188},
+				theme:"rounded-dark",
+				autoExpandScrollbar:true,
+				snapAmount:188,
+				snapOffset:65
+    		});
+        });
+
         $("body").on("click","button.remove",function(){
             var _stringId=$(this).attr("id");
             var _id=_stringId.split("Remove")[1];

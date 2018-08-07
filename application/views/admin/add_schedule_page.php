@@ -1,4 +1,4 @@
-        <div class="cell bg-white p-6 mr-4">
+        <div class="cell bg-white p-6 ml-2">
             <div class="row">
                 <a type="button" href="javascript:history.back();" class="button drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
             </div>
@@ -44,7 +44,7 @@
                     </form>
                     <hr class="row thin bg-darkBlue">
                     <div class="row" id="sched">
-                        <div class="cell" id="DailyScedule">
+                        <div class="cell no-visible" id="DailyScedule">
                             <div class="row" id="DailySchedulePanel" data-role="panel" data-title-caption="Dialy Schedule" data-cls-title="bg-darkBlue fg-white" data-cls-panel="win-shadow">
                                 <div class="cell-12">
                                     <div class="row">
@@ -84,6 +84,8 @@
 
                                             </div>
                                         </div> -->
+                                        <span class="mif-spinner2 mif-5x ani-spin mx-auto"></span>
+
                                     </div>
                                 </div>
                             </div>
@@ -96,6 +98,17 @@
 </div>
 <script>
     $(document).ready(function(){
+        $(window).on("load",function(){
+            $('body').mCustomScrollbar({
+                scrollButtons:{enable:true,scrollType:"stepped"},
+				keyboard:{scrollType:"stepped"},
+				mouseWheel:{scrollAmount:188},
+				theme:"rounded-dark",
+				autoExpandScrollbar:true,
+				snapAmount:188,
+				snapOffset:65
+    		});
+        });
         $("#StartTime").mdtimepicker();
         $("#EndTime").mdtimepicker();
         $('body').on('click','button.update-daily-sched',function(){
@@ -124,8 +137,6 @@
                                          Metro.infobox.create(html_content,"success",{
                                              overlay:true
                                          });
-
-                                        getDialySchedule();
                                     },
                                     error:function(){
                                         var html_content =
@@ -252,6 +263,7 @@
                                     $("#ScheduleID").val(response.id);
                                     $("#lblDailySched").text('Add daily schedule for '+$("#Schedule").val()+' ('+$("#cmbShift").val()+')');
                                     id=response.id;
+                                    getDialySchedule();
                                 }
                             },
                             {
