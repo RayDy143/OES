@@ -29,6 +29,7 @@
     <link rel="icon" href="<?php echo base_url(); ?>assets/metro/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/mdtimepicker.css') ?>">
     <link href="<?php echo base_url(); ?>assets/metro/css/metro-all.css?ver=@@b-version" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/metro/css/third-party/datatables.css?ver=@@b-version" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/plugins/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
     <script src="<?php echo base_url(); ?>assets/metro/js/jquery-3.3.1.min.js"></script>
@@ -64,7 +65,7 @@
     <div class="pos-fixed fixed-top app-bar-wrapper z-top bg-blue drop-shadow">
         <header class="container-fluid pos-relative app-bar-expand-md fg-white bg-darkBlue" data-role="appbar">
             <a href="#" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
-            <div class="app-bar-container ml-auto order-2 order-md-3">
+            <div class="app-bar-container ml-auto order-2">
                 <a href="#" class="app-bar-item"><strong>Home</strong></a>
                 <a href="#" class="app-bar-item"><span class="mif-bell"></span></a>
                 <div class="app-bar-container">
@@ -100,7 +101,7 @@
                 <ul class="sidenav-m3 bg-dark fg-white">
                     <li class="title">Masterfile</li>
                     <li><a id="sideUserAccounts" class="<?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts') ?>"><span class="mif-home icon"></span>User Accounts</a></li>
-                    <li><a id="sideUserNas" class="<?php echo $nas ?>" href="#"><span class="mif-list icon"></span>NAS</a></li>
+                    <li><a id="sideUserNas" class="<?php echo $nas ?>" href="<?php echo base_url('index.php/Nas'); ?>"><span class="mif-list icon"></span>NAS</a></li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
                     <li><a id="sideUserScheduler" class="<?php echo $scheduler ?>" href="<?php echo base_url('index.php/Scheduler') ?>"><span class="mif-list icon"></span>Scheduler</a></li>
                     <li class="title">Evaluation Components</li>

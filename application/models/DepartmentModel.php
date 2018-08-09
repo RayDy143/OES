@@ -32,9 +32,26 @@
 			}
 		}
 		public function getDepartmentEvaluator($id){
-			$query=$this->db->query("SELECT * FROM useraccount inner join userinfo on useraccount.UserID=userinfo.UserID where useraccount.DepartmentID='$id' and useraccount.IsDeleted!=1");
+			$query=$this->db->query("SELECT * FROM useraccount left join userinfo on useraccount.UserID=userinfo.UserID where useraccount.DepartmentID='$id' and useraccount.IsDeleted!=1");
 			if($query->num_rows()>0){
 				return $query->result_array();
+			}else{
+				return false;
+			}
+		}
+		public function getDepartmentNas($id){
+			$query=$this->db->query("SELECT * FROM nas where DepartmentID='$id' and IsDeleted!=1");
+			if($query->num_rows()>0){
+				return $query->result_array();
+			}else{
+				return false;
+			}
+		}
+		public function isDepartmentUsed($id){
+			$query1=$this->db->query("SELECT * from department inner join useraccount on department.DepartmentID=useraccount.DepartmentID and useraccount.IsDeleted=0 and department.DepartmentID='$id'");
+			$query2=$this->db->query("SELECT * from department inner join nas on department.DepartmentID=nas.DepartmentID and nas.IsDeleted=0 and department.DepartmentID='$id'");
+			if($query1->num_rows()>0 || $query2->num_rows()>0){
+				return true;
 			}else{
 				return false;
 			}

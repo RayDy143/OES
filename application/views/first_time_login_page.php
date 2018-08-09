@@ -129,6 +129,7 @@
     <script src="<?php echo base_url(); ?>assets/metro/js/jquery-3.3.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
     <script>
+    
         function invalidForm(){
             var form  = $(this);
             form.addClass("ani-ring");

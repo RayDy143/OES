@@ -37,10 +37,15 @@
             echo json_encode($data);
 		}
         public function deleteDepartment(){
-            $query=$this->DepartmentModel->DeleteDepartment($this->input->post('ID'));
             $data['success']=false;
-            if($query){
-                $data['success']=true;
+            $data['isUsed']=false;
+            if($this->DepartmentModel->isDepartmentUsed($this->input->post('ID'))){
+                $data['isUsed']=true;
+            }else{
+                $query=$this->DepartmentModel->DeleteDepartment($this->input->post('ID'));
+                if($query){
+                    $data['success']=true;
+                }
             }
             echo json_encode($data);
         }
@@ -58,6 +63,22 @@
             $data['evaluator']=$this->DepartmentModel->getDepartmentEvaluator($this->input->post('ID'));
             $data['success']=false;
             if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getDepartmentNas(){
+            $data['nas']=$this->DepartmentModel->getDepartmentNas($this->input->post('ID'));
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function isDepartmentUsed(){
+            $query=$this->DepartmentModel->isDepartmentUsed();
+            $data['success']=false;
+            if($query){
                 $data['success']=true;
             }
             echo json_encode($data);

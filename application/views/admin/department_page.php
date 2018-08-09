@@ -1,6 +1,17 @@
-<div class="cell bg-white p-6 ml-2">
+<div class="cell bg-white p-3 ml-4">
     <div class="row">
-        <a type="button" href="javascript:history.back();" class="button drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <a type="button" href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <div class="stub ml-auto">
+            <div class="row">
+                <h5 class="cell mt-3">Days left para defend:</h5>
+                <div class="cell" data-role="countdown"  data-date="09/25/2018"
+                     data-days="1"
+                     data-hours="2"
+                     data-minutes="3"
+                     data-seconds="4"></div>
+            </div>
+
+        </div>
     </div>
     <div class="row">
         <ul class="cell breadcrumbs" style="margin-bottom:0px;">
@@ -205,6 +216,7 @@
                     $("#depContainer").empty();
                     for (var i = 0; i < _data.length; i++) {
                         var _evalhtml='';
+                        var _nashtml='';
                         $.ajax({
                             type:'ajax',
                             method:'POST',
@@ -215,7 +227,29 @@
                             success:function(response){
                                 var _eval=response.evaluator;
                                 for (var i = 0; i < _eval.length; i++) {
-                                    _evalhtml+='<br/>-'+_eval[i].Firstname+' '+_eval[i].Lastname;
+                                    if(_eval[i].Firstname==null||_eval[i].Lastname==null){
+                                        _evalhtml+='<br/>-'+_eval[i].Email;
+                                    }else{
+                                        _evalhtml+='<br/>-'+_eval[i].Firstname+' '+_eval[i].Lastname;
+                                    }
+
+                                }
+                            },
+                            error:function(){
+
+                            }
+                        });
+                        $.ajax({
+                            type:'ajax',
+                            method:'POST',
+                            url:'<?php echo base_url("index.php/Department/getDepartmentNas") ?>',
+                            dataType:'json',
+                            data:{ID:_data[i].DepartmentID},
+                            async:false,
+                            success:function(response){
+                                var _nas=response.nas;
+                                for (var i = 0; i < _nas.length; i++) {
+                                    _nashtml+='<br/>-'+_nas[i].Firstname+' '+_nas[i].Lastname;
                                 }
                             },
                             error:function(){
@@ -223,10 +257,10 @@
                             }
                         });
                         _html+='<div class="cell-lg-4 cell-md-6 cell-sm-12 mt-2">'
-                                    +'<div class="win-shadow" data-cls-title="bg-darkBlue fg-white" data-role="panel" data-title-caption="'+_data[i].DepartmentName+'" data-collapsible="true" data-collapsed="false">'
+                                    +'<div class="win-shadow" data-cls-title="bg-darkBlue fg-white" data-role="panel" data-collapsed="true" data-title-caption="'+_data[i].DepartmentName+'" data-collapsible="true" data-collapsed="false">'
                                         +'<strong>Evaluator: '+_evalhtml+'</strong>'
                                         +'<hr class="thick bg-darkBlue"/>'
-                                        +'<strong>Scholars </strong>'
+                                        +'<strong>Scholars: '+_nashtml+'</strong>'
                                         +'<hr class="thick bg-darkBlue"/>'
                                         +'<button id="Remove'+_data[i].DepartmentID+'" class="button remove mif-bin bg-red fg-white place-right"> REMOVE</button>'
                                         +'<button id="Rename'+_data[i].DepartmentID+'" class="button rename mif-list2 bg-darkBlue fg-white place-right"> RENAME</button>'
@@ -270,12 +304,21 @@
                                 method:'POST',
                                 url:'<?php echo base_url("index.php/Department/deleteDepartment") ?>',
                                 data:{ID:_id},
-                                success:function(){
-                                    var html_content ="<p>You have successfully deleted the department.</p>";
-                                     Metro.infobox.create(html_content,"success",{
-                                         overlay:true
-                                     });
-                                     getAddDepartment();
+                                dataType:'json',
+                                success:function(response){
+                                    if(response.success){
+                                        var html_content ="<p>You have successfully deleted the department.</p>";
+                                         Metro.infobox.create(html_content,"success",{
+                                             overlay:true
+                                         });
+                                         getAddDepartment();
+                                    }else if(response.isUsed){
+                                        var html_content ="<p>The department you are trying to delete is currently inused.</p>";
+                                         Metro.infobox.create(html_content,"warning",{
+                                             overlay:true
+                                         });
+                                    }
+
                                 },
                                 error:function(){
                                     var html_content ="<p>System error. Please contact the system administrator for solution.</p>";

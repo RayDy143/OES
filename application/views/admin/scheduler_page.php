@@ -1,6 +1,17 @@
-<div class="cell bg-white p-6 ml-2">
+<div class="cell bg-white p-3 ml-4">
     <div class="row">
-        <a type="button" href="javascript:history.back();" class="button drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <a type="button" href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <div class="stub ml-auto">
+            <div class="row">
+                <h5 class="cell mt-3">Days left para defend:</h5>
+                <div class="cell" data-role="countdown"  data-date="09/25/2018"
+                     data-days="1"
+                     data-hours="2"
+                     data-minutes="3"
+                     data-seconds="4"></div>
+            </div>
+
+        </div>
     </div>
     <div class="row">
         <ul class="cell breadcrumbs" style="margin-bottom:0px;">
