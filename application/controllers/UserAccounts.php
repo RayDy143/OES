@@ -2,6 +2,7 @@
     /**
      *
      */
+     defined('BASEPATH') OR exit('No direct script access allowed');
     class UserAccounts extends CI_Controller
     {
 
@@ -11,16 +12,51 @@
             $this->load->model('DepartmentModel');
             $this->load->model('UserAccountModel');
             $this->load->model('UserInfoModel');
+            $this->load->model('UserTypeModel');
         }
-        function index(){
+        function AddImport(){
             $data['Title']="OES-User Accounts";
             $data['useraccounts']="active";
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="";
             $data['dep']=$this->DepartmentModel->getAllDepartment();
+            $data['utype']=$this->UserTypeModel->getUserType();
             $this->load->view('layout/header',$data);
-            $this->load->view('admin/user_accounts_page',$data);
+            $this->load->view('admin/add_import_page',$data);
+        }
+        function View(){
+            $data['Title']="OES-User Accounts";
+            $data['useraccounts']="active";
+            $data['nas']="";
+            $data['department']="";
+            $data['scheduler']="";
+            $data['dep']=$this->DepartmentModel->getDepartment();
+            $data['utype']=$this->UserTypeModel->getUserType();
+            $this->load->view('layout/header',$data);
+            $this->load->view('admin/view_user_accounts_page',$data);
+        }
+        public function uploadExcel()
+        {
+            $config['upload_path']='./assets/uploads/Excel';
+            $config['allowed_types']='xlsx|xlsm|xltx|xltm';
+            $config['file_name'] = $this->input->post("Filename");
+            $this->load->library('upload',$config);
+            $data['success']=false;
+            if($this->upload->do_upload('File')){
+                $upload=$this->upload->data();
+                $data['success']=true;
+                $data['filename']=$upload['file_name'];
+            }
+            echo json_encode($data);
+        }
+        public function getAllDepartment()
+        {
+            $data['department']=$this->DepartmentModel->getDepartment();
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
         }
         public function getUserInfo(){
             $data['info']=$this->UserInfoModel->getUserInfo($this->input->post('ID'));
@@ -80,8 +116,26 @@
             }
             echo json_encode($data);
         }
+        public function importUser()
+        {
+            $datas = array('Email' => $this->input->post('Email'),
+                            'Password'=>$this->input->post('Email'),
+                            'DepartmentID' => $this->input->post('DepartmentID'),
+                            'UserTypeID'=>2
+                        );
+            $query=$this->UserAccountModel->AddNewUser($datas);
+			$data['success']=false;
+			if($query){
+				$data['success']=true;
+			}
+			echo json_encode($data);
+        }
         public function AddNewUser(){
-			$datas = array('Email' => $this->input->post('Email'),'Password'=>$this->input->post('Email'),'DepartmentID' => $this->input->post('cmbDepartment'),'UserTypeID'=>$this->input->post('UserTypeID'));
+			$datas = array('Email' => $this->input->post('Email'),
+                            'Password'=>$this->input->post('Email'),
+                            'DepartmentID' => $this->input->post('cmbDepartment'),
+                            'UserTypeID'=>$this->input->post('UserTypeID')
+                        );
 			$query['data']=$this->UserAccountModel->AddNewUser($datas);
 			$data['success']=false;
 			if($query['data']){
@@ -100,15 +154,15 @@
             echo json_encode($data);
         }
         public function checkEmailExistence(){
-            $query=$this->UserAccountModel->checkEmailExistence($this->input->post('Email'));
+            $data['user']=$this->UserAccountModel->checkEmailExistence($this->input->post('Email'));
             $data['success']=false;
-            if($query){
+            if($data['user']){
                 $data['success']=true;
             }
             echo json_encode($data);
         }
         public function getAllUser(){
-            $data['user']=$this->UserAccountModel->getAllUsers();
+            $data['user']=$this->UserAccountModel->getAllUsers($this->input->post("RoleID"),$this->input->post("DepartmentID"));
             $data['success']=false;
             if($data){
                 $data['success']=true;

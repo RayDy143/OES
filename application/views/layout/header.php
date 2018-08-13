@@ -35,6 +35,9 @@
     <script src="<?php echo base_url(); ?>assets/metro/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/mdtimepicker.js') ?>"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/jquery.mCustomScrollbar.min.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo base_url('assets/plugins/xlsx.full.min.js') ?>"></script>
+
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
     <title><?php echo $Title; ?></title>
 
@@ -100,7 +103,7 @@
             <div class="stub bg-dark drop-shadow">
                 <ul class="sidenav-m3 bg-dark fg-white">
                     <li class="title">Masterfile</li>
-                    <li><a id="sideUserAccounts" class="<?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts') ?>"><span class="mif-home icon"></span>User Accounts</a></li>
+                    <li><a id="sideUserAccounts" class="<?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts/AddImport') ?>"><span class="mif-home icon"></span>User Accounts</a></li>
                     <li><a id="sideUserNas" class="<?php echo $nas ?>" href="<?php echo base_url('index.php/Nas'); ?>"><span class="mif-list icon"></span>NAS</a></li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
                     <li><a id="sideUserScheduler" class="<?php echo $scheduler ?>" href="<?php echo base_url('index.php/Scheduler') ?>"><span class="mif-list icon"></span>Scheduler</a></li>

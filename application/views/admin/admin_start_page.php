@@ -341,7 +341,7 @@
 
             <div class="tile-container">
 
-                <a href="<?php echo base_url('index.php/UserAccounts'); ?>" class="tile bg-indigo fg-white" data-role="tile">
+                <a href="<?php echo base_url('index.php/UserAccounts/AddImport'); ?>" class="tile bg-indigo fg-white" data-role="tile">
                     <div class="tile-content iconic">
                         <span></span>
                     </div>
