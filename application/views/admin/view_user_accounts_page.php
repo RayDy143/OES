@@ -21,13 +21,12 @@
             <li class="page-item"><a href="#" class="page-link">View User</a></li>
         </ul>
         <div class="stub">
-            <button type="button" name="button" onclick="Metro.dialog.open('#demoDialog1')" class="button drop-shadow bg-darkBlue fg-white">New User</button>
-            <button type="button" name="button" class="button bg-darkBlue fg-white drop-shadow">Import</button>
+            <a href="<?php echo base_url('index.php/UserAccounts/AddImport') ?>" class="button bg-darkBlue fg-white">Add User/Import</a>
         </div>
     </div>
     <div class="row">
         <div class="stub">
-            <h3>User Accounts</h3>
+            <h4>User Accounts</h4>
         </div>
         <div class="cell">
             <div class="row">
@@ -80,159 +79,10 @@
         </div>
     </div>
 </div>
-    <div class="dialog" data-role="dialog" id="demoDialog1">
-        <form data-role="validator" id="frmAddUser" data-on-submit="submitForm" action="javascript:">
-            <div class="dialog-title">Add new user<hr class="thick bg-black"></div>
-            <div class="dialog-content">
-                <div class="form-group">
-                    <label for="Email">Email</label>
-                    <input type="email" name="Email" id="Email" data-validate="email required" placeholder="Enter Email">
-                </div>
-                <div class="form-group">
-                    <label for="">Select Usertype</label>
-                    <select data-role="select" id="cmbUserType">
-                        <option value="1">Admin</option>
-                        <option value="2">Evaluator</option>
-                    </select>
-                </div>
-                <div class="form-group" id="depContainer">
-                    <label for="cmbDepartment">Select Department</label>
-                    <select id="cmbDepartment">
-                        <?php
-                        foreach ($dep as $row) {
-                            if($row['DepartmentName']=="Admin"){
-                                echo '<option selected value="'.$row['DepartmentID'].'">'.$row['DepartmentName'].'</option>';
-                            }else{
-                                echo '<option value="'.$row['DepartmentID'].'">'.$row['DepartmentName'].'</option>';
-                            }
-                        }
-
-                         ?>
-                    </select>
-                </div>
-            </div>
-            <div class="dialog-actions">
-                <button type="button" class="button alert place-right js-dialog-close">Cancel</button>
-                <button type="submit" id="btnAdd" class="button primary place-right">Add</button>
-            </div>
-        </form>
-    </div>
 </div>
 </div>
 
 <script>
-
-    function submitForm(){
-        var _check=checkEmailExistence($("#Email").val());
-        if(_check=="Deleted"){
-            Metro.dialog.close(".dialog");
-            Metro.dialog.create({
-               title: "This user was recently registered to this system and have beed deleted!",
-               content: "<div>Would you like to add this user as a new user or just restore this user?</div>",
-               clsDialog: "bg-red fg-white",
-               actions: [
-                   {
-                       caption: "Add as new",
-                       cls: "js-dialog-close",
-                       onclick: function(){
-                           $.ajax({
-                               method:'POST',
-                               type:'ajax',
-                               url:'<?php echo base_url("index.php/UserAccounts/AddAsNewUser"); ?>',
-                               data: {Email:$("#Email").val(),cmbDepartment:$("#cmbDepartment").val(),UserTypeID:$("#cmbUserType").val()},
-                               dataType:'json',
-                               success:function(response){
-                                   if(response.success){
-                                       Metro.dialog.close("#demoDialog1");
-                                       var html_content =
-                                       "<p>Adding of user was successful</p>";
-                                        Metro.infobox.create(html_content,"success",{
-                                            overlay:true
-                                        });
-                                        $(".filter").change();
-
-                                   }
-                               },
-                               error: function()
-                               {
-                                   var html_content =
-                                   "<p>Adding of user was unsuccessful. Please contact your system administrator immediately.</p>";
-                                    Metro.infobox.create(html_content,"alert",{
-                                        overlay:true
-                                    });
-                               }
-                           });
-                       }
-                   },
-                   {
-                       caption: "Restore user",
-                       cls: "js-dialog-close",
-                       onclick: function(){
-                           $.ajax({
-                               method:'POST',
-                               type:'ajax',
-                               url:'<?php echo base_url("index.php/UserAccounts/restoreUser") ?>',
-                               dataType:'json',
-                               data:{Email:$("#Email").val()},
-                               success:function(response){
-                                   var html_content =
-                                   "<p>Successfully restored.</p>";
-                                    Metro.infobox.create(html_content,"success",{
-                                        overlay:true
-                                    });
-                                    $(".filter").change();
-
-                               },
-                               error:function(){
-                                   var html_content =
-                                   "<p>System error. Please immediately contact your system administrator.</p>";
-                                    Metro.infobox.create(html_content,"alert",{
-                                        overlay:true
-                                    });
-                               }
-                           });
-                       }
-                   },
-                   {
-                       caption: "Cancel",
-                       cls: "js-dialog-close"
-                   }
-               ]
-           });
-       }else if(_check=="Duplicated"){
-           html_content="<p>The email you entered was already been registered.</p>";
-            Metro.infobox.create(html_content,"success",{
-                overlay:true
-            });
-        }else{
-            $.ajax({
-                method:'POST',
-                type:'ajax',
-                url:'<?php echo base_url("index.php/UserAccounts/AddNewUser"); ?>',
-                data: {Email:$("#Email").val(),cmbDepartment:$("#cmbDepartment").val(),UserTypeID:$("#cmbUserType").val()},
-                dataType:'json',
-                success:function(response){
-                    if(response.success){
-                        Metro.dialog.close("#demoDialog1");
-                        var html_content =
-                        "<p>Adding of user was successful</p>";
-                         Metro.infobox.create(html_content,"success",{
-                             overlay:true
-                         });
-                         $(".filter").change();
-                    }
-                },
-                error: function()
-                {
-                    var html_content =
-                    "<p>Adding of user was unsuccessful. Please contact your system administrator immediately.</p>";
-                     Metro.infobox.create(html_content,"alert",{
-                         overlay:true
-                     });
-                }
-            });
-        }
-    }
     function getAllUsers() {
         $.ajax({
             type:'ajax',
@@ -263,34 +113,6 @@
                 }
             }
         })
-    }
-    function checkEmailExistence(email){
-        var _res="Available";
-        $.ajax({
-            type:'ajax',
-            method:'POST',
-            url:'<?php echo base_url("index.php/UserAccounts/checkEmailExistence"); ?>',
-            dataType:'json',
-            data:{Email:email},
-            async:false,
-            success:function(response){
-                if(response.success){
-                    if(response.user.IsDeleted==1){
-                        _res="Deleted";
-                    }else{
-                        _res="Duplicated";
-                    }
-                }
-            },
-            error:function(){
-                var html_content =
-                "<p>There were some issues on the database you should contact you system administrator.</p>";
-                 Metro.infobox.create(html_content,"alert",{
-                     overlay:true
-                 });
-            }
-        });
-        return _res;
     }
     $(document).ready(function(){
         $("#tblUsers").dataTable();

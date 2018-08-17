@@ -23,7 +23,7 @@
             $data['dep']=$this->DepartmentModel->getAllDepartment();
             $data['utype']=$this->UserTypeModel->getUserType();
             $this->load->view('layout/header',$data);
-            $this->load->view('admin/add_import_page',$data);
+            $this->load->view('admin/add_import_user_page',$data);
         }
         function View(){
             $data['Title']="OES-User Accounts";

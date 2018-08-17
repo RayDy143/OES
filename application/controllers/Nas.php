@@ -24,17 +24,26 @@
             $data['scheduler']="";
             $data['dep']=$this->DepartmentModel->getAllDepartment();
             $this->load->view('layout/header',$data);
-            $this->load->view('admin/nas_page');
+            $this->load->view('admin/new_nas_page');
         }
-        function Add(){
-            $data['Title']="OES-Add Nas";
+        function View(){
+            $data['Title']="OES-View NAS";
             $data['useraccounts']="";
             $data['nas']="active";
             $data['department']="";
             $data['scheduler']="";
             $data['dep']=$this->DepartmentModel->getAllDepartment();
             $this->load->view('layout/header',$data);
-            $this->load->view('admin/new_nas_page');
+            $this->load->view('admin/nas_page');
+        }
+        function Import(){
+            $data['Title']="OES-Import";
+            $data['useraccounts']="";
+            $data['nas']="active";
+            $data['department']="";
+            $data['scheduler']="";
+            $this->load->view('layout/header',$data);
+            $this->load->view('admin/import_nas_page');
         }
         function Info($id){
             $data['Title']="OES-NAS Information";
@@ -78,6 +87,19 @@
             $data['dailysched']=$this->DailyScheduleModel->getDailySchedofNAS($this->input->post('NasID'));
             $this->load->view('layout/header',$data);
             $this->load->view('admin/more_nas_info_page');
+        }
+        public function uploadExcel()
+        {
+            $config['upload_path']='./assets/temp_files';
+            $config['allowed_types']='xlsx|xlsm|xltx|xltm';
+            $this->load->library('upload',$config);
+            $data['success']=false;
+            if($this->upload->do_upload('ExcelFile')){
+                $upload=$this->upload->data();
+                $data['filename']=$upload['file_name'];
+                $data['success']=true;
+            }
+            echo json_encode($data);
         }
         function uploadProfilePic($file){
 			$config['upload_path']= './assets/uploads/Picture';
@@ -127,6 +149,16 @@
             $data['nas']=$this->NASModel->getNas($this->input->post('ID'));
             $data['success']=false;
             if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function deleteNas()
+        {
+            $where = array('NasID' => $this->input->post("ID") );
+            $query=$this->NASModel->deleteNas($where);
+            $data['success']=false;
+            if($query){
                 $data['success']=true;
             }
             echo json_encode($data);

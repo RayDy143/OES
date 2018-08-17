@@ -11,13 +11,13 @@
     <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
     <title>OES-Admin Dashboard</title>
 
-    <link href="<?php echo base_url(); ?>assets/metro2/css/metro.css" rel="stylesheet">
-     <link href="<?php echo base_url(); ?>assets/metro2/css/metro-icons.css" rel="stylesheet">
-     <link href="<?php echo base_url(); ?>assets/metro2/css/metro-responsive.css" rel="stylesheet">
-     <link href="<?php echo base_url(); ?>assets/metro2/css/metro-schemes.css" rel="stylesheet">
-     <link href="<?php echo base_url(); ?>assets/metro2/css/metro-colors.css" rel="stylesheet">
+    <link href="<?php echo base_url('assets/metro2/css/metro.css'); ?>" rel="stylesheet">
+     <link href="<?php echo base_url('assets/metro2/css/metro-icons.css'); ?>" rel="stylesheet">
+     <link href="<?php echo base_url('assets/metro2/css/metro-responsive.css'); ?>" rel="stylesheet">
+     <link href="<?php echo base_url('assets/metro2/css/metro-schemes.css'); ?>" rel="stylesheet">
+     <link href="<?php echo base_url('assets/metro2/css/metro-colors.css'); ?>" rel="stylesheet">
 
-     <script src="<?php echo base_url(); ?>assets/metro2/js/jquery-3.1.1.min.js"></script>
+     <script src="<?php echo base_url(); ?>assets/metro2/js/jquery-3.3.1.min.js"></script>
      <script src="<?php echo base_url(); ?>assets/metro2/js/metro.js"></script>
 
     <style>

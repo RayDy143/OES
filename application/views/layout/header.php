@@ -36,9 +36,8 @@
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/mdtimepicker.js') ?>"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/jquery.mCustomScrollbar.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/xlsx.full.min.js') ?>"></script>
-
-    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
+    <script src="<?php echo base_url('assets/plugins/datatable.min.js'); ?>"></script>
     <title><?php echo $Title; ?></title>
 
     <style>
@@ -67,7 +66,7 @@
 <body class="h-vh-100">
     <div class="pos-fixed fixed-top app-bar-wrapper z-top bg-blue drop-shadow">
         <header class="container-fluid pos-relative app-bar-expand-md fg-white bg-darkBlue" data-role="appbar">
-            <a href="#" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
+            <a href="#" id="Brand" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
             <div class="app-bar-container ml-auto order-2">
                 <a href="#" class="app-bar-item"><strong>Home</strong></a>
                 <a href="#" class="app-bar-item"><span class="mif-bell"></span></a>
@@ -100,7 +99,7 @@
     </div>
     <div class="grid mt-13" style="margin-bottom:0px;">
         <div class="row" style="height:100%;">
-            <div class="stub bg-dark drop-shadow">
+            <div id="sidenavcontainer" class="stub bg-dark drop-shadow">
                 <ul class="sidenav-m3 bg-dark fg-white">
                     <li class="title">Masterfile</li>
                     <li><a id="sideUserAccounts" class="<?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts/AddImport') ?>"><span class="mif-home icon"></span>User Accounts</a></li>

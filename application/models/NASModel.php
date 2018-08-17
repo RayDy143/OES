@@ -11,14 +11,14 @@
 		}
 		public function getNas($id){
 			if($id=='All'){
-				$query=$this->db->query("SELECT * from nas inner join department on nas.DepartmentID=department.DepartmentID left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where nasuploadedpicture.IsCurrent=1");
+				$query=$this->db->query("SELECT * from nas inner join department on nas.DepartmentID=department.DepartmentID left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where nasuploadedpicture.IsCurrent=1 and nas.IsDeleted=0");
 				if($query){
 					return $query->result_array();
 				}else{
 					return false;
 				}
 			}else{
-				$query=$this->db->query("SELECT * from nas inner join department on nas.DepartmentID=department.DepartmentID left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where department.DepartmentID='$id' and nasuploadedpicture.IsCurrent=1");
+				$query=$this->db->query("SELECT * from nas inner join department on nas.DepartmentID=department.DepartmentID left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where department.DepartmentID='$id' and nasuploadedpicture.IsCurrent=1 and nas.IsDeleted=0");
 				if($query){
 					return $query->result_array();
 				}else{
@@ -52,8 +52,9 @@
 			}
 		}
 		public function deleteNas($where){
+			$field = array('IsDeleted' => 1 );
 			$this->db->where($where);
-			$this->db->delete('nas');
+			$this->db->update('nas',$field);
 			if($this->db->affected_rows()>0){
 				return true;
 			}else{

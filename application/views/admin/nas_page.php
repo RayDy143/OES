@@ -1,6 +1,6 @@
 <div class="cell bg-white p-3 ml-4" style="overflow:auto;">
     <div class="row">
-        <a type="button" href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
@@ -18,15 +18,16 @@
             <li class="page-item"><a href="<?php echo base_url('index.php/AdminStart'); ?>" class="page-link">Home</a></li>
             <li class="page-item"><a href="#" class="page-link">Masterfile</a></li>
             <li class="page-item"><a href="#" class="page-link">NAS</a></li>
+            <li class="page-item"><a href="#" class="page-link">List of NAS</a></li>
         </ul>
         <div class="stub">
-            <a href="<?php echo base_url('index.php/Nas/Add') ?>" class="button drop-shadow bg-darkBlue fg-white">New NAS</a>
-            <button type="button" name="button" class="button bg-darkBlue fg-white drop-shadow">Import</button>
+            <a href="<?php echo base_url('index.php/Nas'); ?>" class="button bg-darkBlue fg-white">ADD</a>
+            <a href="<?php echo base_url('index.php/Nas/Import'); ?>" class="button bg-darkBlue fg-white">IMPORT</a>
         </div>
     </div>
     <div class="row">
         <div class="cell-8">
-            <h3>Non-Academic Scholars(NAS)</h3>
+            <h4>Non-Academic Scholars(NAS)</h4>
         </div>
         <div class="cell-4">
             <div class="row">
@@ -47,9 +48,25 @@
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
+    <div class="d-flex flex-justify-center" id="activity">
+        <div data-role="progress" id="progress" class="mr-3" data-type="line"></div>
+    </div>
     <div class="row" id="nasContainer">
-        <span class="mif-spinner2 mif-5x ani-spin mx-auto"></span>
+        <div class="cell mr-3">
+            <table id="tblNas" class="table table-border striped cell-border cell-hover win-shadow">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fullname</th>
+                        <th>Department</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
 
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </div>
@@ -57,6 +74,7 @@
 
 <script>
     $(document).ready(function() {
+        $("#tblNas").dataTable();
         $(window).on("load",function(){
             $('body').mCustomScrollbar({
                 scrollButtons:{enable:true,scrollType:"stepped"},
@@ -67,6 +85,42 @@
 				snapAmount:188,
 				snapOffset:65
     		});
+        });
+        $('body').on('click','button.delete',function(){
+            var _strid=$(this).attr('id');
+            var _id=_strid.split("Delete")[1];
+            Metro.dialog.create({
+                title:'Are you sure you want to delete this?',
+                content:'<p>This process cant be undone!</p>',
+                actions:[
+                    {
+                        caption:'Delete',
+                        cls:'alert js-dialog-close',
+                        onclick:function(){
+                            $.ajax({
+                                type:'ajax',
+                                method:'POST',
+                                url:'<?php echo base_url("index.php/Nas/deleteNas") ?>',
+                                data:{ID:_id},
+                                dataType:'json',
+                                success:function(response){
+                                    if(response.success){
+                                        var _infocontent='<p>Successfully deleted</p>';
+                                        Metro.infobox.create(_infocontent,"success",{
+                                            overlay:true
+                                        });
+                                        $("#cmbFilterDepartment").change();
+                                    }
+                                }
+                            });
+                        }
+                    },
+                    {
+                        caption:'Cancel',
+                        cls:'js-dialog-close'
+                    }
+                ]
+            });
         });
     });
     $('#cmbFilterDepartment').change(function () {
@@ -84,25 +138,20 @@
                 if(response.success){
                     var _nas=response.nas;
                     var _html='';
-                    $("#nasContainer").empty();
                     for (var i = 0; i < _nas.length; i++) {
-                        _html+='<div class="stub mx-auto" style="width:270px;">'
-                                        +'<div class="card win-shadow">'
-                                            +'<div class="card-header">'
-                                                +'<div class="avatar">'
-                                                    +'<img src="'+'<?php echo base_url("assets/uploads/Picture/"); ?>'+_nas[i].Filename+'">'
-                                                +'</div>'
-                                                +'<div class="name text-ellipsis">'+_nas[i].Firstname+' '+_nas[i].Lastname+'</div>'
-                                                +'<div class="date center">'+_nas[i].DepartmentName+'</div>'
-                                            +'</div>'
-                                            +'<div class="card-footer useractions">'
-                                                +'<a href="'+'<?php echo base_url("index.php/Nas/Info/"); ?>'+_nas[i].NasID+'" class="button edit bg-darkBlue fg-white"> <span class="mt-2 mif-info"> More Info</span></a>'
-                                                +'<button id="Delete'+_nas[i].NasID+'" class="button delete alert mif-bin"> Delete</button>'
-                                            +'</div>'
-                                        +'</div>'
-                                +'</div>';
+                        _html+='<tr>'
+                                    +'<td>'+_nas[i].IDNumber+'</td>'
+                                    +'<td>'+_nas[i].Firstname+' '+_nas[i].Lastname+'</td>'
+                                    +'<td>'+_nas[i].DepartmentName+'</td>'
+                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url('index.php/Nas/Info/'); ?>'+_nas[i].NasID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1">MORE</a><button id="Delete'+_nas[i].NasID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1">DELETE</button></div></td>'
+                               +'</tr>'
                     }
-                    $("#nasContainer").append(_html);
+                    if ($.fn.DataTable.isDataTable("#tblNas")) {
+                      $('#tblNas').DataTable().clear().destroy();
+                    }
+                    $('#tblNas tbody').html(_html);
+                    $("#tblNas").dataTable();
+                    $("#progress").hide();
 
                 }
             },

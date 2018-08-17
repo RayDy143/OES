@@ -9,6 +9,7 @@
         {
             parent::__construct();
             $this->load->model('DepartmentModel');
+            $this->load->model('LocationModel');
         }
         function index(){
             $data['Title']="OES-Department";
@@ -16,11 +17,22 @@
             $data['nas']="";
             $data['department']="active";
             $data['scheduler']="";
+            $data['location']=$this->LocationModel->getAllLocation();
             $this->load->view('layout/header',$data);
             $this->load->view('admin/department_page');
         }
+        function Manage($id){
+            $data['Title']="OES-Department";
+            $data['useraccounts']="";
+            $data['nas']="";
+            $data['department']="active";
+            $data['scheduler']="";
+            $data['location']=$this->LocationModel->getAllLocation();
+            $this->load->view('layout/header',$data);
+            $this->load->view('admin/manage_department_page');
+        }
         public function AddDepartment(){
-            $fields = array('DepartmentName' => $this->input->post('Department'));
+            $fields = array('DepartmentName' => $this->input->post('DepartmentName'),'LocationID'=>$this->input->post('Location'));
             $query=$this->DepartmentModel->AddDepartment($fields);
             $data['success']=false;
             if($query){

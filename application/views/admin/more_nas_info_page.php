@@ -1,6 +1,6 @@
 <div class="cell bg-white p-3 ml-4" style="overflow:auto;">
     <div class="row">
-        <a type="button" href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
@@ -24,6 +24,11 @@
     <div class="row">
         <div class="cell-8">
             <h4>Non-Academic Scholars Info</h4>
+        </div>
+        <div class="stub ml-auto">
+            <a href="<?php echo base_url('index.php/Nas'); ?>" class="button bg-darkBlue fg-white">ADD</a>
+            <a href="<?php echo base_url('index.php/Nas/Import'); ?>" class="button bg-darkBlue fg-white">IMPORT</a>
+            <a href="<?php echo base_url('index.php/Nas/View'); ?>" class="button bg-darkBlue fg-white">VIEW ALL NAS</a>
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">

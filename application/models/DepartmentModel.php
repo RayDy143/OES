@@ -6,7 +6,7 @@
 	class DepartmentModel extends CI_Model
 	{
 		public function getDepartment(){
-			$query=$this->db->query('SELECT DepartmentID,DepartmentName FROM department where IsDeleted=0 and DepartmentName!="Admin"');
+			$query=$this->db->query('SELECT * FROM department inner join location on department.LocationID=location.LocationID where IsDeleted=0 and DepartmentName!="Admin"');
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{

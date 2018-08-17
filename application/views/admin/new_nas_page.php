@@ -23,7 +23,11 @@
     </div>
     <div class="row">
         <div class="cell-8">
-            <h3>Add new Non-Academic Scholars(NAS)</h3>
+            <h4>Add new Non-Academic Scholars(NAS)</h4>
+        </div>
+        <div class="stub ml-auto">
+            <a href="<?php echo base_url('index.php/Nas/View'); ?>" class="button bg-darkBlue fg-white">VIEW ALL NAS</a>
+            <a href="<?php echo base_url('index.php/Nas/Import'); ?>" class="button bg-darkBlue fg-white">IMPORT FROM EXCEL FILE</a>
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
