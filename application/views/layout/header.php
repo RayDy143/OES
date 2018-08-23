@@ -44,22 +44,18 @@
         .container-fluid,section,header,footer,aside{
             margin:0;
         }
-        a.active{
+        .sidenav-m3 li a.active{
             background-color: #0077a3 !important;
-            color:white;
         }
         table {
             font-size: 14px;
         }
-
-        table td [class*=mif-] {
-            margin: 0 4px;
-        }
-        .sidenav-m3 a{
-            background-color: inherit;
-        }
         .sidenav-m3 a:hover{
             background-color: #0077a3;
+        }
+        .button, .flat-button, .action-button{
+            background-color: #0077a3;
+            color: white;
         }
     </style>
 </head>
@@ -68,7 +64,7 @@
         <header class="container-fluid pos-relative app-bar-expand-md fg-white bg-darkBlue" data-role="appbar">
             <a href="#" id="Brand" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
             <div class="app-bar-container ml-auto order-2">
-                <a href="#" class="app-bar-item"><strong>Home</strong></a>
+                <a href="<?php echo base_url('index.php/AdminStart') ?>" class="app-bar-item"><strong>Home</strong></a>
                 <a href="#" class="app-bar-item"><span class="mif-bell"></span></a>
                 <div class="app-bar-container">
                     <a class="app-bar-item dropdown-toggle marker-light" href="#"><span class="mif-plus"></span></a>
@@ -99,11 +95,25 @@
     </div>
     <div class="grid mt-13" style="margin-bottom:0px;">
         <div class="row" style="height:100%;">
-            <div id="sidenavcontainer" class="stub bg-dark drop-shadow">
-                <ul class="sidenav-m3 bg-dark fg-white">
+            <div id="sidenavcontainer" style="background-color:#f8f8f8;" class="stub drop-shadow">
+                <ul class="sidenav-m3">
                     <li class="title">Masterfile</li>
-                    <li><a id="sideUserAccounts" class="<?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts/AddImport') ?>"><span class="mif-home icon"></span>User Accounts</a></li>
-                    <li><a id="sideUserNas" class="<?php echo $nas ?>" href="<?php echo base_url('index.php/Nas'); ?>"><span class="mif-list icon"></span>NAS</a></li>
+                    <li>
+                        <a id="sideUserAccounts" class="dropdown-toggle <?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts/AddImport') ?>"><span class="mif-home icon"></span>User Accounts</a>
+                        <ul class="d-menu" data-role="dropdown" style="display: none;">
+                            <li><a href="<?php echo base_url('index.php/UserAccounts/Add'); ?>">Add User</a></li>
+                            <li><a href="<?php echo base_url('index.php/UserAccounts/Import'); ?>">Import User</a></li>
+                            <li><a href="<?php echo base_url('index.php/UserAccounts/View'); ?>">View User</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="sideUserNas" class="dropdown-toggle <?php echo $nas ?>" href="<?php echo base_url('index.php/Nas/Add') ?>"><span class="mif-list icon"></span>NAS</a>
+                        <ul class="d-menu" data-role="dropdown" style="display: none;">
+                            <li><a href="<?php echo base_url('index.php/Nas/Add'); ?>">Add Nas</a></li>
+                            <li><a href="<?php echo base_url('index.php/Nas/Import'); ?>">Import NAS</a></li>
+                            <li><a href="<?php echo base_url('index.php/Nas/View'); ?>">View NAS</a></li>
+                        </ul>
+                    </li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
                     <li><a id="sideUserScheduler" class="<?php echo $scheduler ?>" href="<?php echo base_url('index.php/Scheduler') ?>"><span class="mif-list icon"></span>Scheduler</a></li>
                     <li class="title">Evaluation Components</li>

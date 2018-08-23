@@ -65,26 +65,6 @@
 
         }
     </style>
-
-    <script>
-
-        /*
-         * Do not use this is a google analytics fro Metro UI CSS
-         * */
-        if (window.location.hostname !== 'localhost') {
-
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-            ga('create', 'UA-58849249-3', 'auto');
-            ga('send', 'pageview');
-
-        }
-
-    </script>
-
     <script>
         function ShowDialog(){
             metroDialog.create({
@@ -224,56 +204,6 @@
                 showSettings();
             });
         });
-
-        var weather_icons = {
-            'clear-day': 'mif-sun',
-            'clear-night': 'mif-moon2',
-            'rain': 'mif-rainy',
-            'snow': 'mif-snowy3',
-            'sleet': 'mif-weather4',
-            'wind': 'mif-wind',
-            'fog': 'mif-cloudy2',
-            'cloudy': 'mif-cloudy',
-            'partly-cloudy-day': 'mif-cloudy3',
-            'partly-cloudy-night': 'mif-cloud5'
-        };
-
-        var api_key = 'AIzaSyDPfgE0qhVmCcy-FNRLBjO27NbVrFM2abg';
-
-        $(function(){
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position){
-                    var lat = position.coords.latitude, lon = position.coords.longitude;
-                    var pos = lat+','+lon;
-                    var latlng = new google.maps.LatLng(lat, lon);
-                    var geocoder = new google.maps.Geocoder();
-                    $.ajax({
-                        url: '//api.forecast.io/forecast/219588ba41dedc2f1019684e8ac393ad/'+pos+'?units=si',
-                        dataType: 'jsonp',
-                        success: function(data){
-                            //do whatever you want with the data here
-                            geocoder.geocode({latLng: latlng}, function(result, status){
-                                console.log(result[3]);
-                                $("#city_name").html(result[3].formatted_address);
-                            });
-                            var current = data.currently;
-                            //$('#city_name').html(response.city+", "+response.country);
-                            $("#city_temp").html(Math.round(current.temperature)+" &deg;C");
-                            $("#city_weather").html(current.summary);
-                            $("#city_weather_daily").html(data.daily.summary);
-                            $("#weather_icon").addClass(weather_icons[current.icon]);
-                            $("#pressure").html(current.pressure);
-                            $("#ozone").html(current.ozone);
-                            $("#wind_bearing").html(current.windBearing);
-                            $("#wind_speed").html(current.windSpeed);
-                            $("#weather_bg").css({
-                                'background-image': 'url(../images/'+current.icon+'.jpg'+')'
-                            });
-                        }
-                    });
-                });
-            }
-        });
     </script>
 
 </head>
@@ -341,7 +271,7 @@
 
             <div class="tile-container">
 
-                <a href="<?php echo base_url('index.php/UserAccounts/AddImport'); ?>" class="tile bg-indigo fg-white" data-role="tile">
+                <a href="<?php echo base_url('index.php/UserAccounts/Add'); ?>" class="tile bg-indigo fg-white" data-role="tile">
                     <div class="tile-content iconic">
                         <span></span>
                     </div>

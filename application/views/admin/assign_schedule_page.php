@@ -23,7 +23,7 @@
     </div>
     <div class="row">
         <div class="stub">
-            <h3>Assign Schedule for <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?></h3>
+            <h4>Assign Schedule for <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?></h4>
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">

@@ -14,7 +14,7 @@
             $this->load->model('UserInfoModel');
             $this->load->model('UserTypeModel');
         }
-        function AddImport(){
+        function Import(){
             $data['Title']="OES-User Accounts";
             $data['useraccounts']="active";
             $data['nas']="";
@@ -23,7 +23,18 @@
             $data['dep']=$this->DepartmentModel->getAllDepartment();
             $data['utype']=$this->UserTypeModel->getUserType();
             $this->load->view('layout/header',$data);
-            $this->load->view('admin/add_import_user_page',$data);
+            $this->load->view('admin/import_user_page',$data);
+        }
+        function Add(){
+            $data['Title']="OES-User Accounts";
+            $data['useraccounts']="active";
+            $data['nas']="";
+            $data['department']="";
+            $data['scheduler']="";
+            $data['dep']=$this->DepartmentModel->getAllDepartment();
+            $data['utype']=$this->UserTypeModel->getUserType();
+            $this->load->view('layout/header',$data);
+            $this->load->view('admin/add_user_page',$data);
         }
         function View(){
             $data['Title']="OES-User Accounts";
@@ -31,7 +42,7 @@
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="";
-            $data['dep']=$this->DepartmentModel->getDepartment();
+            $data['dep']=$this->DepartmentModel->getDepartment("All");
             $data['utype']=$this->UserTypeModel->getUserType();
             $this->load->view('layout/header',$data);
             $this->load->view('admin/view_user_accounts_page',$data);
@@ -50,9 +61,23 @@
             }
             echo json_encode($data);
         }
+        public function uploadTempExcel()
+        {
+            $config['upload_path']='./assets/temp_files';
+            $config['allowed_types']='xlsx|xlsm|xltx|xltm';
+            $config['file_name'] = $this->input->post("Filename");
+            $this->load->library('upload',$config);
+            $data['success']=false;
+            if($this->upload->do_upload('File')){
+                $upload=$this->upload->data();
+                $data['success']=true;
+                $data['filename']=$upload['file_name'];
+            }
+            echo json_encode($data);
+        }
         public function getAllDepartment()
         {
-            $data['department']=$this->DepartmentModel->getDepartment();
+            $data['department']=$this->DepartmentModel->getDepartment("All");
             if($data){
                 $data['success']=true;
             }

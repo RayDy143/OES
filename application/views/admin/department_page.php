@@ -1,7 +1,7 @@
 <div class="cell bg-white p-3 ml-4">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
-        <div class="stub ml-auto">
+        <div class="stub ml-auto no-visible">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
                 <div class="cell" data-role="countdown"  data-date="09/25/2018"
@@ -19,16 +19,36 @@
             <li class="page-item"><a href="#" class="page-link">Masterfile</a></li>
             <li class="page-item"><a href="#" class="page-link">Department</a></li>
         </ul>
+        <div class="stub ml-auto">
+            <button type="button" onclick="Metro.dialog.open('#AddDepartmentDialog');" class="button bg-darkBlue fg-white" name="button">ADD NEW DEPARTMENT</button>
+        </div>
     </div>
     <div class="row">
         <div class="stub">
             <h4>Department</h4>
         </div>
-        <div class="stub ml-auto">
-            <button type="button" onclick="Metro.dialog.open('#AddDepartmentDialog');" class="button bg-darkBlue fg-white" name="button">ADD NEW DEPARTMENT</button>
+        <div class="cell">
+            <div class="row">
+                <div class="cell">
+                    <label class="place-right mt-1">Filter by department:</label>
+                </div>
+                <div class="stub">
+                    <select class="filter" id="cmbFilterLocation">
+                        <option value="All">All</option>
+                        <?php
+                            foreach ($location as $row) {
+                                    echo '<option value="'.$row['LocationID'].'">'.$row['Name'].'</option>';
+                            }
+                         ?>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
+    <div class="d-flex flex-justify-center" id="activity">
+        <div data-role="progress" id="progress" class="mr-3" data-type="line"></div>
+    </div>
     <div class="row">
         <div class="cell mr-4">
             <div class="row">
@@ -99,6 +119,9 @@
         });
         $("#tblDepartment").DataTable();
         getAllDepartment();
+        $('#cmbFilterLocation').change(function () {
+            getAllDepartment();
+        });
         $("#tblDepartment").on('click','button.delete',function() {
             var _stringID=$(this).attr('id');
             var _id=_stringID.split('Delete')[1];
@@ -158,6 +181,7 @@
             type:'ajax',
             method:'POST',
             url:'<?php echo base_url("index.php/Department/getAllDepartment") ?>',
+            data:{ID:$("#cmbFilterLocation").val()},
             dataType:'json',
             success:function(response) {
                 if(response.success){
@@ -178,6 +202,7 @@
                     }
                     $("#tblDepartment tbody").html(_tableContent);
                     $("#tblDepartment").DataTable();
+                    $("#progress").hide();
                 }
             },
             error:function(){

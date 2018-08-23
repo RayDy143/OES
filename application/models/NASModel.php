@@ -51,12 +51,68 @@
 				return false;
 			}
 		}
+		public function restoreNas($where)
+		{
+			$fields = array('IsDeleted' => 0 );
+			$this->db->where($where);
+			$this->db->update('nas',$fields);
+			if($this->db->affected_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function hardDeleteNas($where)
+		{
+			$this->db->where($where);
+			$this->db->delete('nasuploadedpicture');
+			$this->db->where($where);
+			$this->db->delete('nasschedule');
+			$this->db->where($where);
+			$this->db->delete('nas');
+			if($this->db->affected_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		public function deleteNas($where){
 			$field = array('IsDeleted' => 1 );
 			$this->db->where($where);
 			$this->db->update('nas',$field);
 			if($this->db->affected_rows()>0){
 				return true;
+			}else{
+				return false;
+			}
+		}
+		public function IsIDNumberExist($where)
+		{
+			$this->db->where($where);
+			$query=$this->db->get('nas');
+			if($query->num_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function IsEmailExist($where)
+		{
+			$this->db->where($where);
+			$query=$this->db->get('nas');
+			if($query->num_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function IsRecentlyDeleted($where)
+		{
+			$this->db->where($where);
+			$query=$this->db->get('nas');
+			if($query->num_rows()>0){
+				$row=$query->row();
+				return $row->NasID;
 			}else{
 				return false;
 			}

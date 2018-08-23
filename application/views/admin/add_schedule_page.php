@@ -23,10 +23,7 @@
             </div>
             <div class="row">
                 <div class="stub">
-                    <h3>Add Schedule</h3>
-                </div>
-                <div class="stub ml-auto">
-                    <input type="text" class="win-shadow" data-role="search">
+                    <h4>Add new schedule</h4>
                 </div>
             </div>
             <hr class="row thick bg-black drop-shadow">
@@ -41,8 +38,11 @@
                             <div class="cell-sm-12 cell-md-6 cell-lg-5 form-group">
                                 <label for="">Shift</label>
                                 <select id="cmbShift" name="Shift" data-validate="required" data-role="select">
-                                    <option value="Morning">Morning</option>
-                                    <option value="Afternoon">Afternoon</option>
+                                    <?php
+                                        foreach ($shift as $row) {
+                                                echo '<option value="'.$row['ShiftID'].'">'.$row['Shift'].'</option>';
+                                        }
+                                     ?>
                                 </select>
                             </div>
                             <div class="cell mt-4">

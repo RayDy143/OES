@@ -11,6 +11,7 @@
             $this->load->model('SchedulerModel');
             $this->load->model('DailyScheduleModel');
             $this->load->model('NasScheduleModel');
+            $this->load->model('ShiftModel');
         }
         function index(){
             $data['Title']="OES-Scheduler";
@@ -18,6 +19,7 @@
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="active";
+            $data['shift']=$this->ShiftModel->getShift();
             $this->load->view('layout/header',$data);
             $this->load->view('admin/scheduler_page');
         }
@@ -27,6 +29,7 @@
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="active";
+            $data['shift']=$this->ShiftModel->getShift();
             $this->load->view('layout/header',$data);
             $this->load->view('admin/add_schedule_page');
         }
@@ -36,8 +39,7 @@
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="active";
-            $whereSched = array('ScheduleID' => $id );
-            $data['schedule']=$this->SchedulerModel->getSchedulebyID($whereSched);
+            $data['schedule']=$this->SchedulerModel->getSchedulebyID($id);
             $data['nasschedule']=$this->NasScheduleModel->getNasSchedule($id);
             $this->load->view('layout/header',$data);
             $this->load->view('admin/manage_schedule_page');
@@ -70,7 +72,7 @@
         }
         public function addSchedule()
         {
-            $fields = array('ScheduleDescription' => $this->input->post('Schedule'),'Shift' => $this->input->post('Shift') );
+            $fields = array('ScheduleDescription' => $this->input->post('Schedule'),'ShiftID' => $this->input->post('Shift') );
             $data['id']=$this->SchedulerModel->addSchedule($fields);
             $data['success']=false;
             if($data){
@@ -87,7 +89,7 @@
             echo json_encode($data);
         }
         public function getSchedule(){
-            $data['sched']=$this->SchedulerModel->getSchedule();
+            $data['sched']=$this->SchedulerModel->getSchedule($this->input->post("ID"));
             $data['success']=false;
             if($data){
                 $data['success']=true;

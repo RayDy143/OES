@@ -1,7 +1,7 @@
 <div class="cell bg-white p-3 ml-4" style="overflow:auto;">
     <div class="row">
-        <a type="button" href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
-        <div class="stub ml-auto">
+        <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <div class="stub ml-auto no-visible">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
                 <div class="cell" data-role="countdown"  data-date="09/25/2018"
@@ -25,19 +25,16 @@
         <div class="cell-8">
             <h4>Add new Non-Academic Scholars(NAS)</h4>
         </div>
-        <div class="stub ml-auto">
-            <a href="<?php echo base_url('index.php/Nas/View'); ?>" class="button bg-darkBlue fg-white">VIEW ALL NAS</a>
-            <a href="<?php echo base_url('index.php/Nas/Import'); ?>" class="button bg-darkBlue fg-white">IMPORT FROM EXCEL FILE</a>
-        </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
     <div class="row">
         <div class="cell">
             <form id="frmAddNas" action="javascript:" data-role="validator" data-on-validate-form="validateAddNas">
-                <div data-role="panel" class="win-shadow" data-title-caption="Non-Academic Scholars(NAS) Infomation" data-cls-title="bg-darkBlue fg-white" data-collapsible="false">
+                <div data-role="panel" class="win-shadow mr-3" data-title-caption="Non-Academic Scholars(NAS) Infomation" data-cls-title="bg-darkBlue fg-white" data-collapsible="false">
                     <div class="row">
                         <div class="cell-lg-8 cell-md-12 cell-sm-12">
                             <div class="row">
+                                <input type="hidden" name="NasID" id="NasID">
                                 <div class="cell-lg-6 cell-md-12 cell-sm-12 form-group">
                                     <label for="IDNumber">ID Number</label>
                                     <input data-validate="required" type="text" data-role="input" id="IDNumber" name="IDNumber">
@@ -141,12 +138,99 @@
             contentType : false,
             processData : false,
             success:function(response){
-                if(response.success){
-                    var html_content =
-                    "<p>Successfully Added.</p>";
-                     Metro.infobox.create(html_content,"success",{
-                         overlay:true
-                     });
+                if(response.isrecentlydeleted){
+                    $('#NasID').val(response.isrecentlydeleted);
+                    var formData = new FormData( $("#frmAddNas")[0] );
+                    Metro.dialog.create({
+                        title:"Record was existed but recently deleted",
+                        content:"<p>You can add this as a new record or you may restore this record.",
+                        actions:[
+                            {
+                                caption:"Add as new",
+                                cls:"js-dialog-close primary",
+                                onclick:function () {
+                                    $.ajax({
+                                        type:'ajax',
+                                        method:'POST',
+                                        url:'<?php echo base_url("index.php/Nas/AddAsNew") ?>',
+                                        data:formData,
+                                        dataType:'json',
+                                        contentType : false,
+                                        processData : false,
+                                        success:function(addasnewresponse){
+                                            if(addasnewresponse.success){
+                                                var html_content =
+                                                "<p>Successfully Added.</p>";
+                                                 Metro.infobox.create(html_content,"success",{
+                                                     overlay:true
+                                                 });
+                                            }
+                                        },
+                                        error:function() {
+                                            var html_content =
+                                            "<p>System fatal error. Please contact your system administrator.</p>";
+                                             Metro.infobox.create(html_content,"alert",{
+                                                 overlay:true
+                                             });
+                                        }
+                                    })
+                                }
+                            },
+                            {
+                                caption:"Restore",
+                                cls:"js-dialog-close primary",
+                                onclick:function () {
+                                    $.ajax({
+                                        type:'ajax',
+                                        method:'POST',
+                                        url:'<?php echo base_url("index.php/Nas/restoreNas") ?>',
+                                        data:{IDNumber:$("#IDNumber").val()},
+                                        dataType:'json',
+                                        success:function (restoreresponse) {
+                                            if(restoreresponse.success){
+                                                var html_content =
+                                                "<p>Successfully Restored.</p>";
+                                                 Metro.infobox.create(html_content,"success",{
+                                                     overlay:true
+                                                 });
+                                            }
+                                        },
+                                        error:function () {
+                                            var html_content =
+                                            "<p>System fatal error. Please contact your system administrator.</p>";
+                                             Metro.infobox.create(html_content,"alert",{
+                                                 overlay:true
+                                             });
+                                        }
+                                    })
+                                }
+                            },
+                            {
+                                caption:"Cancel",
+                                cls:"js-dialog-close alert"
+                            }
+                        ]
+                    })
+                }else{
+                    if(response.success){
+                        var html_content =
+                        "<p>Successfully Added.</p>";
+                         Metro.infobox.create(html_content,"success",{
+                             overlay:true
+                         });
+                    }else if(response.duplicateid){
+                        var html_content =
+                        "<p>ID Number already exist.</p>";
+                         Metro.infobox.create(html_content,"alert",{
+                             overlay:true
+                         });
+                    }else if(response.duplicateemail){
+                        var html_content =
+                        "<p>Email already exist.</p>";
+                         Metro.infobox.create(html_content,"alert",{
+                             overlay:true
+                         });
+                    }
                 }
             }
         });

@@ -1,7 +1,7 @@
 <div class="cell bg-white p-3 ml-4" style="overflow:auto;">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
-        <div class="stub ml-auto">
+        <div class="stub ml-auto no-visible">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
                 <div class="cell" data-role="countdown"  data-date="09/25/2018"
@@ -20,10 +20,6 @@
             <li class="page-item"><a href="#" class="page-link">NAS</a></li>
             <li class="page-item"><a href="#" class="page-link">List of NAS</a></li>
         </ul>
-        <div class="stub">
-            <a href="<?php echo base_url('index.php/Nas'); ?>" class="button bg-darkBlue fg-white">ADD</a>
-            <a href="<?php echo base_url('index.php/Nas/Import'); ?>" class="button bg-darkBlue fg-white">IMPORT</a>
-        </div>
     </div>
     <div class="row">
         <div class="cell-8">

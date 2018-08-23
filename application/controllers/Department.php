@@ -41,7 +41,7 @@
             echo json_encode($data);
 		}
         public function getAllDepartment(){
-			$data['dep']=$this->DepartmentModel->getDepartment();
+			$data['dep']=$this->DepartmentModel->getDepartment($this->input->post("ID"));
             $data['success']=false;
             if($data){
                 $data['success']=true;

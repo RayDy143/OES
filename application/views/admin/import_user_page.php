@@ -1,7 +1,7 @@
 <div class="cell bg-white p-3 ml-4" style="overflow:auto;">
     <div class="row">
-        <a href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
-        <div class="stub ml-auto">
+        <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <div class="stub ml-auto no-visible">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
                 <div class="cell" data-role="countdown"  data-date="09/25/2018"
@@ -10,7 +10,6 @@
                      data-minutes="3"
                      data-seconds="4"></div>
             </div>
-
         </div>
     </div>
     <div class="row">
@@ -18,21 +17,18 @@
             <li class="page-item"><a href="<?php echo base_url('index.php/AdminStart'); ?>" class="page-link">Home</a></li>
             <li class="page-item"><a href="#" class="page-link">Masterfile</a></li>
             <li class="page-item"><a href="#" class="page-link">UserAccounts</a></li>
-            <li class="page-item"><a href="#" class="page-link">Add/Import</a></li>
+            <li class="page-item"><a href="#" class="page-link">Import</a></li>
         </ul>
     </div>
     <div class="row">
         <div class="stub">
-            <h4>User Accounts</h4>
-        </div>
-        <div class="stub ml-auto">
-            <a href="<?php echo base_url('index.php/UserAccounts/View'); ?>" class="button bg-darkBlue fg-white">VIEW USER ACCOUNTS</a>
+            <h4>Import User Accounts</h4>
         </div>
     </div>
-    <hr class="row thick bg-darkBlue drop-shadow">
+    <hr class="row thick bg-dark drop-shadow">
     <div class="row">
         <div class="cell-lg-12 cell-md-6 cell-sm-12">
-          <div class="mr-4 mt-2" data-role="panel" data-title-caption="Add new user" data-cls-title="bg-darkBlue fg-white">
+          <!-- <div class="mr-4 mt-2" data-role="panel" data-title-caption="Add new user" data-cls-title="bg-darkBlue fg-white">
               <form action="javascript:" data-interactive-check="true" data-role="validator" data-on-validate-form="submitAddUserForm">
                   <div class="row">
                       <div class="cell-4 form-group">
@@ -71,10 +67,9 @@
                       </div>
                   </div>
               </form>
-          </div>
+          </div> -->
         </div>
         <div class="cell-lg-12 cell-md-6 cell-sm-12">
-          <div class="mr-4 mt-2" data-role="panel" data-title-caption="Import user from excel files" data-cls-title="bg-darkBlue fg-white">
               <form id="frmImport" action="javascript:" data-role="validator" data-on-validate-form="validateImport">
                   <label><strong>Note: Excel file has to be its standard format.</strong></label><label class="row ml-1">(Download Sample:<strong><a href="#">sample.xlxs</a>)</strong></label>
                   <div class="row">
@@ -82,17 +77,24 @@
                           <label for="File">File</label>
                           <input data-validate="required" type="file" data-role="file" name="File" id="File">
                       </div>
-                      <input type="hidden" name="Filename" id="txtFilename">
-                  </div>
-                  <hr class="thin bg-darkBlue">
-                  <div class="row">
-                      <div class="cell-12 mt-2 form-group">
+                      <div class="cell-6 mt-2 form-group">
                           <button type="button" class="button bg-darkRed fg-white place-right ml-2" name="button">CLEAR</button>
                           <button type="submit" class="button bg-darkBlue fg-white place-right" name="button">IMPORT</button>
                       </div>
+                      <input type="hidden" name="Filename" id="txtFilename">
                   </div>
               </form>
-          </div>
+              <table id="tblImportUser" class="table table-border stripe cell-border cell-hover">
+                  <thead>
+                      <tr>
+                          <th>Email</th>
+                          <th>Department</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+              </table>
         </div>
     </div>
 </div>
@@ -112,46 +114,47 @@
     				snapOffset:65
     		});
         });
-        var depdata=[];
-        $('#DepartmentContainer').hide();
-        $("#UserType").change(function () {
-            if($(this).val()=="2"){
-                $('#DepartmentContainer').show();
-                $.ajax({
-                    type:'ajax',
-                    method:'POST',
-                    url:'<?php echo base_url("index.php/UserAccounts/getAllDepartment"); ?>',
-                    dataType:'json',
-                    success:function(response){
-                        if(response.success){
-                            var _optioncontent='';
-                            var _department=response.department;
-                            depdata=_department;
-                            for (var i = 0; i < _department.length; i++) {
-                                _optioncontent+='<option value="'+_department[i].DepartmentID+'">'
-                                                    +_department[i].DepartmentName
-                                                +'</option>';
-                            }
-                            $("#Department").empty().append(_optioncontent);
-                        }
-                    },
-                    error:function() {
-
-                    }
-                });
-
-            }else{
-                $('#DepartmentContainer').hide();
-                var _optioncontent='<option value="28">Admin</option>';
-                $("#Department").empty().append(_optioncontent);
-            }
-        });
+        $("#tblImportUser").DataTable();
         $('#File').change(function (e) {
              $("#txtFilename").val($("#File")[0].files[0].name);
+             var importFormData=new FormData($("#frmImport")[0]);
+             $.ajax({
+                 type:'ajax',
+                 method:'POST',
+                 url:'<?php echo base_url("index.php/UserAccounts/uploadTempExcel"); ?>',
+                 data:importFormData,
+                 contentType: false,
+                 processData: false,
+                 dataType:'json',
+                 success:function(uploadresponse){
+                     var _filename=uploadresponse.filename;
+                     importExcel({
+                         filename:"<?php echo base_url(); ?>assets/temp_files/"+_filename,
+                         success:function(excelResponse){
+                             var _excelData = excelResponse;
+                             var _length = _excelData.length;
+                             var _tableContent='';
+                             console.log(_excelData);
+                             if(_length>0){
+                                 for (var i = 0; i < _length; i++) {
+                                     _tableContent+='<tr>'
+                                                        +'<td>'+_excelData[i].Email+'</td>'
+                                                        +'<td>'+_excelData[i].Department+'</td>'
+                                                   +'</tr>';
+                                 }
+                                 if ($.fn.DataTable.isDataTable("#tblImportUser")) {
+                                   $('#tblImportUser').DataTable().clear().destroy();
+                                 }
+                                 $("#tblImportUser tbody").html(_tableContent);
+                                 $("#tblImportUser").DataTable();
+                             }
+                         }
+                     })
+                 }
+             })
         });
       });
       function validateImport(){
-
           var importFormData=new FormData($("#frmImport")[0]);
           $.ajax({
               type:'ajax',
@@ -304,116 +307,7 @@
 
           oReq.send();
       }
-      function submitAddUserForm(){
-          var _check=checkEmailExistence($("#Email").val());
-          if(_check=="Deleted"){
-              Metro.dialog.close(".dialog");
-              Metro.dialog.create({
-                 title: "This user was recently registered to this system and have beed deleted!",
-                 content: "<div>Would you like to add this user as a new user or just restore this user?</div>",
-                 clsDialog: "bg-red fg-white",
-                 actions: [
-                     {
-                         caption: "Add as new",
-                         cls: "js-dialog-close",
-                         onclick: function(){
-                             $.ajax({
-                                 method:'POST',
-                                 type:'ajax',
-                                 url:'<?php echo base_url("index.php/UserAccounts/AddAsNewUser"); ?>',
-                                 data: {Email:$("#Email").val(),cmbDepartment:$("#Department").val(),UserTypeID:$("#UserType").val()},
-                                 dataType:'json',
-                                 success:function(response){
-                                     if(response.success){
-                                         Metro.dialog.close("#demoDialog1");
-                                         var html_content =
-                                         "<p>Adding of user was successful</p>";
-                                          Metro.infobox.create(html_content,"success",{
-                                              overlay:true
-                                          });
-                                          $("#Email").val('');
-                                     }
-                                 },
-                                 error: function()
-                                 {
-                                     var html_content =
-                                     "<p>Adding of user was unsuccessful. Please contact your system administrator immediately.</p>";
-                                      Metro.infobox.create(html_content,"alert",{
-                                          overlay:true
-                                      });
-                                 }
-                             });
-                         }
-                     },
-                     {
-                         caption: "Restore user",
-                         cls: "js-dialog-close",
-                         onclick: function(){
-                             $.ajax({
-                                 method:'POST',
-                                 type:'ajax',
-                                 url:'<?php echo base_url("index.php/UserAccounts/restoreUser") ?>',
-                                 dataType:'json',
-                                 data:{Email:$("#Email").val()},
-                                 success:function(response){
-                                     var html_content =
-                                     "<p>Successfully restored.</p>";
-                                      Metro.infobox.create(html_content,"success",{
-                                          overlay:true
-                                      });
-                                      $("#Email").val('');
-                                 },
-                                 error:function(){
-                                     var html_content =
-                                     "<p>System error. Please immediately contact your system administrator.</p>";
-                                      Metro.infobox.create(html_content,"alert",{
-                                          overlay:true
-                                      });
-                                 }
-                             });
-                         }
-                     },
-                     {
-                         caption: "Cancel",
-                         cls: "js-dialog-close"
-                     }
-                 ]
-             });
-         }else if(_check=="Duplicated"){
-             html_content="<p>This email was already been registered</p>";
-              Metro.infobox.create(html_content,"alert",{
-                  overlay:true
-              });
-          }else{
-              $.ajax({
-                  method:'POST',
-                  type:'ajax',
-                  url:'<?php echo base_url("index.php/UserAccounts/AddNewUser"); ?>',
-                  data: {Email:$("#Email").val(),cmbDepartment:$("#Department").val(),UserTypeID:$("#UserType").val()},
-                  dataType:'json',
-                  success:function(response){
-                      if(response.success){
-                          Metro.dialog.close("#demoDialog1");
-                          var html_content =
-                          "<p>Adding of user was successful</p>";
-                           Metro.infobox.create(html_content,"success",{
-                               overlay:true
-                           });
-                           $("#Email").val('');
-                      }
-                  },
-                  error: function()
-                  {
-                      var html_content =
-                      "<p>Adding of user was unsuccessful. Please contact your system administrator immediately.</p>";
-                       Metro.infobox.create(html_content,"alert",{
-                           overlay:true
-                       });
-                  }
-              });
-          }
 
-      }
       function checkEmailExistence(email){
           var _res="Available";
           $.ajax({

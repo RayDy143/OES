@@ -5,12 +5,21 @@
 	 defined('BASEPATH') OR exit('No direct script access allowed');
 	class DepartmentModel extends CI_Model
 	{
-		public function getDepartment(){
-			$query=$this->db->query('SELECT * FROM department inner join location on department.LocationID=location.LocationID where IsDeleted=0 and DepartmentName!="Admin"');
-			if($query->num_rows()>0){
-				return $query->result_array();
+		public function getDepartment($id){
+			if($id=="All"){
+				$query=$this->db->query('SELECT * FROM department inner join location on department.LocationID=location.LocationID where IsDeleted=0 and DepartmentName!="Admin"');
+				if($query->num_rows()>0){
+					return $query->result_array();
+				}else{
+					return false;
+				}
 			}else{
-				return false;
+				$query=$this->db->query("SELECT * FROM department inner join location on department.LocationID=location.LocationID where IsDeleted=0 and DepartmentName!='Admin' and location.LocationID='$id'");
+				if($query->num_rows()>0){
+					return $query->result_array();
+				}else{
+					return false;
+				}
 			}
 		}
 		public function checkDepartmentExistence($where){

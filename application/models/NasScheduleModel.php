@@ -40,7 +40,7 @@
         }
         public function getSpecificNasSchedule($id)
         {
-            $query=$this->db->query("SELECT * from nasschedule inner join schedule on nasschedule.ScheduleID=schedule.ScheduleID where IsCurrent=1 and NasID='$id'");
+            $query=$this->db->query("SELECT * from nasschedule inner join schedule on nasschedule.ScheduleID=schedule.ScheduleID inner join shift on schedule.ShiftID=shift.ShiftID where IsCurrent=1 and NasID='$id'");
             if($query->num_rows()>0){
                 return $query->row();
             }else{

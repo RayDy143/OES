@@ -16,7 +16,7 @@
             $this->load->model("SchedulerModel");
             $this->load->model("NasUploadedPictureModel");
         }
-        function index(){
+        function Add(){
             $data['Title']="OES-Nas";
             $data['useraccounts']="";
             $data['nas']="active";
@@ -32,7 +32,7 @@
             $data['nas']="active";
             $data['department']="";
             $data['scheduler']="";
-            $data['dep']=$this->DepartmentModel->getAllDepartment();
+            $data['dep']=$this->DepartmentModel->getDepartment("All");
             $this->load->view('layout/header',$data);
             $this->load->view('admin/nas_page');
         }
@@ -51,7 +51,7 @@
             $data['nas']="active";
             $data['department']="";
             $data['scheduler']="";
-            $data['dep']=$this->DepartmentModel->getAllDepartment();
+            $data['dep']=$this->DepartmentModel->getDepartment("All");
             $data['nasprofile']=$this->NASModel->getNasProfile($id);
             $data['nasschedule']=$this->NasScheduleModel->getSpecificNasSchedule($id);
             $data['dailysched']=$this->DailyScheduleModel->getDailySchedofNAS($id);
@@ -65,7 +65,7 @@
             $data['department']="";
             $data['scheduler']="";
             $data['nasprofile']=$this->NASModel->getNasProfile($nasid);
-            $data['sched']=$this->SchedulerModel->getSchedule();
+            $data['sched']=$this->SchedulerModel->getSchedule("All");
             $this->load->view('layout/header',$data);
             $this->load->view('admin/assign_schedule_page');
         }
@@ -163,26 +163,82 @@
             }
             echo json_encode($data);
         }
+        public function restoreNas()
+        {
+            $where = array('IDNumber' =>$this->input->post('IDNumber') );
+            $restore=$this->NASModel->restoreNas($where);
+            $data['success']=false;
+            if($restore){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function AddAsNew()
+        {
+            $data['success']=false;
+            $where = array('NasID' => $this->input->post('NasID') );
+            if($this->NASModel->hardDeleteNas($where))
+            {
+                $picid=$this->uploadProfilePic('UploadPic');
+                if($picid){
+                    $fields = array(
+                                    'IDNumber' => $this->input->post('IDNumber')
+                                    ,'Firstname' => $this->input->post('Firstname')
+                                    ,'Middlename' => $this->input->post('Middlename')
+                                    ,'Lastname' => $this->input->post('Lastname')
+                                    ,'Email' => $this->input->post('Email')
+                                    ,'Address' => $this->input->post('Address')
+                                    ,'Birthdate' => $this->input->post('Birthdate')
+                                    ,'ContactNumber' => $this->input->post('ContactNumber')
+                                    ,'DepartmentID' => $this->input->post('Department')
+                    );
+                    $nasid=$this->NASModel->AddNas($fields);
+                    $query=$this->NasUploadedPictureModel->insertProfile($nasid,$picid);
+                    if($query){
+                        $data['success']=true;
+                    }
+                }
+            }
+            echo json_encode($data);
+        }
         public function AddNewNas()
         {
             $data['success']=false;
-            $picid=$this->uploadProfilePic('UploadPic');
-            if($picid){
-                $fields = array(
-                                'IDNumber' => $this->input->post('IDNumber')
-                                ,'Firstname' => $this->input->post('Firstname')
-                                ,'Middlename' => $this->input->post('Middlename')
-                                ,'Lastname' => $this->input->post('Lastname')
-                                ,'Email' => $this->input->post('Email')
-                                ,'Address' => $this->input->post('Address')
-                                ,'Birthdate' => $this->input->post('Birthdate')
-                                ,'ContactNumber' => $this->input->post('ContactNumber')
-                                ,'DepartmentID' => $this->input->post('Department')
-                );
-                $nasid=$this->NASModel->AddNas($fields);
-                $query=$this->NasUploadedPictureModel->insertProfile($nasid,$picid);
-                if($query){
-                    $data['success']=true;
+            $data['duplicateid']=false;
+            $data['duplicateemail']=false;
+            $data['isrecentlydeleted']=false;
+            $whereDeleted = array('IDNumber' => $this->input->post('IDNumber'),'IsDeleted'=>1 );
+            if($this->NASModel->IsRecentlyDeleted($whereDeleted)){
+                $data['isrecentlydeleted']=$this->NASModel->IsRecentlyDeleted($whereDeleted);
+            }else{
+                $whereId = array('IDNumber' => $this->input->post('IDNumber'));
+                if($this->NASModel->IsIDNumberExist($whereId)){
+                    $data['duplicateid']=true;
+                }else{
+                    $whereEmail = array('Email' => $this->input->post('Email'));
+                    if($this->NASModel->IsEmailExist($whereEmail)){
+                        $data['duplicateemail']=true;
+                    }else{
+                        $picid=$this->uploadProfilePic('UploadPic');
+                        if($picid){
+                            $fields = array(
+                                            'IDNumber' => $this->input->post('IDNumber')
+                                            ,'Firstname' => $this->input->post('Firstname')
+                                            ,'Middlename' => $this->input->post('Middlename')
+                                            ,'Lastname' => $this->input->post('Lastname')
+                                            ,'Email' => $this->input->post('Email')
+                                            ,'Address' => $this->input->post('Address')
+                                            ,'Birthdate' => $this->input->post('Birthdate')
+                                            ,'ContactNumber' => $this->input->post('ContactNumber')
+                                            ,'DepartmentID' => $this->input->post('Department')
+                            );
+                            $nasid=$this->NASModel->AddNas($fields);
+                            $query=$this->NasUploadedPictureModel->insertProfile($nasid,$picid);
+                            if($query){
+                                $data['success']=true;
+                            }
+                        }
+                    }
                 }
             }
             echo json_encode($data);

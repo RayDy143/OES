@@ -16,18 +16,25 @@
                 return false;
             }
         }
-        public function getSchedule(){
-            $this->db->where("IsDeleted",0);
-            $query=$this->db->get('schedule');
-            if($query->num_rows()>0){
-                return $query->result_array();
+        public function getSchedule($shiftid){
+            if($shifid="All"){
+                $query=$this->db->query("SELECT * FROM schedule inner join shift on schedule.ShiftID=shift.ShiftID where schedule.IsDeleted=0 and shift.IsDeleted=0");
+                if($query->num_rows()>0){
+                    return $query->result_array();
+                }else{
+                    return false;
+                }
             }else{
-                return false;
+                $query=$this->db->query("SELECT * FROM schedule inner join shift on schedule.ShiftID=shift.ShiftID where schedule.IsDeleted=0 and shift.IsDeleted=0 and shift.ShiftID='$shiftid'");
+                if($query->num_rows()>0){
+                    return $query->result_array();
+                }else{
+                    return false;
+                }
             }
         }
-        public function getSchedulebyID($where){
-            $this->db->where($where);
-            $query=$this->db->get('schedule');
+        public function getSchedulebyID($id){
+            $query=$this->db->query("SELECT * FROM schedule inner join shift on schedule.ShiftID=shift.ShiftID where schedule.ScheduleID='$id'");
             if($query->num_rows()>0){
                 return $query->row();
             }else{
