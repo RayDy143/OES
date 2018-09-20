@@ -1,6 +1,6 @@
-<div class="cell bg-white p-3 ml-4">
+<div class="cell bg-white p-3 ml-4 mr-4" style="overflow:auto;overflow-x:hidden;">
     <div class="row">
-        <a type="button" href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
@@ -10,7 +10,6 @@
                      data-minutes="3"
                      data-seconds="4"></div>
             </div>
-
         </div>
     </div>
     <div class="row">
@@ -23,7 +22,7 @@
     </div>
     <div class="row">
         <div class="stub">
-            <h3>Manage Schedule </h3>
+            <h4>Manage Schedule </h4>
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
@@ -37,16 +36,19 @@
                 <div id="target_info">
                     <input type="hidden" id="lblScheduleID" value="<?php echo $schedule->ScheduleID; ?>">
                     <div class="row">
-                        <div class="cell">Schedule Description : <?php echo $schedule->ScheduleDescription; ?></div>
-                        <button type="button" class="button stub bg-darkBlue fg-white mr-2">EDIT INFO</button>
+                        <div class="cell">Schedule Description : <span id="schedDescription"><?php echo $schedule->ScheduleDescription; ?></span> </div>
+                        <button type="button" id="btnEditSchedInfo" class="button stub bg-darkBlue fg-white mr-2">EDIT INFO</button>
                     </div>
-                    <div>Shift : <?php echo $schedule->Shift; ?></div>
-                    <hr class="thick bg-darkBlue">
-                    <h5>List of Non Academic Scholars assigned in this schedule.</h5>
-                    <table class="table striped table-border cell-border">
+                    <div>Shift : <span id="schedShift"><?php echo $schedule->Shift; ?></span> </div>
+                    <hr class="thick bg-dark">
+                    List of Non Academic Scholars assigned in this schedule.
+                    <table id="tblNas" class="table striped table-border cell-border">
                         <thead>
                             <tr>
+                                <th width="50px">Picture</th>
                                 <th>Full name</th>
+                                <th>Department</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody class="cell-hover">
@@ -54,42 +56,95 @@
                                 if($nasschedule){
                                     foreach($nasschedule as $row) {
                                         echo '<tr>';
+                                            echo '<td><div class="avatar"><img style="width:50px;" src="'.base_url('assets/uploads/Picture/').$row['Filename'].'"></div></td>';
                                             echo '<td>'.$row['Firstname'].' '.$row['Lastname'].' '.'</td>';
+                                            echo '<td>'.$row['DepartmentName'].'</td>';
+                                            echo '<td><div data-role="buttongroup" class="mx-auto"><a href="'.base_url('index.php/Nas/Info/').$row['NasID'].'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></a></div></td>';
                                         echo '</tr>';
                                     }
                                 }
                              ?>
                         </tbody>
                     </table>
+                    <!-- <p class="text-center h3 text-light">Sort by</p>
+                        <div class="d-flex flex-justify-center flex-wrap m-2">
+                            <div class="cell-md-4 mt-4">
+                                <select data-role="select" data-filter="false" data-prepend="Department:" data-on-change="$('#nas').data('list').filter(this.value)">
+                                    <option value="" selected>All</option>
+                                    <?php
+                                        foreach ($dep as $row) {
+                                            echo '<option value="'.$row['DepartmentName'].'">'.$row['DepartmentName'].'</option>';
+                                        }
+                                     ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <ul id="nas"
+                            data-role="list"
+                            data-sort-class="painting-name"
+                            data-sort-dir="desc"
+                            data-cls-list="unstyled-list row flex-justify-center mt-4"
+                            data-cls-list-item="cell-sm-6 cell-md-2"
+                            data-show-pagination="true"
+                            data-items="12"
+                        >
+                        <?php
+                            foreach ($nasschedule as $row) {
+                                echo '<li>';
+                                    echo '<figure class="text-center">';
+                                        echo '<div class="img-container thumbnail">';
+                                            echo '<img src="'.base_url('assets/uploads/Picture/').$row['Filename'].'" alt="Gogen, When is the wedding">';
+                                        echo '</div>';
+                                        echo '<figcaption class="painting-name">'.$row['Firstname'].' '.$row['Lastname'].'</figcaption>';
+                                        echo '<figcaption class="painting-author text-bold">'.$row['DepartmentName'].'</figcaption>';
+                                    echo '</figure>';
+                                echo '</li>';
+                            }
+                         ?>
+                        </ul> -->
                 </div>
                 <div id="target_daily_sched">
                     <div class="row">
-                        <h5 class="cell">Daily Schedule</h5>
-                        <button type="button" onclick="Metro.dialog.open('#AddDailySchedDialog');" class="button mr-2 stub drop-shadow bg-darkBlue fg-white" id="btnAddDaily" name="button">ADD DAILY SCHEDULE</button>
+                        <div class="cell">
+                            Daily Schedule
+                        </div>
                     </div>
                     <hr class="thick bg-darkBlue">
                     <div class="row" id="dailyschedulecontainer">
+                        <div class="cell">
+                            <table id="tblDailySchedule" class="table table-border striped cell-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>Time</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div data-role="dialog" class="dialog" id="AddDailySchedDialog">
-        <form id="AddDialySchedForm" action="javascript:" data-role="validator" data-on-validate-form="validateDialySched">
-            <div class="dialog-title">Add Dialy Schedule</div>
+    <div data-role="dialog" class="dialog" id="EditDailySchedDialog">
+        <form id="EditDailySched" action="javascript:" data-role="validator" data-on-validate-form="validateEditDailySched">
+            <div class="dialog-title">Edit Dialy Schedule</div>
             <div class="dialog-content">
                 <div class="row">
-                    <input type="hidden" name="ScheduleID" value="<?php echo $schedule->ScheduleID; ?>">
+                    <input type="hidden" name="txtDailyScheduleID" id="txtDailyScheduleID" value="">
                     <div class="cell-12 form-group">
                         <label for="Day"></label>
-                        <select data-role="select" name="Day">
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
-                            <option value="Saturday">Saturday</option>
+                        <select name="Day" id="cmbDay">
+                            <?php
+                                foreach ($day as $row) {
+                                    echo '<option value="'.$row['DayID'].'">'.$row['Day'].'</option>';
+                                }
+                             ?>
                         </select>
                     </div>
                     <div class="cell form-group">
@@ -103,7 +158,35 @@
                 </div>
             </div>
             <div class="dialog-actions">
-                <button type="submit" class="button bg-darkBlue fg-white place-right" name="button">Add</button>
+                <button type="submit" class="button bg-darkBlue fg-white place-right" name="button">Update</button>
+                <button type="button" class="button js-dialog-close bg-darkRed fg-white place-right" name="button">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <div data-role="dialog" class="dialog" id="EditSchedInfo">
+        <form id="frmEditSchedDetail" action="javascript:" data-role="validator" data-on-validate-form="validateEditSched">
+            <div class="dialog-title">Edit Schedule Details</div>
+            <div class="dialog-content">
+                <div class="row">
+                    <input type="hidden" name="ScheduleID" value="<?php echo $schedule->ScheduleID; ?>">
+                    <div class="cell form-group">
+                        <label for="txtSchedDes">Schedule Description</label>
+                        <input data-validate="required" data-role="input" id="txtSchedDes" name="txtSchedDes">
+                    </div>
+                    <div class="cell-12 form-group">
+                        <label for="ShiftID">Shift</label>
+                        <select data-role="select" id="ShiftID" name="ShiftID">
+                            <?php
+                                foreach ($shift as $row) {
+                                    echo '<option value="'.$row['ShiftID'].'">'.$row['Shift'].'</option>';
+                                }
+                             ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-actions">
+                <button type="submit" class="button bg-darkBlue fg-white place-right" name="button">Update</button>
                 <button type="button" class="button js-dialog-close bg-darkRed fg-white place-right" name="button">Cancel</button>
             </div>
         </form>
@@ -113,116 +196,39 @@
 </div>
 <script>
     $(document).ready(function(){
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                scrollButtons:{enable:true,scrollType:"stepped"},
-				keyboard:{scrollType:"stepped"},
-				mouseWheel:{scrollAmount:188},
-				theme:"rounded-dark",
-				autoExpandScrollbar:true,
-				snapAmount:188,
-				snapOffset:65
-    		});
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //         scrollButtons:{enable:true,scrollType:"stepped"},
+		// 		keyboard:{scrollType:"stepped"},
+		// 		mouseWheel:{scrollAmount:188},
+		// 		theme:"rounded-dark",
+		// 		autoExpandScrollbar:true,
+		// 		snapAmount:188,
+		// 		snapOffset:65
+    	// 	});
+        // });
+        $("#tblNas").DataTable();
+        $("#tblDailySchedule").DataTable();
+        getDialySchedule();
+        $("#btnEditSchedInfo").click(function () {
+            $("#txtSchedDes").val($('#schedDescription').text());
+            Metro.dialog.open('#EditSchedInfo');
         });
         $("#txtStartTime").mdtimepicker();
         $("#txtEndTime").mdtimepicker();
-        $('body').on('click','button.update-daily-sched',function(){
+        $('#tblDailySchedule tbody').on('click','button.edit',function(){
             var _stringId=$(this).attr('id');
-            var _id=_stringId.split('UpdateDaily')[1];
-            var _startTime=$("#UpdateStart"+_id).val();
-            var _endTime=$("#UpdateEnd"+_id).val();
-            if(_startTime!=""||_endTime!=""){
-                Metro.dialog.create({
-                    title:'Confirm update',
-                    content:'<p>Are you sure you want to update this?',
-                    actions:[
-                        {
-                            caption:'Update',
-                            cls:'bg-darkBlue fg-white js-dialog-close',
-                            onclick:function(){
-                                $.ajax({
-                                    type:'ajax',
-                                    method:'POST',
-                                    url:'<?php echo base_url("index.php/Scheduler/updateDailySched"); ?>',
-                                    data:{ID:_id,Start:_startTime,End:_endTime},
-                                    dataType:'json',
-                                    success:function(response){
-                                        var html_content =
-                                        "<p>Successfully updated.</p>";
-                                         Metro.infobox.create(html_content,"success",{
-                                             overlay:true
-                                         });
-                                    },
-                                    error:function(){
-                                        var html_content =
-                                        "<p>System error. Please contact you system administrator immediately.</p>";
-                                         Metro.infobox.create(html_content,"alert",{
-                                             overlay:true
-                                         });
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            caption:'Close',
-                            cls:'bg-darkRed fg-white js-dialog-close'
-                        }
-                    ]
-                });
-            }else{
-                var html_content =
-                "<p>Please dont leave the fields blank.</p>";
-                 Metro.infobox.create(html_content,"alert",{
-                     overlay:true
-                 });
-            }
-        });
-        $('body').on('click','button.delete-daily-sched',function(){
-            var _stringId=$(this).attr('id');
-            var _id=_stringId.split('DeleteDaily')[1];
-            Metro.dialog.create({
-                title:'Confirm update',
-                content:'<p>Are you sure you want to delete this?',
-                actions:[
-                    {
-                        caption:'Delete',
-                        cls:'bg-darkBlue fg-white js-dialog-close',
-                        onclick:function(){
-                            $.ajax({
-                                type:'ajax',
-                                method:'POST',
-                                url:'<?php echo base_url("index.php/Scheduler/deleteDailySchedule") ?>',
-                                data:{ID:_id},
-                                dataType:'json',
-                                success:function(response){
-                                    if(response.success){
-                                        var html_content =
-                                        "<p>Successfully deleted.</p>";
-                                         Metro.infobox.create(html_content,"success",{
-                                             overlay:true
-                                         });
-                                         getDialySchedule();
-                                    }
-                                },
-                                error:function(){
-                                    var html_content =
-                                    "<p>System error.</p>";
-                                     Metro.infobox.create(html_content,"alert",{
-                                         overlay:true
-                                     });
-                                }
-                            });
-                        }
-                    },
-                    {
-                        caption:'Close',
-                        cls:'bg-darkRed fg-white js-dialog-close'
-                    }
-                ]
-            });
+            var _id=_stringId.split('Edit')[1];
+            var _index=dailyScheduleData.findIndex(x=>x.DailyScheduleID==_id);
+            $("#cmbDay").val(dailyScheduleData[_index].DayID);
+            $("#txtDailyScheduleID").val(dailyScheduleData[_index].DailyScheduleID);
+            $("#txtStartTime").val(tConv24(dailyScheduleData[_index].StartTime));
+            $("#txtEndTime").val(tConv24(dailyScheduleData[_index].EndTime));
+            $("#txtStartTime").mdtimepicker();
+            $("#txtEndTime").mdtimepicker();
+            Metro.dialog.open("#EditDailySchedDialog");
         });
     });
-    getDialySchedule();
     function tConv24(time24) {
       var ts = time24;
       var H = +ts.substr(0, 2);
@@ -232,34 +238,50 @@
       ts = h + ts.substr(2, 3) + ampm;
       return ts;
     };
-    function validateDialySched(){
+    function validateEditSched() {
         $.ajax({
             type:'ajax',
             method:'POST',
-            url:'<?php echo base_url("index.php/Scheduler/addDailySched") ?>',
+            url:'<?php echo base_url("index.php/Scheduler/editScheduleDetail") ?>',
             data:$(this).serialize(),
             dataType:'json',
-            success:function(response){
+            success:function (response) {
                 if(response.success){
-                    var html_content =
-                    "<p>Successfully Added.</p>";
-                     Metro.infobox.create(html_content,"success",{
-                         overlay:true
-                     });
-                     getDialySchedule();
-                }else if(response.duplicate){
-                    var html_content =
-                    "<p>The day you are tyring to add already exist.Please select another day.</p>";
-                     Metro.infobox.create(html_content,"alert",{
-                         overlay:true
-                     });
+                    var infobox_content="<p>Successfully Updated</p>";
+                    Metro.infobox.create(infobox_content,'success',{overlay:true});
+                    $("#schedDescription").text($("#txtSchedDes").val());
+                    $("#schedShift").text($("#ShiftID option:selected").text());
+                    Metro.dialog.close("#EditSchedInfo");
                 }
             },
-            error:function(){
-
+            error:function() {
+                var infoboxcontent="<p>System fatal error.</p>";
+                Metro.infobox.create(infoboxcontent,"alert",{overlay:true});
             }
-        });
+        })
     }
+    function validateEditDailySched() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Scheduler/updateDailySched") ?>',
+            data:{ID:$("#txtDailyScheduleID").val(),Start:$("#txtStartTime").val(),End:$("#txtEndTime").val()},
+            dataType:'json',
+            success:function (response) {
+                if(response.success){
+                    var infoboxcontent="<p>Success Updated.</p>";
+                    Metro.infobox.create(infoboxcontent,"success",{overlay:true});
+                    Metro.dialog.close("#EditDailySchedDialog");
+                    getDialySchedule();
+                }
+            },
+            error:function () {
+                var infoboxcontent="<p>System fatal error.</p>";
+                Metro.infobox.create(infoboxcontent,"alert",{overlay:true});
+            }
+        })
+    }
+    var dailyScheduleData=[];
     function getDialySchedule(){
         $.ajax({
             type:'ajax',
@@ -269,38 +291,26 @@
             dataType:'json',
             success:function(response){
                 if(response.success){
-                    $("#dailyschedulecontainer").empty();
                     var _data=response.dailysched;
+                    dailyScheduleData=_data;
                     var _content=''
                     for (var i = 0; i < _data.length; i++) {
-                        _content+= '<div class="cell cell-lg-6 cell-md-12 cell-sm-12">'
-                                        +'<div  style="width:100%;" data-cls-title="bg-darkBlue fg-white" data-cls-panel="win-shadow" class="mt-4" data-role="panel" data-title-caption="'+_data[i].Day+'" data-collapsible="true" data-collapsed="true">'
-                                            +'<div class="row">'
-                                                +'<input type="hidden" name="ScheduleID" id="ScheduleID" value="">'
-                                                    +'<input type="hidden" id="UpdateDay" value="'+_data[i].Day+'"/>'
-                                                    +'<div class="cell-lg-6 form-group" style="margin-top:0;">'
-                                                        +'<label for="StartTime">Start Time</label>'
-                                                        +'<input id="UpdateStart'+_data[i].DailyScheduleID+'" data-role="input" readonly class="tpickerStart" type="text" value="'+tConv24(_data[i].StartTime)+'" id="StartTime" name="StartTime">'
-                                                    +'</div>'
-                                                    +'<div class="cell-lg-6 form-group"  style="margin-top:0;">'
-                                                        +'<label for="">End Time</label>'
-                                                        +'<input id="UpdateEnd'+_data[i].DailyScheduleID+'" data-role="input" readonly class="tpickerStart" value="'+tConv24(_data[i].EndTime)+'" type="text" id="EndTime" name="EndTime">'
-                                                    +'</div>'
-                                                    +'<div class="cell mt-2">'
-                                                        +'<button id="UpdateDaily'+_data[i].DailyScheduleID+'" type="submit" class="button update-daily-sched bg-darkBlue fg-white place-right">UPDATE</button>'
-                                                        +'<button id="DeleteDaily'+_data[i].DailyScheduleID+'" type="submit" class="button delete-daily-sched bg-darkRed fg-white place-right">DELETE</button>'
-                                                    +'</div>'
-                                            +'</div>'
-                                        +'</div>'
-                                    +'</div>';
+                        _content+='<tr>'
+                                    +'<td>'+_data[i].Day+'</td>'
+                                    +'<td>'+tConv24(_data[i].StartTime)+'-'+tConv24(_data[i].EndTime)+'</td>'
+                                    +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+_data[i].DailyScheduleID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button></div></td>'
+                                 +'</tr>';
                     }
-                    $("#dailyschedulecontainer").append(_content);
-                    $(".tpickerStart").mdtimepicker();
-
+                    if($.fn.DataTable.isDataTable("#tblDailySchedule")){
+                        $("#tblDailySchedule").DataTable().clear().destroy();
+                    }
+                    $("#tblDailySchedule tbody").html(_content);
+                    $("#tblDailySchedule").DataTable();
                 }
             },
             error:function(){
-
+                var infoboxcontent="<p>System fatal error.</p>";
+                Metro.infobox.create(infoboxcontent,"alert",{overlay:true});
             }
         });
     }

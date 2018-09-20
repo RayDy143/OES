@@ -11,14 +11,18 @@
             $this->load->model('SchedulerModel');
             $this->load->model('DailyScheduleModel');
             $this->load->model('NasScheduleModel');
+            $this->load->model('DepartmentModel');
             $this->load->model('ShiftModel');
+            $this->load->model('ShiftModel');
+            $this->load->model('DayModel');
         }
         function index(){
             $data['Title']="OES-Scheduler";
             $data['useraccounts']="";
             $data['nas']="";
             $data['department']="";
-            $data['scheduler']="active";
+            $data['evaluation']="";
+            $data['nas']="";
             $data['shift']=$this->ShiftModel->getShift();
             $this->load->view('layout/header',$data);
             $this->load->view('admin/scheduler_page');
@@ -28,8 +32,10 @@
             $data['useraccounts']="";
             $data['nas']="";
             $data['department']="";
-            $data['scheduler']="active";
+            $data['evaluation']="";
+            $data['nas']="";
             $data['shift']=$this->ShiftModel->getShift();
+            $data['day']=$this->DayModel->getDay();
             $this->load->view('layout/header',$data);
             $this->load->view('admin/add_schedule_page');
         }
@@ -37,12 +43,27 @@
             $data['Title']="OES-Scheduler/Add schedule";
             $data['useraccounts']="";
             $data['nas']="";
+            $data['evaluation']="";
             $data['department']="";
-            $data['scheduler']="active";
+            $data['nas']="";
             $data['schedule']=$this->SchedulerModel->getSchedulebyID($id);
+            $data['shift']=$this->ShiftModel->getShift();
+            $data['day']=$this->DayModel->getDay();
+            $data['dep']=$this->DepartmentModel->getDepartment("All");
             $data['nasschedule']=$this->NasScheduleModel->getNasSchedule($id);
             $this->load->view('layout/header',$data);
             $this->load->view('admin/manage_schedule_page');
+        }
+        public function editScheduleDetail()
+        {
+            $where = array('ScheduleID' => $this->input->post('ScheduleID') );
+            $fields = array('ScheduleDescription'=>$this->input->post('txtSchedDes'),'ShiftID'=>$this->input->post('ShiftID') );
+            $query=$this->SchedulerModel->updateScheduleDetails($where,$fields);
+            $data['success']=false;
+            if($query){
+                $data['success']=true;
+            }
+            echo json_encode($data);
         }
         public function deleteDailySchedule()
         {
@@ -72,7 +93,7 @@
         }
         public function addSchedule()
         {
-            $fields = array('ScheduleDescription' => $this->input->post('Schedule'),'ShiftID' => $this->input->post('Shift') );
+            $fields = array('ScheduleDescription' => $this->input->post('txtAddSchedDescription'),'ShiftID' => $this->input->post('cmbAddSchedShift') );
             $data['id']=$this->SchedulerModel->addSchedule($fields);
             $data['success']=false;
             if($data){
@@ -116,17 +137,14 @@
         {
             $end = date("H:i", strtotime(str_replace(' ', '', $this->input->post("EndTime"))));
             $start = date("H:i", strtotime(str_replace(' ', '', $this->input->post("StartTime"))));
-            $fields = array('Day' => $this->input->post('Day'),
+            $fields = array('DayID' => $this->input->post('Day'),
                             'StartTime' => $start,
                             'EndTime' => $end,
                             'ScheduleID' => $this->input->post('ScheduleID')
                          );
-             $where = array('Day' => $this->input->post('Day'),
-                            'ScheduleID'=>$this->input->post('ScheduleID')
-                             );
              $data['duplicate']=false;
              $data['success']=false;
-            if($this->DialySchedExisted($where)){
+            if($this->DialySchedExisted($this->input->post('Day'),$this->input->post('ScheduleID'))){
                 $data['duplicate']=true;
             }else{
                 $query=$this->DailyScheduleModel->addDailySched($fields);
@@ -137,8 +155,8 @@
             }
             echo json_encode($data);
         }
-        public function DialySchedExisted($where){
-            $query=$this->DailyScheduleModel->checkDuplicate($where);
+        public function DialySchedExisted($day,$schedid){
+            $query=$this->DailyScheduleModel->checkDuplicate($day,$schedid);
             if($query){
                 return true;
             }else{
@@ -147,8 +165,7 @@
         }
         public function getDailySched()
         {
-            $where = array('ScheduleID' => $this->input->post('ScheduleID') );
-            $data['dailysched']=$this->DailyScheduleModel->getDailySched($where);
+            $data['dailysched']=$this->DailyScheduleModel->getDailySched($this->input->post('ScheduleID'));
             $data['success']=false;
             if($data){
                 $data['success']=true;

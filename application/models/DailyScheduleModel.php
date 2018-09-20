@@ -18,9 +18,8 @@
                 return false;
             }
         }
-        public function checkDuplicate($where){
-            $this->db->where($where);
-            $query=$this->db->get('dailyschedule');
+        public function checkDuplicate($day,$schedid){
+            $query=$this->db->query("SELECT * FROM dailyschedule inner join Day on dailyschedule.DayID =Day.DayID where Day.DayID='$day' and dailyschedule.ScheduleID='$schedid'");
             if($query->num_rows()>0){
                 return true;
             }else{
@@ -46,10 +45,9 @@
                 return false;
             }
         }
-        public function getDailySched($where)
+        public function getDailySched($schedid)
         {
-            $this->db->where($where);
-            $query=$this->db->get('dailyschedule');
+            $query=$this->db->query("SELECT * FROM schedule inner join dailyschedule on schedule.ScheduleID=dailyschedule.ScheduleID inner join day on dailyschedule.DayID=day.DayID where schedule.ScheduleID='$schedid'");
             if($query->num_rows()>0){
                 return $query->result_array();
             }else{
@@ -58,7 +56,7 @@
         }
         public function getDailySchedofNAS($nasid)
         {
-            $query=$this->db->query("SELECT * FROM nas right join nasschedule on nas.NasID=nasschedule.NasID right join schedule on nasschedule.ScheduleID=schedule.ScheduleID right join dailyschedule on schedule.ScheduleID=dailyschedule.ScheduleID where nas.NasID='$nasid' and nasschedule.IsCurrent=1");
+            $query=$this->db->query("SELECT * FROM nas right join nasschedule on nas.NasID=nasschedule.NasID right join schedule on nasschedule.ScheduleID=schedule.ScheduleID right join dailyschedule on schedule.ScheduleID=dailyschedule.ScheduleID inner join day on dailyschedule.DayID=day.DayID where nas.NasID='$nasid' and nasschedule.IsCurrent=1");
             if($query->num_rows()>0){
                 return $query->result_array();
             }else{

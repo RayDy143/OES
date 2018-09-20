@@ -1,7 +1,7 @@
 <div class="cell bg-white p-3 ml-4">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
-        <div class="stub ml-auto">
+        <div class="stub ml-auto no-visible">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
                 <div class="cell" data-role="countdown"  data-date="09/25/2018"
@@ -25,20 +25,16 @@
         <div class="cell-8">
             <h4>Import NAS from excel files.</h4>
         </div>
-        <div class="stub ml-auto">
-            <a href="<?php echo base_url('index.php/Nas/View') ?>" class="button bg-darkBlue fg-white">VIEW ALL NAS</a>
-            <a href="<?php echo base_url('index.php/Nas') ?>" class="button bg-darkBlue fg-white">ADD INDIVIDUALLY</a>
-        </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
     <div class="row">
         <div class="cell">
             <div class="row">
-                <form class="cell-lg-6 cell-md-12 cell-sm-12 mr-3" id="frmImportNas" action="javascript:">
+                <form class="cell-lg-6 cell-md-12 cell-sm-12 mr-3" id="frmImportNas">
                     <input id="ExcelFile" name="ExcelFile" type="file" data-role="file" data-prepend="Select from excel file: " data-caption="Choose file">
                 </form>
                 <div class="stub">
-                    <button type="button" class="button bg-darkBlue fg-white" name="button">Import</button>
+                    <button type="button" class="button bg-darkBlue fg-white" id="btnImport" name="button">Import</button>
                 </div>
             </div>
             <div class="row">
@@ -72,6 +68,7 @@
 
 <script>
     $(document).ready(function(){
+        var excelData=[];
         $("#tblNasInfo").DataTable();
         $("#sidenavcontainer").hide();
         $("#Brand").click(function(){
@@ -93,7 +90,7 @@
                         importExcel({
                             filename:"<?php echo base_url(); ?>assets/temp_files/"+_filename,
                             success:function (importresponse) {
-                                var excelData=importresponse;
+                                excelData=importresponse;
                                 var excelLength=excelData.length;
                                 var _tablecontent='';
                                 if(excelLength>0){
@@ -125,17 +122,64 @@
                 }
             });
         });
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                scrollButtons:{enable:true,scrollType:"stepped"},
-				keyboard:{scrollType:"stepped"},
-				mouseWheel:{scrollAmount:188},
-				theme:"rounded-dark",
-				autoExpandScrollbar:true,
-				snapAmount:188,
-				snapOffset:65
-    		});
+        $("#btnImport").click(function () {
+            if(excelData.length>0){
+                $.ajax({
+                    type:'ajax',
+                    method:'POST',
+                    url:'<?php echo base_url("index.php/Nas/getAllDepartment") ?>',
+                    dataType:'json',
+                    success:function (depresponse) {
+                        if(depresponse.success){
+                            var _departmentData=depresponse.dep;
+                            var _importedrows=0;
+                            var _unimportedrows=0;
+                            for (var i = 0; i < excelData.length; i++) {
+                                var _excelRow=excelData[i];
+                                var depgrep=$.grep(_departmentData,function(x){return x.DepartmentName==_excelRow.Department} );
+                                if(depgrep.length==0){
+                                    alert('Unknown department in row number '+(i+1));
+                                    _unimportedrows++;
+                                }else{
+                                    _excelRow.DepartmentID=depgrep[0].DepartmentID;
+                                    $.ajax({
+                                        type:'ajax',
+                                        method:'POST',
+                                        url:'<?php echo base_url("index.php/Nas/ImportNas"); ?>',
+                                        data:_excelRow,
+                                        dataType:'json',
+                                        async:false,
+                                        success:function (importresponse) {
+                                            if(importresponse.success==false){
+                                                _unimportedrows++;
+                                                alert('Failed to import row number'+(i+1));
+                                            }else{
+                                                _importedrows++;
+                                            }
+                                        },
+                                        error:function () {
+                                            alert('Failed to import row number'+(i+1));
+                                            _unimportedrows++;
+                                        }
+                                    });
+                                }
+                            }
+                            alert("Imported row(s): "+_importedrows+" Unimported row(s): "+_unimportedrows);                        }
+                    }
+                });
+            }
         });
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //         scrollButtons:{enable:true,scrollType:"stepped"},
+		// 		keyboard:{scrollType:"stepped"},
+		// 		mouseWheel:{scrollAmount:188},
+		// 		theme:"rounded-dark",
+		// 		autoExpandScrollbar:true,
+		// 		snapAmount:188,
+		// 		snapOffset:65
+    	// 	});
+        // });
     });
     function ExcelDateToJSDate(serial) {
        var utc_days  = Math.floor(serial - 25569);

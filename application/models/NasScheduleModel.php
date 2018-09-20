@@ -11,7 +11,7 @@
         }
         public function getNasSchedule($id)
         {
-            $query=$this->db->query("SELECT * FROM nas inner join nasschedule on nas.NasID=nasschedule.NasID where nasschedule.IsCurrent=1 and nasschedule.ScheduleID='$id'");
+            $query=$this->db->query("SELECT * FROM nas inner join department on nas.DepartmentID=department.DepartmentID inner join nasschedule on nas.NasID=nasschedule.NasID left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where nas.IsDeleted=0 and nasschedule.IsCurrent=1 and nasschedule.ScheduleID='$id' and nasuploadedpicture.IsCurrent=1");
             if($query->num_rows()>0){
                 return $query->result_array();
             }else{

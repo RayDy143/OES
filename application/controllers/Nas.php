@@ -15,6 +15,7 @@
             $this->load->model("DailyScheduleModel");
             $this->load->model("SchedulerModel");
             $this->load->model("NasUploadedPictureModel");
+            $this->load->model("NasGradesModel");
         }
         function Add(){
             $data['Title']="OES-Nas";
@@ -22,6 +23,7 @@
             $data['nas']="active";
             $data['department']="";
             $data['scheduler']="";
+            $data['evaluation']="";
             $data['dep']=$this->DepartmentModel->getAllDepartment();
             $this->load->view('layout/header',$data);
             $this->load->view('admin/new_nas_page');
@@ -32,6 +34,7 @@
             $data['nas']="active";
             $data['department']="";
             $data['scheduler']="";
+            $data['evaluation']="";
             $data['dep']=$this->DepartmentModel->getDepartment("All");
             $this->load->view('layout/header',$data);
             $this->load->view('admin/nas_page');
@@ -41,52 +44,50 @@
             $data['useraccounts']="";
             $data['nas']="active";
             $data['department']="";
+            $data['evaluation']="";
             $data['scheduler']="";
             $this->load->view('layout/header',$data);
             $this->load->view('admin/import_nas_page');
         }
-        function Info($id){
+        function Info($id,$tab=NULL){
+            if($tab=="Schedule"){
+                $data['scheduleactive']="active";
+            }
             $data['Title']="OES-NAS Information";
             $data['useraccounts']="";
             $data['nas']="active";
             $data['department']="";
+            $data['evaluation']="";
             $data['scheduler']="";
             $data['dep']=$this->DepartmentModel->getDepartment("All");
             $data['nasprofile']=$this->NASModel->getNasProfile($id);
             $data['nasschedule']=$this->NasScheduleModel->getSpecificNasSchedule($id);
             $data['dailysched']=$this->DailyScheduleModel->getDailySchedofNAS($id);
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/more_nas_info_page');
-        }
-        function AssignSchedule($nasid){
-            $data['Title']="OES-NAS Information";
-            $data['useraccounts']="";
-            $data['nas']="active";
-            $data['department']="";
-            $data['scheduler']="";
-            $data['nasprofile']=$this->NASModel->getNasProfile($nasid);
             $data['sched']=$this->SchedulerModel->getSchedule("All");
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/assign_schedule_page');
-        }
-        public function AssignNasSchedule()
-        {
-            $fields = array('NasID' => $this->input->post('NasID'),'ScheduleID'=> $this->input->post('Schedule'));
-            $where = array('NasID' => $this->input->post('NasID'));
-            $this->NasScheduleModel->reassignSchedule($where);
-            $this->NasScheduleModel->assignSchedule($fields);
-            $data['Title']="OES-NAS Information";
-            $data['useraccounts']="";
-            $data['nas']="active";
-            $data['department']="";
-            $data['scheduler']="";
-            $data['scheduleactive']="active";
-            $data['dep']=$this->DepartmentModel->getAllDepartment();
-            $data['nasprofile']=$this->NASModel->getNasProfile($this->input->post('NasID'));
-            $data['nasschedule']=$this->NasScheduleModel->getSpecificNasSchedule($this->input->post('NasID'));
-            $data['dailysched']=$this->DailyScheduleModel->getDailySchedofNAS($this->input->post('NasID'));
+            $data['gradeschoolyear']=$this->NasGradesModel->getSchoolyear($id);
             $this->load->view('layout/header',$data);
             $this->load->view('admin/more_nas_info_page');
+        }
+        public function assignSchedule()
+        {
+            $where = array('NasID' => $this->input->post('NasID') );
+            $fields = array('NasID' => $this->input->post('NasID'),'ScheduleID'=> $this->input->post('cmbSchedule') );
+            $this->NasScheduleModel->reassignSchedule($where);
+            $query=$this->NasScheduleModel->assignSchedule($fields);
+            $data['success']=false;
+            if($query){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getAllDepartment()
+        {
+            $data['dep']=$this->DepartmentModel->getDepartment('All');
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
         }
         public function uploadExcel()
         {
@@ -97,6 +98,76 @@
             if($this->upload->do_upload('ExcelFile')){
                 $upload=$this->upload->data();
                 $data['filename']=$upload['file_name'];
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function ImportNas()
+        {
+            $fields = array
+            (
+                'IDNumber' => $this->input->post('IDNumber'),
+                'Firstname' => $this->input->post('Firstname'),
+                'Middlename' => $this->input->post('Middlename'),
+                'Lastname' => $this->input->post('Lastname'),
+                'Email' => $this->input->post('Email'),
+                'Address' => $this->input->post('Address'),
+                'ContactNumber' => $this->input->post('ContactNumber'),
+                'Birthdate' => $this->input->post('Birthdate'),
+                'DepartmentID' => $this->input->post('DepartmentID')
+            );
+            $nasid=$this->NASModel->Import($fields);
+            $data['success']=false;
+            if($nasid){
+                $data['success']=true;
+                $this->NasUploadedPictureModel->insertProfile($nasid,50);
+            }
+            echo json_encode($data);
+        }
+        public function importNasGrade()
+        {
+            $fields = array(
+                'Subject' => $this->input->post('Subject'),
+                'Grade' => $this->input->post('Grade'),
+                'Schoolyear' => $this->input->post('Schoolyear'),
+                'Semester' => $this->input->post('Semester'),
+                'NasID' => $this->input->post('NasID')
+            );
+            $query=$this->NasGradesModel->importGrade($fields);
+            $data['success']=false;
+            if($query){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getNasGrade()
+        {
+            $data['nasgrades']=$this->NasGradesModel->getGrade($this->input->post('SY'),$this->input->post('sem'),$this->input->post('id'));
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function deleteGrade()
+        {
+            $where = array('NasGradesID' => $this->input->post('ID') );
+            $query=$this->NasGradesModel->deleteGrade($where);
+            $data['success']=false;
+            if($query){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function updateGrade()
+        {
+            $where = array(
+                'NasGradesID' => $this->input->post('txtUpdateGradeID')
+            );
+            $fields = array('Subject' => $this->input->post('txtUpdateGradeSubject'),'Grade' => $this->input->post('txtUpdateGrade') );
+            $query=$this->NasGradesModel->updateGrade($where,$fields);
+            $data['success']=false;
+            if($query){
                 $data['success']=true;
             }
             echo json_encode($data);
@@ -138,9 +209,9 @@
                             'ContactNumber' => $this->input->post('ContactNumber'),
                             'DepartmentID' => $this->input->post('Department'),
                             );
-            $query=$this->NASModel->update($where,$fields);
+            $nasid=$this->NASModel->update($where,$fields);
             $data['success']=false;
-            if($query){
+            if($nasid){
                 $data['success']=true;
             }
             echo json_encode($data);

@@ -1,4 +1,4 @@
-<div class="cell bg-white p-3 ml-4" style="overflow:auto;">
+<div class="cell bg-white p-3 ml-4 mr-4" style="overflow:auto;">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
@@ -48,10 +48,11 @@
         <div data-role="progress" id="progress" class="mr-3" data-type="line"></div>
     </div>
     <div class="row" id="nasContainer">
-        <div class="cell mr-3">
+        <div class="cell">
             <table id="tblNas" class="table table-border striped cell-border cell-hover win-shadow">
                 <thead>
                     <tr>
+                        <th>Profile</th>
                         <th>ID</th>
                         <th>Fullname</th>
                         <th>Department</th>
@@ -71,17 +72,17 @@
 <script>
     $(document).ready(function() {
         $("#tblNas").dataTable();
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                scrollButtons:{enable:true,scrollType:"stepped"},
-				keyboard:{scrollType:"stepped"},
-				mouseWheel:{scrollAmount:188},
-				theme:"rounded-dark",
-				autoExpandScrollbar:true,
-				snapAmount:188,
-				snapOffset:65
-    		});
-        });
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //         scrollButtons:{enable:true,scrollType:"stepped"},
+		// 		keyboard:{scrollType:"stepped"},
+		// 		mouseWheel:{scrollAmount:188},
+		// 		theme:"rounded-dark",
+		// 		autoExpandScrollbar:true,
+		// 		snapAmount:188,
+		// 		snapOffset:65
+    	// 	});
+        // });
         $('body').on('click','button.delete',function(){
             var _strid=$(this).attr('id');
             var _id=_strid.split("Delete")[1];
@@ -136,10 +137,11 @@
                     var _html='';
                     for (var i = 0; i < _nas.length; i++) {
                         _html+='<tr>'
+                                    +'<td><div class="avatar"><img style="width:50px;" src="<?php echo base_url('assets/uploads/Picture/'); ?>'+_nas[i].Filename+'"></div></td>'
                                     +'<td>'+_nas[i].IDNumber+'</td>'
                                     +'<td>'+_nas[i].Firstname+' '+_nas[i].Lastname+'</td>'
                                     +'<td>'+_nas[i].DepartmentName+'</td>'
-                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url('index.php/Nas/Info/'); ?>'+_nas[i].NasID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1">MORE</a><button id="Delete'+_nas[i].NasID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1">DELETE</button></div></td>'
+                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url('index.php/Nas/Info/'); ?>'+_nas[i].NasID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-info"></a><button id="Delete'+_nas[i].NasID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                                +'</tr>'
                     }
                     if ($.fn.DataTable.isDataTable("#tblNas")) {

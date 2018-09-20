@@ -15,6 +15,7 @@
             $data['Title']="OES-Department";
             $data['useraccounts']="";
             $data['nas']="";
+            $data['evaluation']="";
             $data['department']="active";
             $data['scheduler']="";
             $data['location']=$this->LocationModel->getAllLocation();
@@ -27,7 +28,12 @@
             $data['nas']="";
             $data['department']="active";
             $data['scheduler']="";
+            $data['evaluation']="";
             $data['location']=$this->LocationModel->getAllLocation();
+            $data['depid']=$id;
+            $data['depevaluator']=$this->DepartmentModel->getDepartmentEvaluator($id);
+            $data['depnas']=$this->DepartmentModel->getDepartmentNas($id);
+            $data['depinfo']=$this->DepartmentModel->getSpecificDepartment($id);
             $this->load->view('layout/header',$data);
             $this->load->view('admin/manage_department_page');
         }
@@ -40,6 +46,18 @@
             }
             echo json_encode($data);
 		}
+        public function EditDepartmentInfo()
+        {
+            $data['success']=false;
+            $wheredepartment = array('DepartmentID' => $this->input->post('txtEditDepartmentID'));
+            $departmentfields = array('DepartmentName' => $this->input->post('txtEditDepName'),'LocationID'=>$this->input->post('cmbLocation'));
+            $query=$this->DepartmentModel->UpdateDepartmentInfo($wheredepartment,$departmentfields);
+            if($this->input->post('cmbDepartmentHead')){
+                $this->DepartmentModel->AddDepartmentHead($this->input->post('cmbDepartmentHead'),$wheredepartment,$this->input->post('txtEditDepartmentID'));
+            }
+            $data['success']=true;
+            echo json_encode($data);
+        }
         public function getAllDepartment(){
 			$data['dep']=$this->DepartmentModel->getDepartment($this->input->post("ID"));
             $data['success']=false;

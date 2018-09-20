@@ -1,6 +1,6 @@
-<div class="cell bg-white p-3 ml-4" style="overflow:auto;">
+<div class="cell bg-white p-3 ml-4 mr-4" style="overflow:auto;">
     <div class="row">
-        <a type="button" href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
+        <a href="javascript:history.back();" class="button stub drop-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
@@ -10,7 +10,6 @@
                      data-minutes="3"
                      data-seconds="4"></div>
             </div>
-
         </div>
     </div>
     <div class="row">
@@ -62,9 +61,10 @@
     </div>
     <div class="row" id="userContainer">
         <div class="cell mr-3">
-            <table id="tblUsers" class="table table-border striped cell-border cell-hover win-shadow">
+            <table id="tblUsers" class="table striped table-border cell-border">
                 <thead>
                     <tr>
+                        <th width="50px">Picture</th>
                         <th>User ID</th>
                         <th>Email</th>
                         <th>Department</th>
@@ -95,13 +95,26 @@
                     var _user=response.user;
                     var _tableContent='';
                     for (var i = 0; i < _user.length; i++) {
-                        _tableContent+='<tr>'
-                                            +'<td>'+_user[i].UserID+'</td>'
-                                            +'<td>'+_user[i].Email+'</td>'
-                                            +'<td>'+_user[i].DepartmentName+'</td>'
-                                            +'<td>'+_user[i].Status+'</td>'
-                                            +'<td><div data-role="buttongroup" class="row"><button id="Edit'+_user[i].UserID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1">MORE</button><button id="Delete'+_user[i].UserID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1">DELETE</button></div></td>'
-                                      +'</tr>'
+                        if(_user[i].Filename!=null){
+                            _tableContent+='<tr>'
+                                                +'<td><div class="avatar"><img style="width:50px;" src="<?php echo base_url('assets/uploads/Picture/'); ?>'+_user[i].Filename+'"></div></td>'
+                                                +'<td>'+_user[i].UserID+'</td>'
+                                                +'<td>'+_user[i].Email+'</td>'
+                                                +'<td>'+_user[i].DepartmentName+'</td>'
+                                                +'<td>'+_user[i].Status+'</td>'
+                                                +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+_user[i].UserID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+_user[i].UserID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                          +'</tr>';
+                        }else{
+                            _tableContent+='<tr>'
+                                                +'<td><div class="avatar"><img style="width:50px;" src="<?php echo base_url('assets/uploads/Picture/default_prof_pic.png'); ?>"></div></td>'
+                                                +'<td>'+_user[i].UserID+'</td>'
+                                                +'<td>'+_user[i].Email+'</td>'
+                                                +'<td>'+_user[i].DepartmentName+'</td>'
+                                                +'<td>'+_user[i].Status+'</td>'
+                                                +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+_user[i].UserID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+_user[i].UserID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                          +'</tr>';
+                        }
+
                     }
 
                     if ($.fn.DataTable.isDataTable("#tblUsers")) {
@@ -116,17 +129,17 @@
     }
     $(document).ready(function(){
         $("#tblUsers").dataTable();
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                scrollButtons:{enable:true,scrollType:"stepped"},
-				keyboard:{scrollType:"stepped"},
-				mouseWheel:{scrollAmount:188},
-				theme:"rounded-dark",
-				autoExpandScrollbar:true,
-				snapAmount:188,
-				snapOffset:65
-    		});
-        });
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //         scrollButtons:{enable:true,scrollType:"stepped"},
+		// 		keyboard:{scrollType:"stepped"},
+		// 		mouseWheel:{scrollAmount:188},
+		// 		theme:"rounded-dark",
+		// 		autoExpandScrollbar:true,
+		// 		snapAmount:188,
+		// 		snapOffset:65
+    	// 	});
+        // });
         getAllUsers();
         var gUserData=[];
         $("body").on("click","button.edit",function(){

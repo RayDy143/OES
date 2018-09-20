@@ -74,17 +74,17 @@
 
 <script>
     $(document).ready(function(){
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                    scrollButtons:{enable:true,scrollType:"stepped"},
-    				keyboard:{scrollType:"stepped"},
-    				mouseWheel:{scrollAmount:188},
-    				theme:"rounded-dark",
-    				autoExpandScrollbar:true,
-    				snapAmount:188,
-    				snapOffset:65
-    		});
-        });
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //             scrollButtons:{enable:true,scrollType:"stepped"},
+    	// 			keyboard:{scrollType:"stepped"},
+    	// 			mouseWheel:{scrollAmount:188},
+    	// 			theme:"rounded-dark",
+    	// 			autoExpandScrollbar:true,
+    	// 			snapAmount:188,
+    	// 			snapOffset:65
+    	// 	});
+        // });
         var depdata=[];
         $('#DepartmentContainer').hide();
         $("#UserType").change(function () {

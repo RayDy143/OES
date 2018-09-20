@@ -59,7 +59,7 @@
         }
     </style>
 </head>
-<body class="h-vh-100">
+<body class="h-vh-100" style="overflow:hidden">
     <div class="pos-fixed fixed-top app-bar-wrapper z-top bg-blue drop-shadow">
         <header class="container-fluid pos-relative app-bar-expand-md fg-white bg-darkBlue" data-role="appbar">
             <a href="#" id="Brand" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
@@ -93,9 +93,9 @@
             </div>
         </header>
     </div>
-    <div class="grid mt-13" style="margin-bottom:0px;">
-        <div class="row" style="height:100%;">
-            <div id="sidenavcontainer" style="background-color:#f8f8f8;" class="stub drop-shadow">
+    <div class="grid" style="height:100%;">
+        <div class="row mt-13" style="height:100%">
+            <div id="sidenavcontainer" style="background-color:#f8f8f8;overflow:auto;height:100%;" class="stub drop-shadow">
                 <ul class="sidenav-m3">
                     <li class="title">Masterfile</li>
                     <li>
@@ -111,15 +111,20 @@
                         <ul class="d-menu" data-role="dropdown" style="display: none;">
                             <li><a href="<?php echo base_url('index.php/Nas/Add'); ?>">Add Nas</a></li>
                             <li><a href="<?php echo base_url('index.php/Nas/Import'); ?>">Import NAS</a></li>
-                            <li><a href="<?php echo base_url('index.php/Nas/View'); ?>">View NAS</a></li>
+                            <li><a href="<?php echo base_url('index.php/Nas/View'); ?>">Manage NAS</a></li>
+                        </ul>
+                    </li>
+                    <li class="title">Manage</li>
+                    <li><a href="<?php echo base_url('index.php/Scheduler'); ?>"><span class="mif-list icon"></span>Schedule</a></li>
+                    <li>
+                        <a href="#" class="dropdown-toggle <?php echo $evaluation ?>"><span class="mif-list icon"></span>Evaluation</a>
+                        <ul class="d-menu" data-role="dropdown" style="display: none;">
+                        <li><a href="<?php echo base_url('index.php/Evaluation/QuestionCategory'); ?>"><span class="icon"></span>Question Category</a></li>
+                            <li><a href="<?php echo base_url('index.php/Evaluation/Question'); ?>">Evaluation Question</a></li>
+                            <li><a href="<?php echo base_url('index.php/Evaluation/Manage'); ?>">Manage Evaluation</a></li>
                         </ul>
                     </li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
-                    <li><a id="sideUserScheduler" class="<?php echo $scheduler ?>" href="<?php echo base_url('index.php/Scheduler') ?>"><span class="mif-list icon"></span>Scheduler</a></li>
-                    <li class="title">Evaluation Components</li>
-                    <li><a href="#"><span class="mif-list icon"></span>Attendance</a></li>
-                    <li><a href="#"><span class="mif-list icon"></span>Grade</a></li>
-                    <li><a href="#"><span class="mif-list icon"></span>Evaluation Question</a></li>
                     <li class="title">Reports</li>
                     <li><a href="#"><span class="mif-list icon"></span>Evaluation Result</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>Renewal Remarks</a></li>

@@ -16,8 +16,18 @@
                 return false;
             }
         }
+        public function updateScheduleDetails($where,$fields)
+        {
+            $this->db->where($where);
+            $this->db->update('schedule',$fields);
+            if($this->db->affected_rows()>0){
+                return true;
+            }else{
+                return false;
+            }
+        }
         public function getSchedule($shiftid){
-            if($shifid="All"){
+            if($shiftid=="All"){
                 $query=$this->db->query("SELECT * FROM schedule inner join shift on schedule.ShiftID=shift.ShiftID where schedule.IsDeleted=0 and shift.IsDeleted=0");
                 if($query->num_rows()>0){
                     return $query->result_array();

@@ -1,4 +1,4 @@
-<div class="cell bg-white p-3 ml-4" style="overflow:auto;">
+<div class="cell bg-white p-3 ml-4 mr-6" style="overflow:auto;">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
@@ -23,7 +23,7 @@
     </div>
     <div class="row">
         <div class="cell-8">
-            <h4>Non-Academic Scholars Info</h4>
+            <h4><?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?> Info</h4>
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
@@ -41,7 +41,7 @@
                         <div class="row">
                             <div class="cell-lg-8 cell-md-12 cell-sm-12">
                                 <div class="row">
-                                    <input type="hidden" name="NasID" value="<?php echo $nasprofile->NasID ?>">
+                                    <input type="hidden" name="NasID" id="txtNasID" value="<?php echo $nasprofile->NasID ?>">
                                     <div class="cell-lg-6 cell-md-12 cell-sm-12 form-group">
                                         <label for="IDNumber">ID Number</label>
                                         <input readonly value="<?php echo $nasprofile->IDNumber ?>" type="text" id="IDNumber" name="IDNumber">
@@ -114,15 +114,15 @@
                 <div id="target_schedule">
                     <?php
                         if($nasschedule==false){
-                            echo 'No schedule. Please assign schedule by clicking the assign button.<a href='.base_url('index.php/Nas/AssignSchedule/').$nasprofile->NasID.' class="button bg-darkBlue fg-white">Assign</a>';
+                            echo 'No schedule. Please assign schedule by clicking the assign button.<button id="btnAssign" class="button bg-darkBlue fg-white">Assign</button>';
                         }else{
                             echo '<input type="hidden" id="txtSchedID" value="'.$nasschedule->ScheduleID.'">';
                             echo '<div class="row">';
                             echo '<div class="cell">Schedule Description : '.$nasschedule->ScheduleDescription.'</div>';
-                            echo '<div class="stub ml-auto"><a href="'.base_url('index.php/Nas/AssignSchedule/').$nasprofile->NasID.'" class="button bg-darkBlue fg-white">Assign new schedule</a></div>';
+                            echo '<div class="stub ml-auto"><button id="btnAssignNew" class="button bg-darkBlue fg-white">Assign new schedule</button></div>';
                             echo '</div>';
                             echo '<div class="row"><div class="cell">Shift : '.$nasschedule->Shift.'</div></div>';
-                            echo '<table id="tblSchedule" class="table striped table-border win-shadow mt-3" data-role="table" data-pagination="true">';
+                            echo '<table id="tblDailySchedule" class="table striped table-border win-shadow mt-3" data-role="table" data-pagination="true">';
                                 echo '<thead>';
                                     echo '<tr>';
                                         echo '<th>Day</th>';
@@ -149,27 +149,205 @@
 
                 </div>
                 <div id="target_grades">
+                    <div class="row">
+                        <div class="cell">
+                            <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?> Grades
+                        </div>
+                        <div class="stub ml-auto">
+                            <button type="button" onclick="Metro.dialog.open('#ImportNasGradeDialog')" class="button bg-darkBlue fg-white" name="button">Import</button>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="cell">
+                            <label class="place-right mt-1" for="">Schoolyear:</label>
+                        </div>
+                        <div class="cell">
+                            <select class="filter" id="cmbShoolyear">
+                                <?php
+                                    foreach ($gradeschoolyear as $row) {
+                                        echo '<option value="'.$row['Schoolyear'].'">'.$row['Schoolyear'].'</option>';
+                                    }
+                                 ?>
+                            </select>
+                        </div>
+                        <div class="cell">
+                            <label class="place-right mt-1" for="">Semester:</label>
+                        </div>
+                        <div class="cell">
+                            <select class="filter" id="cmbSemester">
+                                <option value="First Semester">First Semester</option>
+                                <option value="Second Semester">Second Semester</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="cell">
+                            <table id="tblNasGrade" class="table striped table-border cell-border">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Grade</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="dialog" data-role="dialog" id="AssignNewScheduleDialog">
+    <form data-role="validator" action="javascript:" data-on-validate-form="validateAssignSchedule">
+        <div class="dialog-title">Assign <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?> schedule.</div>
+        <div class="dialog-content">
+            <input type="hidden" name="NasID" value="<?php echo $nasprofile->NasID; ?>">
+            <div class="cell form-group">
+                <label for="cmbSchedule">Choose schedule</label>
+                <select data-role="select" name="cmbSchedule">
+                    <?php
+                        foreach ($sched as $row) {
+                            echo '<option value="'.$row['ScheduleID'].'">'.$row['ScheduleDescription'].'</option>';
+                        }
+                    ?>
+                </select>
+            </div>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="button js-dialog-close alert place-right">Close</button>
+            <button type="submit" class="button primary place-right">Assign</button>
+        </div>
+    </form>
+</div>
+<div class="dialog" data-role="dialog" id="ImportNasGradeDialog">
+    <form data-role="validator" action="javascript:" data-on-validate-form="validateNasGradeImport">
+        <div class="dialog-title">Import Grade for <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?></div>
+        <div class="dialog-content">
+            <div class="cell form-group">
+                <label for="dtpImportSchoolyear">Schoolyear</label>
+                <input data-validate="required" data-role="datepicker" id="dtpImportYear" name="dtpImportYear" data-day="false" data-month="false">
+                <input type="hidden" name="dtpImportYear1" id="dtpImportYear1">
+                <input class="text-center" readonly type="text" id="txtImportGradeYear" name="txtImportGradeYear" data-day="false" data-month="false">
+                <span class="invalid_feedback">Schoolyear is required.</span>
+            </div>
+            <div class="cell form-group">
+                <label for="cmbImportSemester">Semester</label>
+                <select data-validate="required" data-role="select" id="cmbImportSemester" name="cmbImportSemester">
+                    <option value="First Semester">First Semester</option>
+                    <option value="Second Semester">Second Semester</option>
+                </select>
+                <span class="invalid_feedback">Semester is required.</span>
+            </div>
+            <div class="cell form-group">
+                <label for="ExcelFile">Excel File</label>
+                <input type="file" data-role="file" id="ExcelFile" name="ExcelFile">
+            </div>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="button alert js-dialog-close place-right">Close</button>
+            <button type="submit" class="button primary place-right">Import</button>
+        </div>
+    </form>
+</div>
+<div class="dialog" data-role="dialog" id="EditGradeDialog">
+    <form data-role="validator" action="javascript:" data-on-validate-form="validateEditGrade">
+        <div class="dialog-title">Update Grade.</div>
+        <div class="dialog-content">
+            <input type="hidden" name="txtUpdateGradeID" id="txtUpdateGradeID">
+            <div class="cell form-group">
+                <label for="txtUpdateGradeSubject">Subject</label>
+                <input data-role="input" type="text" name="txtUpdateGradeSubject" id="txtUpdateGradeSubject">
+            </div>
+            <div class="cell form-group">
+                <label for="txtUpdateGrade">Grade</label>
+                <input data-role="input" type="number" name="txtUpdateGrade" id="txtUpdateGrade">
+            </div>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="button alert js-dialog-close place-right">Close</button>
+            <button type="submit" class="button primary place-right">Update</button>
+        </div>
+    </form>
 </div>
 </div>
 </div>
 
 <script>
     $(document).ready(function() {
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                scrollButtons:{enable:true,scrollType:"stepped"},
-				keyboard:{scrollType:"stepped"},
-				mouseWheel:{scrollAmount:188},
-				theme:"rounded-dark",
-				autoExpandScrollbar:true,
-				snapAmount:188,
-				snapOffset:65
-    		});
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //         scrollButtons:{enable:true,scrollType:"stepped"},
+		// 		keyboard:{scrollType:"stepped"},
+		// 		mouseWheel:{scrollAmount:188},
+		// 		theme:"rounded-dark",
+		// 		autoExpandScrollbar:true,
+		// 		snapAmount:188,
+		// 		snapOffset:65
+    	// 	});
+        // });
+        $("#tblNasGrade").DataTable();
+        $("#btnAssign").click(function() {
+            Metro.dialog.open("#AssignNewScheduleDialog");
+        });
+        $("#btnAssignNew").click(function() {
+            Metro.dialog.open("#AssignNewScheduleDialog");
+        });
+        $("#dtpImportYear").change(function() {
+            var year=new Date($("#dtpImportYear").val());
+            $("#dtpImportYear1").val(year.getFullYear());
+            $("#txtImportGradeYear").val(year.getFullYear()+1);
+        });
+        getNasGrades();
+        $(".filter").change(function () {
+            getNasGrades();
+        });
+        $("#tblNasGrade tbody").on('click','button.edit',function() {
+            var _stringId=$(this).attr('id');
+            var _id=_stringId.split("Edit")[1];
+            var _index=nasgradeData.findIndex(x=>x.NasGradesID==_id);
+            $("#txtUpdateGradeID").val(_id);
+            $("#txtUpdateGradeSubject").val(nasgradeData[_index].Subject);
+            $("#txtUpdateGrade").val(nasgradeData[_index].Grade);
+            Metro.dialog.open("#EditGradeDialog");
+        });
+        $("#tblNasGrade tbody").on('click','button.delete',function() {
+            var _stringId=$(this).attr('id');
+            var _id=_stringId.split("Delete")[1];
+            Metro.dialog.create({
+                title:"Are you sure you want to delete this?",
+                content:"<p>This process can't be undone</p>",
+                actions:[
+                    {
+                        caption:'Confirm Deletion',
+                        cls:"bg-darkRed fg-white js-dialog-close",
+                        onclick:function() {
+                            $.ajax({
+                                type:'ajax',
+                                method:'POST',
+                                url:'<?php echo base_url("index.php/Nas/deleteGrade") ?>',
+                                data:{ID:_id},
+                                dataType:'json',
+                                success:function(response) {
+                                    var html_content ="<p>Successfully Deleted.</p>";
+                                     Metro.infobox.create(html_content,"success",{
+                                         overlay:true
+                                     });
+                                     getNasGrades();
+                                }
+                            });
+                        }
+                    },
+                    {
+                        caption:'Cancel',
+                        cls:"bg-darkBlue fg-white js-dialog-close"
+                    }
+                ]
+            })
+
         });
         $("#UploadPic").change(function () {
             if (this.files && this.files[0]) {
@@ -200,6 +378,53 @@
             }
         });
     });
+    function ExcelDateToJSDate(serial) {
+       var utc_days  = Math.floor(serial - 25569);
+       var utc_value = utc_days * 86400;
+       var date_info = new Date(utc_value * 1000);
+
+       var fractional_day = serial - Math.floor(serial) + 0.0000001;
+
+       var total_seconds = Math.floor(86400 * fractional_day);
+
+       var seconds = total_seconds % 60;
+
+       total_seconds -= seconds;
+
+       var hours = Math.floor(total_seconds / (60 * 60));
+       var minutes = Math.floor(total_seconds / 60) % 60;
+
+       return new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate(), hours, minutes, seconds);
+    }
+    function importExcel(o) {
+        /* set up XMLHttpRequest */
+        var url = o.filename;
+        var oReq = new XMLHttpRequest();
+        oReq.open("GET", url, true);
+        oReq.responseType = "arraybuffer";
+
+        oReq.onload = function(e) {
+            var arraybuffer = oReq.response;
+
+            /* convert data to binary string */
+            var data = new Uint8Array(arraybuffer);
+            var arr = new Array();
+            for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+            var bstr = arr.join("");
+
+            /* Call XLSX */
+            var workbook = XLSX.read(bstr, {type:"binary"});
+
+            /* DO SOMETHING WITH workbook HERE */
+            var first_sheet_name = workbook.SheetNames[0];
+            /* Get worksheet */
+            var worksheet = workbook.Sheets[first_sheet_name];
+            var data = XLSX.utils.sheet_to_json(worksheet,{raw:true});
+            if (typeof o.success) o.success(data);
+        }
+
+        oReq.send();
+    }
     function validateUpdateNas() {
         $.ajax({
             type:'ajax',
@@ -216,7 +441,127 @@
                      });
                 }
             }
-        })
+        });
+    }
+    function validateAssignSchedule() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/assignSchedule") ?>',
+            data:$(this).serialize(),
+            dataType:'json',
+            success:function(response){
+                if(response.success){
+                    Metro.dialog.close(".dialog");
+                    var html_content =
+                    "<p>Successfully Assigned.</p>";
+                     Metro.infobox.create(html_content,"success",{
+                         overlay:true
+                     });
+                     window.location.replace("<?php echo base_url('index.php/Nas/Info/').$nasprofile->NasID.'/Schedule';?>");
+                }
+            }
+        });
+    }
+    function validateNasGradeImport() {
+        var _formData=new FormData($(this)[0]);
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/uploadExcel"); ?>',
+            data:_formData,
+            dataType:'json',
+            processData: false,
+            contentType: false,
+            success:function(uploadresponse){
+                if(uploadresponse.success){
+                    var _filename=uploadresponse.filename;
+                    importExcel({
+                        filename:"<?php echo base_url(); ?>assets/temp_files/"+_filename,
+                        success:function (importresponse) {
+                            var excelData=importresponse;
+                            var _importedrows=0;
+                            var _unimportedrows=0;
+                            for (var i = 0; i < excelData.length; i++) {
+                                var _excelRow=excelData[i];
+                                _excelRow.Schoolyear=$('#dtpImportYear1').val()+'-'+$('#txtImportGradeYear').val();
+                                _excelRow.Semester=$("#cmbImportSemester").val();
+                                _excelRow.NasID=$("#txtNasID").val();
+                                $.ajax({
+                                    type:'ajax',
+                                    method:'POST',
+                                    url:'<?php echo base_url("index.php/Nas/importNasGrade") ?>',
+                                    data:_excelRow,
+                                    dataType:'json',
+                                    async:false,
+                                    success:function(response) {
+                                        if(response.success){
+                                            _importedrows++;
+                                        }else{
+                                            _unimportedrows++;
+                                        }
+                                    },
+                                    error:function () {
+                                        _unimportedrows++;
+                                    }
+                                });
+                            }
+                            var infoboxcontent="<p>"+_importedrows+" rows imported successfully. "+_unimportedrows+" failed.</p>";
+                            Metro.infobox.create(infoboxcontent,"info",{overlay:true});
+                            getNasGrades();
+                        }
+                    });
+                }
+            },
+            error:function(){
+
+            }
+        });
+    }
+    var nasgradeData=[];
+    function getNasGrades() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/getNasGrade") ?>',
+            data:{SY:$("#cmbShoolyear").val(),sem:$("#cmbSemester").val(),id:$("#txtNasID").val()},
+            dataType:'json',
+            success:function(response){
+                if(response.success){
+                    var _tableContent='';
+                    nasgradeData=response.nasgrades;
+                    for (var i = 0; i < response.nasgrades.length; i++) {
+                        _tableContent+='<tr>'
+                                             +'<td>'+response.nasgrades[i].Subject+'</td>'
+                                             +'<td>'+response.nasgrades[i].Grade+'</td>'
+                                             +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+response.nasgrades[i].NasGradesID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+response.nasgrades[i].NasGradesID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                      +'</tr>';
+                    }
+                    if($.fn.DataTable.isDataTable("#tblNasGrade")){
+                        $("#tblNasGrade").DataTable().clear().destroy();
+                    }
+                    $("#tblNasGrade tbody").html(_tableContent);
+                    $("#tblNasGrade").DataTable();
+                }
+            }
+        });
+    }
+    function validateEditGrade() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/updateGrade") ?>',
+            data:$(this).serialize(),
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    Metro.dialog.close("#EditGradeDialog");
+                    var infoboxcontent="<p>Successfully Updated.</p>";
+                    Metro.infobox.create(infoboxcontent,"success",{overlay:true});
+                    getNasGrades();
+                }
+            }
+        });
     }
 </script>
 </body>

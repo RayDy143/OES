@@ -20,6 +20,7 @@
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="";
+            $data['evaluation']="";
             $data['dep']=$this->DepartmentModel->getAllDepartment();
             $data['utype']=$this->UserTypeModel->getUserType();
             $this->load->view('layout/header',$data);
@@ -31,6 +32,7 @@
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="";
+            $data['evaluation']="";
             $data['dep']=$this->DepartmentModel->getAllDepartment();
             $data['utype']=$this->UserTypeModel->getUserType();
             $this->load->view('layout/header',$data);
@@ -42,6 +44,7 @@
             $data['nas']="";
             $data['department']="";
             $data['scheduler']="";
+            $data['evaluation']="";
             $data['dep']=$this->DepartmentModel->getDepartment("All");
             $data['utype']=$this->UserTypeModel->getUserType();
             $this->load->view('layout/header',$data);

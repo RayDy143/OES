@@ -1,4 +1,4 @@
-<div class="cell bg-white p-3 ml-4" style="overflow:auto;">
+<div class="cell bg-white p-3 ml-4 mr-6" style="overflow:auto;">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
@@ -103,17 +103,17 @@
 
 <script>
     $(document).ready(function(){
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                    scrollButtons:{enable:true,scrollType:"stepped"},
-    				keyboard:{scrollType:"stepped"},
-    				mouseWheel:{scrollAmount:188},
-    				theme:"rounded-dark",
-    				autoExpandScrollbar:true,
-    				snapAmount:188,
-    				snapOffset:65
-    		});
-        });
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //             scrollButtons:{enable:true,scrollType:"stepped"},
+    	// 			keyboard:{scrollType:"stepped"},
+    	// 			mouseWheel:{scrollAmount:188},
+    	// 			theme:"rounded-dark",
+    	// 			autoExpandScrollbar:true,
+    	// 			snapAmount:188,
+    	// 			snapOffset:65
+    	// 	});
+        // });
         $("#tblImportUser").DataTable();
         $('#File').change(function (e) {
              $("#txtFilename").val($("#File")[0].files[0].name);
@@ -200,7 +200,6 @@
                                                   }
                                                  var _check=checkEmailExistence(_excelRow.Email);
                                                  if(_check=="Deleted"){
-                                                     Metro.dialog.close(".dialog");
                                                      Metro.dialog.create({
                                                         title: _excelRow.Email+" This user was recently registered to this system and have beed deleted!",
                                                         content: "<div>Would you like to restore this user?</div>",
@@ -210,19 +209,19 @@
                                                                 caption: "Restore user",
                                                                 cls: "js-dialog-close",
                                                                 onclick: function(){
+                                                                    alert($(this).attr('class'));
                                                                     $.ajax({
                                                                         method:'POST',
                                                                         type:'ajax',
                                                                         url:'<?php echo base_url("index.php/UserAccounts/restoreUser") ?>',
                                                                         dataType:'json',
-                                                                        data:{Email:$("#Email").val()},
+                                                                        data:{Email:_excelRow.Email},
                                                                         success:function(response){
                                                                             var html_content =
                                                                             "<p>Successfully restored.</p>";
                                                                              Metro.infobox.create(html_content,"success",{
                                                                                  overlay:true
                                                                              });
-                                                                             $("#Email").val('');
                                                                         },
                                                                         error:function(){
                                                                             var html_content =

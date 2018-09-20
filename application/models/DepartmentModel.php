@@ -22,6 +22,15 @@
 				}
 			}
 		}
+		public function getSpecificDepartment($id)
+		{
+			$query=$this->db->query("SELECT * FROM department inner join location on department.LocationID=location.LocationID left join departmenthead on department.DepartmentID=departmenthead.DepartmentID left join useraccount on departmenthead.UserID=useraccount.UserID left join userinfo on useraccount.UserID=userinfo.UserID where department.IsDeleted=0 and DepartmentName!='Admin' and department.DepartmentID='$id'");
+			if($query->num_rows()>0){
+				return $query->row();
+			}else{
+				return false;
+			}
+		}
 		public function checkDepartmentExistence($where){
 			$this->db->where($where);
 			$query=$this->db->get('department');
@@ -42,7 +51,7 @@
 			}
 		}
 		public function getDepartmentEvaluator($id){
-			$query=$this->db->query("SELECT * FROM useraccount left join userinfo on useraccount.UserID=userinfo.UserID where useraccount.DepartmentID='$id' and useraccount.IsDeleted!=1");
+			$query=$this->db->query("SELECT * FROM useraccount left join userinfo on useraccount.UserID=userinfo.UserID left join useruploadedpicture on userinfo.UserID=useruploadedpicture.UserID left join uploadedpicture on useruploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where useraccount.DepartmentID='$id' and useraccount.IsDeleted!=1");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{
@@ -50,7 +59,7 @@
 			}
 		}
 		public function getDepartmentNas($id){
-			$query=$this->db->query("SELECT * FROM nas where DepartmentID='$id' and IsDeleted!=1");
+			$query=$this->db->query("SELECT * FROM nas left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where DepartmentID='$id' and IsDeleted!=1 and nasuploadedpicture.IsCurrent=1");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{
@@ -75,6 +84,33 @@
 			}else{
 				return false;
 			}
+		}
+		public function UpdateDepartmentInfo($where,$fields)
+		{
+			$this->db->where($where);
+			$this->db->update('department',$fields);
+			if($this->db->affected_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function AddDepartmentHead($email,$wherdep,$depid)
+		{
+			$query=$this->db->query("SELECT * FROM useraccount where Email='$email'");
+			if($query->num_rows()>0){
+				$user=$query->row();
+				$where1 = array('UserID' => $user->UserID,'DepartmentID'=> $depid);
+				$this->db->where($wherdep);
+				$this->db->delete('departmenthead');
+				$this->db->insert('departmenthead',$where1);
+				if($this->db->affected_rows()>0){
+					return true;
+				}else{
+					return false;
+				}
+			}
+			return false;
 		}
 		public function renameDepartment($where,$fields){
 			$this->db->where($where);

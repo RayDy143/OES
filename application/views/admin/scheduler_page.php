@@ -1,4 +1,4 @@
-<div class="cell bg-white p-3 ml-4">
+<div class="cell bg-white p-3 ml-4 mr-6">
     <div class="row">
         <a href="javascript:history.back();" class="button stub win-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
@@ -20,12 +20,12 @@
             <li class="page-item"><a href="<?php echo base_url('index.php/Scheduler'); ?>" class="page-link">Scheduler</a></li>
         </ul>
         <div class="stub ml-auto">
-            <a href="<?php echo base_url('index.php/Scheduler/Add') ?>" class="button bg-darkBlue fg-white win-shadow" name="button">Add new schedule</a>
+            <button class="button bg-darkBlue fg-white win-shadow" onclick="Metro.dialog.open('#AddNewScheduleDialog')" name="button">Add new schedule</button>
         </div>
     </div>
     <div class="row">
         <div class="stub">
-            <h4>Scheduler</h4>
+            <h4>Schedule</h4>
         </div>
         <div class="cell">
             <div class="row">
@@ -46,8 +46,8 @@
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">
-    <div class="row bg-light">
-        <div class="cell mr-3">
+    <div class="row">
+        <div class="cell">
             <table id="tblSchedule" class="table table-border striped cell-hover cell-border">
                 <thead>
                     <tr>
@@ -77,19 +77,88 @@
         <button type="button" class="button place-right js-dialog-close">Abort</button>
     </div>
 </div>
+<div class="dialog" data-role="dialog" id="AddNewScheduleDialog">
+    <form action="javascript:" data-role="validator" data-on-validate-form="validateAddSched">
+        <div class="dialog-title">Add new schedule.</div>
+        <div class="dialog-content">
+            <div class="cell form-group">
+                <label for="txtAddSchedDescription">Schedule Description</label>
+                <input data-validate="required" type="text" name="txtAddSchedDescription" id="txtAddSchedDescription">
+            </div>
+            <div class="cell form-group">
+                <label for="cmbAddSchedShift">Shift</label>
+                <select data-role="select" name="cmbAddSchedShift">
+                    <?php
+                        foreach ($shift as $row) {
+                                echo '<option value="'.$row['ShiftID'].'">'.$row['Shift'].'</option>';
+                        }
+                     ?>
+                </select>
+            </div>
+        </div>
+        <div class="dialog-actions">
+            <button type="button" class="button bg-darkRed fg-white place-right  js-dialog-close">Cancel</button>
+            <button type="submit" class="button place-right">Add</button>
+        </div>
+    </form>
+</div>
 <script>
     $(document).ready(function(){
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                scrollButtons:{enable:true},
-				mouseWheel:{scrollAmount:188},
-				theme:"rounded-dark",
-				autoExpandScrollbar:true,
-				snapAmount:188,
-				snapOffset:65
-    		});
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //         scrollButtons:{enable:true},
+		// 		mouseWheel:{scrollAmount:188},
+		// 		theme:"rounded-dark",
+		// 		autoExpandScrollbar:true,
+		// 		snapAmount:188,
+		// 		snapOffset:65
+    	// 	});
+        // });
+        $("#cmbFilterShift").change(function () {
+            getSchedule();
         });
         $("#tblSchedule").DataTable();
+        $('#tblSchedule').on('click','button.delete',function () {
+            var _strId=$(this).attr('id');
+            var _id=_strId.split('Delete')[1];
+            Metro.dialog.create({
+                title:'Are you sure you want to delete this?',
+                content:'This process cant be undone.',
+                actions:
+                [
+                    {
+                        caption : "Delete",
+                        cls:'alert js-dialog-close',
+                        onclick:function() {
+                            $.ajax({
+                                type:'ajax',
+                                method:'POST',
+                                url:'<?php echo base_url("index.php/Scheduler/deleteSchedule") ?>',
+                                data:{ID:_id},
+                                dataType:'json',
+                                success:function (response) {
+                                    if(response.success){
+                                        var infoboxcontent="<p>Successfully deleted.</p>";
+                                        Metro.infobox.create(infoboxcontent,'success');
+                                        getSchedule();
+                                    }else if(response.deleteerror){
+                                        var infoboxcontent="<p>You cannot delete a schedule that is currently inused.</p>";
+                                        Metro.infobox.create(infoboxcontent,'alert');
+                                    }
+                                }
+                            })
+                        }
+                    },
+                    {
+                        caption : "Cancel",
+                        cls:'js-dialog-close',
+                        onclick:function() {
+
+                        }
+                    }
+                ]
+            })
+        });
     });
     getSchedule();
     function tConv24(time24) {
@@ -129,10 +198,10 @@
                             }
                         });
                         _html+='<tr>'
-                                    +'<td>'+_sched[i].ScheduleDescription+'</td>'
+                                    +'<td >'+_sched[i].ScheduleDescription+'</td>'
                                     +'<td>'+_sched[i].Shift+'</td>'
                                     +'<td>'+_total+'</td>'
-                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url(); ?>index.php/Scheduler/Manage/'+_sched[i].ScheduleID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1">MANAGE</a><button id="Delete'+_sched[i].ScheduleID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1">DELETE</button></div></td>'
+                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url(); ?>index.php/Scheduler/Manage/'+_sched[i].ScheduleID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-info"></a><button id="Delete'+_sched[i].ScheduleID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                               +'</tr>';
                     }
                     if($.fn.DataTable.isDataTable("#tblSchedule")){
@@ -144,6 +213,25 @@
             },
             error:function(){
 
+            }
+        });
+    }
+    function validateAddSched() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Scheduler/addSchedule") ?>',
+            data:$(this).serialize(),
+            dataType:'json',
+            success:function(response){
+                Metro.dialog.close("#AddNewScheduleDialog");
+                var infoboxcontent="<p>Successfully Added!</p>";
+                Metro.infobox.create(infoboxcontent,"success",{overlay:true});
+                getSchedule();
+            },
+            error:function() {
+                var infoboxcontent="<p>System fatal error!</p>";
+                Metro.infobox.create(infoboxcontent,"alert",{overlay:true});
             }
         });
     }

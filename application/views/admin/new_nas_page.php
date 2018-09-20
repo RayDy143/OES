@@ -1,4 +1,4 @@
-<div class="cell bg-white p-3 ml-4" style="overflow:auto;">
+<div class="cell bg-white p-3 ml-4 mr-4" style="overflow:auto;">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
@@ -30,7 +30,7 @@
     <div class="row">
         <div class="cell">
             <form id="frmAddNas" action="javascript:" data-role="validator" data-on-validate-form="validateAddNas">
-                <div data-role="panel" class="win-shadow mr-3" data-title-caption="Non-Academic Scholars(NAS) Infomation" data-cls-title="bg-darkBlue fg-white" data-collapsible="false">
+                <div data-role="panel" class="win-shadow mr-2" data-title-caption="Non-Academic Scholars(NAS) Infomation" data-cls-content="p-8" data-cls-title="bg-darkBlue fg-white" data-collapsible="false">
                     <div class="row">
                         <div class="cell-lg-8 cell-md-12 cell-sm-12">
                             <div class="row">
@@ -106,17 +106,17 @@
 
 <script>
     $(document).ready(function(){
-        $(window).on("load",function(){
-            $('body').mCustomScrollbar({
-                scrollButtons:{enable:true,scrollType:"stepped"},
-				keyboard:{scrollType:"stepped"},
-				mouseWheel:{scrollAmount:188},
-				theme:"rounded-dark",
-				autoExpandScrollbar:true,
-				snapAmount:188,
-				snapOffset:65
-    		});
-        });
+        // $(window).on("load",function(){
+        //     $('body').mCustomScrollbar({
+        //         scrollButtons:{enable:true,scrollType:"stepped"},
+		// 		keyboard:{scrollType:"stepped"},
+		// 		mouseWheel:{scrollAmount:188},
+		// 		theme:"rounded-dark",
+		// 		autoExpandScrollbar:true,
+		// 		snapAmount:188,
+		// 		snapOffset:65
+    	// 	});
+        // });
         $("#UploadPic").change(function () {
             if (this.files && this.files[0]) {
                 var reader = new FileReader();
