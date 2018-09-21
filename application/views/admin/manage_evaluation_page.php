@@ -41,6 +41,8 @@
                             <th>School year</th>
                             <th>Semester</th>
                             <th>Starting Date</th>
+                            <th>Date ended</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -195,7 +197,9 @@
                                             +'<td>'+response.eval[i].Schoolyear+'</td>'
                                             +'<td>'+response.eval[i].Semester+'</td>'
                                             +'<td>'+response.eval[i].StartingDate+'</td>'
-                                            +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+response.eval[i].EvaluationID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+response.eval[i].EvaluationID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                            +'<td>'+((response.eval[i].DateEnded==null)?'TBD':response.eval[i].DateEnded)+'</td>'
+                                            +'<td>'+((response.eval[i].IsActive==0)?'Deactivated':'Active')+'</td>'
+                                            +'<td><div data-role="buttongroup" class="mx-auto"><a href="<?php echo base_url('index.php/Evaluation/Monitor/'); ?>'+response.eval[i].EvaluationID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></a><button id="Delete'+response.eval[i].EvaluationID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                                       +'</tr>';
                     }
                     if($.fn.DataTable.isDataTable("#tblEvaluation")){

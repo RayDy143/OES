@@ -64,17 +64,18 @@
             $this->load->view('layout/header',$data);
             $this->load->view('admin/manage_evaluation_page');
         }
-        public function Schoolyear()
+        public function Monitor($id)
         {
-            $data['Title']="OES-Manage Schoolyear";
+            $data['Title']="OES-Manage Evaluation";
             $data['useraccounts']="";
             $data['nas']="";
             $data['eval']="";
             $data['scheduler']="";
             $data['department']="";
             $data['evaluation']="active";
+            $data['eval']=$this->EvaluationModel->getEvaluationByID($id);
             $this->load->view('layout/header',$data);
-            $this->load->view('admin/manage_schoolyear_page');
+            $this->load->view('admin/monitor_evaluation_page');
         }
         public function getEvaluation()
         {
@@ -94,6 +95,27 @@
                 $data['success']=true;
             }
             echo json_encode($data);
+        }
+        public function changeStatus()
+        {
+            $where = array('EvaluationID' => $this->input->post('ID'));
+            if($this->input->post('Status')=='Deactivated'){
+                $fields = array('IsActive' => 1 );
+                $query=$this->EvaluationModel->changeStatus($where,$fields);
+                $data['success']=false;
+                if($query){
+                    $data['success']=true;
+                }
+                echo json_encode($data);
+            }else{
+                $fields = array('IsActive' => 0 );
+                $query=$this->EvaluationModel->changeStatus($where,$fields);
+                $data['success']=false;
+                if($query){
+                    $data['success']=true;
+                }
+                echo json_encode($data);
+            }
         }
         public function deleteEvaluation()
         {

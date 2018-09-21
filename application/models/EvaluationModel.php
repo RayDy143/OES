@@ -15,6 +15,17 @@
                 return false;
             }
         }
+        public function getActiveEvaluation()
+        {
+            $where = array('IsActive' => 1,'DateEnded'=>null );
+            $this->db->where($where);
+            $query=$this->db->get('evaluation');
+            if($query->num_rows()>0){
+                return $query->result_array();
+            }else{
+                return false;
+            }
+        }
         public function Add($fields)
         {
             $this->db->insert('evaluation',$fields);
@@ -30,6 +41,27 @@
             $this->db->where($where);
             $this->db->update('evaluation',$fields);
             if($this->db->affected_rows()){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        public function getEvaluationByID($id)
+        {
+            $where = array('EvaluationID' => $id );
+            $this->db->where($where);
+            $query=$this->db->get('evaluation');
+            if($query->num_rows()>0){
+                return $query->row();
+            }else{
+                return false;
+            }
+        }
+        public function changeStatus($where,$fields)
+        {
+            $this->db->where($where);
+            $this->db->update('evaluation',$fields);
+            if($this->db->affected_rows()>0){
                 return true;
             }else{
                 return false;

@@ -48,35 +48,36 @@
             </div>
             <hr class="row thin bg-black">
             <div class="row">
-                <p class="text-center h3 text-light">Evaluator(s) and Scholar(s)</p>
-                    <ul id="paintings"
-                        data-role="list"
-                        data-cls-list="unstyled-list row flex-justify-center mt-4"
-                        data-cls-list-item="cell-sm-4 cell-md-3"
-                     >
-                     <?php foreach ($depevaluator as $row): ?>
-                         <li>
-                             <figure class="text-center">
-                                 <div class="img-container thumbnail">
-                                     <img src="<?php if($row['Filename']){echo base_url('assets/uploads/Picture/').$row['Filename'];}else{echo base_url('assets/uploads/Picture/default_prof_pic.png');} ?>">
-                                 </div>
-                                 <figcaption class="painting-author text-bold"><?php if($row['Firstname']) {echo $row['Firstname'].' '.$row['Lastname'];}else{echo $row['Email'];} ?></figcaption>
-                                 <figcaption class="painting-name">Evaluator</figcaption>
-                             </figure>
-                         </li>
-                     <?php endforeach; ?>
-                     <?php foreach ($depnas as $row): ?>
-                         <li>
-                             <figure class="text-center">
-                                 <div class="img-container thumbnail">
-                                     <img src="<?php echo base_url('assets/uploads/Picture/').$row['Filename']; ?>" alt="Gogen, When is the wedding">
-                                 </div>
-                                 <figcaption class="painting-author text-bold"><?php echo $row['Firstname'].' '.$row['Lastname'];?></figcaption>
-                                 <figcaption class="painting-name">Scholar</figcaption>
-                             </figure>
-                         </li>
-                     <?php endforeach; ?>
-                    </ul>
+                <div class="cell">
+                    <table data-role="table" data-pagenation="true" id="tblDepartmentEvaluatorAndScholars" class="table table-border striped cell-hover">
+                        <thead>
+                            <tr>
+                                <th>Picture</th>
+                                <th>Name/Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            function secure_iterable($var)
+                            {
+                                return is_iterable($var) ? $var : array();
+                            }
+                             ?>
+                            <?php foreach (secure_iterable($depevaluator) as $row): ?>
+                                <tr>
+                                    <td><div class="avatar"><img style="width:50px;" src="<?php if($row['Filename']){echo base_url('assets/uploads/Picture/').$row['Filename'];}else{echo base_url('assets/uploads/Picture/default_prof_pic.png');} ?>"></div></td>
+                                    <td><?php if($row['Firstname']) {echo $row['Firstname'].' '.$row['Lastname'];}else{echo $row['Email'];} ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php foreach (secure_iterable($depnas) as $row): ?>
+                                <tr>
+                                    <td><div class="avatar"><img style="width:50px;" src="<?php if($row['Filename']){echo base_url('assets/uploads/Picture/').$row['Filename'];}else{echo base_url('assets/uploads/Picture/default_prof_pic.png');} ?>"></div></td>
+                                    <td><?php if($row['Firstname']) {echo $row['Firstname'].' '.$row['Lastname'];}else{echo $row['Email'];} ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
