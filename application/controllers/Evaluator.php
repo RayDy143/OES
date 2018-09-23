@@ -16,16 +16,45 @@
         }
         public function index()
         {
-            $data['eval']=$this->EvaluationModel->getActiveEvaluation();
-            $data['nas']=$this->NASModel->getNas($_SESSION['DepartmentID']);
-            $this->load->view('Evaluator/header',$data);
-            $this->load->view('Evaluator/home_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            header('location:'.base_url('index.php/AdminStart'));
+                        }else{
+                            $data['eval']=$this->EvaluationModel->getActiveEvaluation();
+                            $data['nas']=$this->NASModel->getNas($_SESSION['DepartmentID']);
+                            $this->load->view('Evaluator/header',$data);
+                            $this->load->view('Evaluator/home_page');
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         public function Evaluate()
         {
-            $data['nasprofile']=$this->NASModel->getNasProfile($_SESSION['evaluatenasid']);
-            $this->load->view('Evaluator/header',$data);
-            $this->load->view('Evaluator/nas_evaluation_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        $data['nasprofile']=$this->NASModel->getNasProfile($_SESSION['evaluatenasid']);
+                        $this->load->view('Evaluator/header',$data);
+                        $this->load->view('Evaluator/nas_evaluation_page');
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         public function getCategory()
         {

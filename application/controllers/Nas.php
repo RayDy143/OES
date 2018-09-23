@@ -18,55 +18,127 @@
             $this->load->model("NasGradesModel");
         }
         function Add(){
-            $data['Title']="OES-Nas";
-            $data['useraccounts']="";
-            $data['nas']="active";
-            $data['department']="";
-            $data['scheduler']="";
-            $data['evaluation']="";
-            $data['dep']=$this->DepartmentModel->getAllDepartment();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/new_nas_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Nas";
+                            $data['useraccounts']="";
+                            $data['nas']="active";
+                            $data['department']="";
+                            $data['scheduler']="";
+                            $data['evaluation']="";
+                            $data['dep']=$this->DepartmentModel->getAllDepartment();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/new_nas_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         function View(){
-            $data['Title']="OES-View NAS";
-            $data['useraccounts']="";
-            $data['nas']="active";
-            $data['department']="";
-            $data['scheduler']="";
-            $data['evaluation']="";
-            $data['dep']=$this->DepartmentModel->getDepartment("All");
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/nas_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-View NAS";
+                            $data['useraccounts']="";
+                            $data['nas']="active";
+                            $data['department']="";
+                            $data['scheduler']="";
+                            $data['evaluation']="";
+                            $data['dep']=$this->DepartmentModel->getDepartment("All");
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/nas_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         function Import(){
-            $data['Title']="OES-Import";
-            $data['useraccounts']="";
-            $data['nas']="active";
-            $data['department']="";
-            $data['evaluation']="";
-            $data['scheduler']="";
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/import_nas_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Import";
+                            $data['useraccounts']="";
+                            $data['nas']="active";
+                            $data['department']="";
+                            $data['evaluation']="";
+                            $data['scheduler']="";
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/import_nas_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         function Info($id,$tab=NULL){
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-NAS Information";
+                            $data['useraccounts']="";
+                            $data['nas']="active";
+                            $data['department']="";
+                            $data['evaluation']="";
+                            $data['scheduler']="";
+                            $data['dep']=$this->DepartmentModel->getDepartment("All");
+                            $data['nasprofile']=$this->NASModel->getNasProfile($id);
+                            $data['nasschedule']=$this->NasScheduleModel->getSpecificNasSchedule($id);
+                            $data['dailysched']=$this->DailyScheduleModel->getDailySchedofNAS($id);
+                            $data['sched']=$this->SchedulerModel->getSchedule("All");
+                            $data['gradeschoolyear']=$this->NasGradesModel->getSchoolyear($id);
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/more_nas_info_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
             if($tab=="Schedule"){
                 $data['scheduleactive']="active";
             }
-            $data['Title']="OES-NAS Information";
-            $data['useraccounts']="";
-            $data['nas']="active";
-            $data['department']="";
-            $data['evaluation']="";
-            $data['scheduler']="";
-            $data['dep']=$this->DepartmentModel->getDepartment("All");
-            $data['nasprofile']=$this->NASModel->getNasProfile($id);
-            $data['nasschedule']=$this->NasScheduleModel->getSpecificNasSchedule($id);
-            $data['dailysched']=$this->DailyScheduleModel->getDailySchedofNAS($id);
-            $data['sched']=$this->SchedulerModel->getSchedule("All");
-            $data['gradeschoolyear']=$this->NasGradesModel->getSchoolyear($id);
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/more_nas_info_page');
+
         }
         public function assignSchedule()
         {

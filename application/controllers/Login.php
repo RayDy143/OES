@@ -17,7 +17,11 @@
 				if($_SESSION['IsFirstLogin']=="1"){
 					header('location:'.base_url('index.php/FirstTimeLogin'));
 				}else{
-					header('location:'.base_url('index.php/AdminStart'));
+                    if($_SESSION['UserTypeID']==1){
+                        header('location:'.base_url('index.php/AdminStart'));
+                    }else{
+    					header('location:'.base_url('index.php/Evaluator'));
+                    }
 				}
 			}else{
 				$this->load->view('login_page');

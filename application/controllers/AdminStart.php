@@ -18,7 +18,11 @@
 					}else{
 						$sess['data']=$this->UserInfoModel->getUserInfo($_SESSION['UserID']);
 						$this->session->set_userdata($sess['data'][0]);
-						$this->load->view("admin/admin_start_page");
+                        if($_SESSION['UserTypeID']==1){
+    						$this->load->view("admin/admin_start_page");
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
 					}
 				}else{
 					header('location:'.base_url('index.php/Login'));

@@ -12,30 +12,63 @@
             $this->load->model('LocationModel');
         }
         function index(){
-            $data['Title']="OES-Department";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['evaluation']="";
-            $data['department']="active";
-            $data['scheduler']="";
-            $data['location']=$this->LocationModel->getAllLocation();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/department_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+
+                            $data['Title']="OES-Department";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['evaluation']="";
+                            $data['department']="active";
+                            $data['scheduler']="";
+                            $data['location']=$this->LocationModel->getAllLocation();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/department_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         function Manage($id){
-            $data['Title']="OES-Department";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['department']="active";
-            $data['scheduler']="";
-            $data['evaluation']="";
-            $data['location']=$this->LocationModel->getAllLocation();
-            $data['depid']=$id;
-            $data['depevaluator']=$this->DepartmentModel->getDepartmentEvaluator($id);
-            $data['depnas']=$this->DepartmentModel->getDepartmentNas($id);
-            $data['depinfo']=$this->DepartmentModel->getSpecificDepartment($id);
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/manage_department_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Department";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['department']="active";
+                            $data['scheduler']="";
+                            $data['evaluation']="";
+                            $data['location']=$this->LocationModel->getAllLocation();
+                            $data['depid']=$id;
+                            $data['depevaluator']=$this->DepartmentModel->getDepartmentEvaluator($id);
+                            $data['depnas']=$this->DepartmentModel->getDepartmentNas($id);
+                            $data['depinfo']=$this->DepartmentModel->getSpecificDepartment($id);
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/manage_department_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         public function AddDepartment(){
             $fields = array('DepartmentName' => $this->input->post('DepartmentName'),'LocationID'=>$this->input->post('Location'));

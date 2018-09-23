@@ -17,42 +17,92 @@
             $this->load->model('DayModel');
         }
         function index(){
-            $data['Title']="OES-Scheduler";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['department']="";
-            $data['evaluation']="";
-            $data['nas']="";
-            $data['shift']=$this->ShiftModel->getShift();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/scheduler_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Scheduler";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['department']="";
+                            $data['evaluation']="";
+                            $data['nas']="";
+                            $data['shift']=$this->ShiftModel->getShift();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/scheduler_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         function Add(){
-            $data['Title']="OES-Scheduler/Add schedule";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['department']="";
-            $data['evaluation']="";
-            $data['nas']="";
-            $data['shift']=$this->ShiftModel->getShift();
-            $data['day']=$this->DayModel->getDay();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/add_schedule_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Scheduler/Add schedule";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['department']="";
+                            $data['evaluation']="";
+                            $data['nas']="";
+                            $data['shift']=$this->ShiftModel->getShift();
+                            $data['day']=$this->DayModel->getDay();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/add_schedule_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         function Manage($id){
-            $data['Title']="OES-Scheduler/Add schedule";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['evaluation']="";
-            $data['department']="";
-            $data['nas']="";
-            $data['schedule']=$this->SchedulerModel->getSchedulebyID($id);
-            $data['shift']=$this->ShiftModel->getShift();
-            $data['day']=$this->DayModel->getDay();
-            $data['dep']=$this->DepartmentModel->getDepartment("All");
-            $data['nasschedule']=$this->NasScheduleModel->getNasSchedule($id);
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/manage_schedule_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Scheduler/Add schedule";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['evaluation']="";
+                            $data['department']="";
+                            $data['nas']="";
+                            $data['schedule']=$this->SchedulerModel->getSchedulebyID($id);
+                            $data['shift']=$this->ShiftModel->getShift();
+                            $data['day']=$this->DayModel->getDay();
+                            $data['dep']=$this->DepartmentModel->getDepartment("All");
+                            $data['nasschedule']=$this->NasScheduleModel->getNasSchedule($id);
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/manage_schedule_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         public function editScheduleDetail()
         {

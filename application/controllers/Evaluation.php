@@ -15,67 +15,154 @@
         }
         public function Question()
         {
-            $data['Title']="OES-Evaluation Question";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['eval']="";
-            $data['scheduler']="";
-            $data['department']="";
-            $data['evaluation']="active";
-            $data['category']=$this->CategoryModel->getCategory();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/eval_question_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Evaluation Question";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="active";
+                            $data['category']=$this->CategoryModel->getCategory();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/eval_question_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         public function QuestionCategory()
         {
-            $data['Title']="OES-Question Category";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['eval']="";
-            $data['scheduler']="";
-            $data['department']="";
-            $data['evaluation']="active";
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/question_category_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Question Category";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="active";
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/question_category_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         public function ImportQuestion()
         {
-            $data['Title']="OES-Import Category";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['eval']="";
-            $data['scheduler']="";
-            $data['department']="";
-            $data['evaluation']="active";
-            $data['category']=$this->CategoryModel->getCategory();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/import_evaluation_question_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Import Category";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="active";
+                            $data['category']=$this->CategoryModel->getCategory();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/import_evaluation_question_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         public function Manage()
         {
-            $data['Title']="OES-Manage Evaluation";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['eval']="";
-            $data['scheduler']="";
-            $data['department']="";
-            $data['evaluation']="active";
-            $data['sy']=$this->SchoolyearModel->getSchoolyear();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/manage_evaluation_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Manage Evaluation";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="active";
+                            $data['sy']=$this->SchoolyearModel->getSchoolyear();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/manage_evaluation_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         public function Monitor($id)
         {
-            $data['Title']="OES-Manage Evaluation";
-            $data['useraccounts']="";
-            $data['nas']="";
-            $data['eval']="";
-            $data['scheduler']="";
-            $data['department']="";
-            $data['evaluation']="active";
-            $data['eval']=$this->EvaluationModel->getEvaluationByID($id);
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/monitor_evaluation_page');
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Manage Evaluation";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="active";
+                            $data['eval']=$this->EvaluationModel->getEvaluationByID($id);
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/monitor_evaluation_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
         }
         public function getEvaluation()
         {

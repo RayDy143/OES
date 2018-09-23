@@ -8,7 +8,6 @@
             </div>
             <input type="hidden" id="txtNasID" value="<?php echo $nasprofile->NasID; ?>">
             <div class="cell-8">
-
                 <p>Name : <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?></p>
                 <p>Email : <?php echo $nasprofile->Email; ?></p>
                 <p>Address : <?php echo $nasprofile->Address; ?></p>
@@ -49,12 +48,12 @@
             </div>
         </div>
     </div>
-    <div class="cell-8 bg-dark fg-white p-5" style="overflow:auto;">
+    <div class="cell-8 bg-white win-shadow mb-14 p-3" style="overflow:auto;">
         <h4>Evaluation for <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?>.</h4>
         <div class="row"  id="evalContainer">
 
         </div>
-        <button type="button" class="cell button bg-darkBlue fg-white mt-3 mb-10 place-right" id="btnSubmit">Submit</button>
+        <button type="button" class="cell button bg-darkBlue fg-white mt-3 place-right" id="btnSubmit">Submit</button>
     </div>
 </div>
 </div>

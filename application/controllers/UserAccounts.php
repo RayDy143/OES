@@ -15,40 +15,88 @@
             $this->load->model('UserTypeModel');
         }
         function Import(){
-            $data['Title']="OES-User Accounts";
-            $data['useraccounts']="active";
-            $data['nas']="";
-            $data['department']="";
-            $data['scheduler']="";
-            $data['evaluation']="";
-            $data['dep']=$this->DepartmentModel->getAllDepartment();
-            $data['utype']=$this->UserTypeModel->getUserType();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/import_user_page',$data);
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-User Accounts";
+                            $data['useraccounts']="active";
+                            $data['nas']="";
+                            $data['department']="";
+                            $data['scheduler']="";
+                            $data['evaluation']="";
+                            $data['dep']=$this->DepartmentModel->getAllDepartment();
+                            $data['utype']=$this->UserTypeModel->getUserType();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/import_user_page',$data);
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         function Add(){
-            $data['Title']="OES-User Accounts";
-            $data['useraccounts']="active";
-            $data['nas']="";
-            $data['department']="";
-            $data['scheduler']="";
-            $data['evaluation']="";
-            $data['dep']=$this->DepartmentModel->getAllDepartment();
-            $data['utype']=$this->UserTypeModel->getUserType();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/add_user_page',$data);
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-User Accounts";
+                            $data['useraccounts']="active";
+                            $data['nas']="";
+                            $data['department']="";
+                            $data['scheduler']="";
+                            $data['evaluation']="";
+                            $data['dep']=$this->DepartmentModel->getAllDepartment();
+                            $data['utype']=$this->UserTypeModel->getUserType();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/add_user_page',$data);
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         function View(){
-            $data['Title']="OES-User Accounts";
-            $data['useraccounts']="active";
-            $data['nas']="";
-            $data['department']="";
-            $data['scheduler']="";
-            $data['evaluation']="";
-            $data['dep']=$this->DepartmentModel->getDepartment("All");
-            $data['utype']=$this->UserTypeModel->getUserType();
-            $this->load->view('layout/header',$data);
-            $this->load->view('admin/view_user_accounts_page',$data);
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-User Accounts";
+                            $data['useraccounts']="active";
+                            $data['nas']="";
+                            $data['department']="";
+                            $data['scheduler']="";
+                            $data['evaluation']="";
+                            $data['dep']=$this->DepartmentModel->getDepartment("All");
+                            $data['utype']=$this->UserTypeModel->getUserType();
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/view_user_accounts_page',$data);
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
         }
         public function uploadExcel()
         {

@@ -57,7 +57,7 @@
        data-cls-check="bd-cyan myCheck" type="checkbox" data-caption="<?php if($eval->IsActive==0){echo "Deactivated";}else{echo "Active";} ?>">
         </div>
         <div class="stub ml-auto">
-            <button type="button" class="button bg-darkBlue fg-white" name="button">End Evaluation</button>
+            <button type="button" id="<?php echo $eval->EvaluationID; ?>" class="button end bg-darkBlue fg-white" name="button">End Evaluation</button>
         </div>
     </div>
     <div class="row mt-3">

@@ -54,6 +54,7 @@
                             <tr>
                                 <th>Picture</th>
                                 <th>Name/Email</th>
+                                <th>Type</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,12 +68,14 @@
                                 <tr>
                                     <td><div class="avatar"><img style="width:50px;" src="<?php if($row['Filename']){echo base_url('assets/uploads/Picture/').$row['Filename'];}else{echo base_url('assets/uploads/Picture/default_prof_pic.png');} ?>"></div></td>
                                     <td><?php if($row['Firstname']) {echo $row['Firstname'].' '.$row['Lastname'];}else{echo $row['Email'];} ?></td>
+                                    <td>Evaluator</td>
                                 </tr>
                             <?php endforeach; ?>
                             <?php foreach (secure_iterable($depnas) as $row): ?>
                                 <tr>
                                     <td><div class="avatar"><img style="width:50px;" src="<?php if($row['Filename']){echo base_url('assets/uploads/Picture/').$row['Filename'];}else{echo base_url('assets/uploads/Picture/default_prof_pic.png');} ?>"></div></td>
                                     <td><?php if($row['Firstname']) {echo $row['Firstname'].' '.$row['Lastname'];}else{echo $row['Email'];} ?></td>
+                                    <td>Scholar</td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
