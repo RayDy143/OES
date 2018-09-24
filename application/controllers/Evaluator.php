@@ -105,6 +105,34 @@
             }
             echo json_encode($data);
         }
+        public function getActiveEvaluation()
+        {
+            $data['activeeval']=$this->EvaluationModel->getActiveEvaluation();
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getNas()
+        {
+            $data['nas']=$this->NASModel->getNas($_SESSION['DepartmentID']);
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function hasEvaluatedNas()
+        {
+            $where = array('UserID' => $_SESSION['UserID'],'NasID'=>$this->input->post('NasID'),'EvaluationID'=>$this->input->post('EvalID') );
+            $data['success']=false;
+            $query=$this->NasEvaluationModel->hasEvaluatedNas($where);
+            if($query){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
     }
 
  ?>

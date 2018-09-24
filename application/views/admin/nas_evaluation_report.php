@@ -72,7 +72,6 @@
                 success:function(response) {
                     if(response.success)
                     {
-
                         var totalRating=0;
                         var totalRatingCount=0;
                         var totalEquvalentPercentage=0;
@@ -105,7 +104,7 @@
                                     }
                                 }
                             });
-                            EquvalentPercentage=(Rating/ratingcount);
+                            EquvalentPercentage=Rating/ratingcount;
                             totalEquvalentPercentage+=EquvalentPercentage;
                             totalEquvalentPercentageCount++;
                             _content+='<div class="text-secondary mt-3" data-role="panel" data-title-caption="'+((response.nasevalcat[i].Category=="Job Responsibility")?response.nasevalcat[i].Category+' 40%':response.nasevalcat[i].Category+' 30%')+'">'
@@ -114,12 +113,12 @@
                                                     +_questioncontent
                                                 +'</tbody>'
                                             +'</table>'
-                                            +'<p class="text-right">Equivalent Percentage: '+EquvalentPercentage+'</p>'
+                                            +'<p class="text-right">Equivalent Percentage: '+EquvalentPercentage.toFixed(1)+'</p>'
                                     +'</div>';
                         }
                         $("#resultContainer").html(_content);
-                        $("#lblTotaAverage").text(totalEquvalentPercentage);
-                        $("#lblTotaEqui").text(Math.round((totalEquvalentPercentage/totalEquvalentPercentageCount)*100)/100);
+                        $("#lblTotaAverage").text(totalEquvalentPercentage.toFixed(1));
+                        $("#lblTotaEqui").text(Math.round((totalEquvalentPercentage/totalEquvalentPercentageCount)*10)/10);
                     }
                 }
             });
