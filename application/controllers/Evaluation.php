@@ -12,6 +12,9 @@
             $this->load->model('CategoryModel');
             $this->load->model('QuestionModel');
             $this->load->model('SchoolyearModel');
+            $this->load->model('NasModel');
+            $this->load->model('UserInfoModel');
+            $this->load->model('EvaluationResultsModel');
         }
         public function Question()
         {
@@ -150,8 +153,106 @@
                             $data['department']="";
                             $data['evaluation']="active";
                             $data['eval']=$this->EvaluationModel->getEvaluationByID($id);
+                            $data['evalres']=$this->EvaluationResultsModel->getEvaluationLogs($id);
                             $this->load->view('layout/header',$data);
                             $this->load->view('admin/monitor_evaluation_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
+        }
+
+        public function Results()
+        {
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Evaluation Results";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="";
+                            $data['evaluationresultsnav']="active";
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/evaluation_results_page');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
+        }
+
+        public function NasEvaluationResult()
+        {
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Evaluation Results";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="";
+                            $data['evaluationresultsnav']="active";
+                            $data['nasprofile']=$this->NasModel->getNasProfile($_SESSION['resultNasID']);
+                            $data['userprofile']=$this->UserInfoModel->getUserAccountInfo($_SESSION['resultUserID']);
+                            $data['evaldata']=$this->EvaluationModel->getEvaluationByID($_SESSION['resultEvalID']);
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/nas_evaluation_report');
+                        }else{
+        					header('location:'.base_url('index.php/Evaluator'));
+                        }
+					}
+				}else{
+					header('location:'.base_url('index.php/Login'));
+				}
+			}else{
+				header('location:'.base_url('index.php/Login'));
+			}
+
+        }
+        public function ViewResults($id)
+        {
+            if(isset($_SESSION['Email'])){
+				if($_SESSION['Status']=="Verified"){
+					if($_SESSION['IsFirstLogin']=="1"){
+						header('location:'.base_url('index.php/Login'));
+					}else{
+                        if($_SESSION['UserTypeID']==1){
+                            $data['Title']="OES-Evaluation Results";
+                            $data['useraccounts']="";
+                            $data['nas']="";
+                            $data['eval']="";
+                            $data['scheduler']="";
+                            $data['department']="";
+                            $data['evaluation']="";
+                            $data['evaluationresultsnav']="active";
+                            $data['eval']=$this->EvaluationModel->getEvaluationByID($id);
+                            $data['evalres']=$this->EvaluationResultsModel->getEvaluationLogs($id);
+                            $this->load->view('layout/header',$data);
+                            $this->load->view('admin/view_result_page');
                         }else{
         					header('location:'.base_url('index.php/Evaluator'));
                         }
@@ -173,13 +274,52 @@
             }
             echo json_encode($data);
         }
-        public function addEvaluation()
+        public function setResultsSession()
         {
-            $fields = array('Schoolyear' => $this->input->post('dtpAddEvalYear1')."-".$this->input->post('txtAddEvalYear'),'Semester'=>$this->input->post('cmbAddEvalSemester'),'StartingDate'=>$this->input->post('dtpStartingDate') );
-            $query=$this->EvaluationModel->Add($fields);
+            $_SESSION['resultNasID']=$this->input->post('NasID');
+            $_SESSION['resultUserID']=$this->input->post('UserID');
+            $_SESSION['resultEvalID']=$this->input->post('EvalID');
+        }
+        public function getNasEvaluationCategoryResult()
+        {
+            $data['nasevalcat']=$this->EvaluationResultsModel->getNasEvaluationCategoryResult($_SESSION['resultNasID'],$_SESSION['resultUserID'],$_SESSION['resultEvalID']);
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getNasEvaluationQuestionResultByCategory()
+        {
+            $data['nasevalquestion']=$this->EvaluationResultsModel->getNasEvaluationQuestionResultByCategory($_SESSION['resultNasID'],$_SESSION['resultUserID'],$_SESSION['resultEvalID'],$this->input->post('ID'));
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function endEvaluation()
+        {
+            $where = array('EvaluationID' => $this->input->post('ID') );
+            $query=$this->EvaluationModel->endEvaluation($where);
             $data['success']=false;
             if($query){
                 $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function addEvaluation()
+        {
+            if($this->EvaluationModel->checkUndoneEvaluation()){
+                $data['hasundone']=true;
+                $data['success']=false;
+            }else{
+                $fields = array('Schoolyear' => $this->input->post('dtpAddEvalYear1')."-".$this->input->post('txtAddEvalYear'),'Semester'=>$this->input->post('cmbAddEvalSemester'),'StartingDate'=>$this->input->post('dtpStartingDate') );
+                $query=$this->EvaluationModel->Add($fields);
+                $data['success']=false;
+                if($query){
+                    $data['success']=true;
+                }
             }
             echo json_encode($data);
         }

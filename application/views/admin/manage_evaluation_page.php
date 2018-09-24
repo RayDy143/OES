@@ -75,10 +75,6 @@
                 </select>
                 <span class="invalid_feedback">Semester is required.</span>
             </div>
-            <div class="cell form-group">
-                <label for="dtpStartingDate">Starting Date</label>
-                <input data-role="datepicker" id="dtpStartingDate" name="dtpStartingDate">
-            </div>
         </div>
         <div class="dialog-actions">
             <button type="button" class="button bg-darkRed fg-white js-dialog-close place-right mb-2">CANCEL</button>
@@ -196,8 +192,8 @@
                                             +'<td>'+response.eval[i].EvaluationID+'</td>'
                                             +'<td>'+response.eval[i].Schoolyear+'</td>'
                                             +'<td>'+response.eval[i].Semester+'</td>'
-                                            +'<td>'+response.eval[i].StartingDate+'</td>'
-                                            +'<td>'+((response.eval[i].DateEnded==null)?'TBD':response.eval[i].DateEnded)+'</td>'
+                                            +'<td>'+new Date(response.eval[i].StartingDate).toLocaleDateString()+'</td>'
+                                            +'<td>'+((response.eval[i].DateEnded==null)?'TBD':new Date(response.eval[i].DateEnded).toLocaleDateString())+'</td>'
                                             +'<td>'+((response.eval[i].IsActive==0)?'Deactivated':'Active')+'</td>'
                                             +'<td><div data-role="buttongroup" class="mx-auto"><a href="<?php echo base_url('index.php/Evaluation/Monitor/'); ?>'+response.eval[i].EvaluationID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></a><button id="Delete'+response.eval[i].EvaluationID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                                       +'</tr>';
@@ -226,6 +222,11 @@
                 if(response.success){
                     var infoboxcontent="<p>Successfully Added.</p>";
                     Metro.infobox.create(infoboxcontent,"success",{overlay:true});
+                    Metro.dialog.close(".dialog");
+                    getEvaluation();
+                }else{
+                    var infoboxcontent="<p>Unable to add evaluation because there is still current unfinished one.</p>";
+                    Metro.infobox.create(infoboxcontent,"alert",{overlay:true});
                     Metro.dialog.close(".dialog");
                     getEvaluation();
                 }

@@ -16,7 +16,7 @@
         <ul class="cell breadcrumbs" style="margin-bottom:0px;">
             <li class="page-item"><a href="<?php echo base_url('index.php/AdminStart'); ?>" class="page-link">Home</a></li>
             <li class="page-item"><a href="<?php echo base_url('index.php/Masterfile'); ?>" class="page-link">Masterfile</a></li>
-            <li class="page-item"><a href="<?php echo base_url('index.php/Scheduler'); ?>" class="page-link">Scheduler</a></li>
+            <li class="page-item"><a href="<?php echo base_url('index.php/Scheduler'); ?>" class="page-link">Schedule</a></li>
             <li class="page-item"><a href="#" class="page-link">Manage</a></li>
         </ul>
     </div>
@@ -305,7 +305,7 @@
                         $("#tblDailySchedule").DataTable().clear().destroy();
                     }
                     $("#tblDailySchedule tbody").html(_content);
-                    $("#tblDailySchedule").DataTable();
+                    $("#tblDailySchedule").DataTable({"ordering": false});
                 }
             },
             error:function(){

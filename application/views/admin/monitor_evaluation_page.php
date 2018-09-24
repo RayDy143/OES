@@ -40,7 +40,7 @@
         </div>
         <div class="cell-3 m-0 form-group">
             <label for="txtStartingDate">Starting Date</label>
-            <input type="text" value="<?php echo $eval->StartingDate; ?>" readonly name="txtStartingDate" id="txtStartingDate">
+            <input type="text" value="<?php echo date('Y-m-d',strtotime($eval->StartingDate)); ?>" readonly name="txtStartingDate" id="txtStartingDate">
         </div>
         <div class="cell-3 m-0 form-group">
             <label for="txtDateEnded">Date Ended</label>
@@ -49,15 +49,19 @@
     </div>
     <div class="row mt-3">
         <div class="cell form-group">
-            <label>Status: </label>
-            <input id="StatusSwitch" type="checkbox" <?php if($eval->IsActive==1){echo "checked";} ?>
-       data-role="switch"
-       data-cls-switch="mySwitch"
-       data-cls-caption="fg-cyan text-bold"
-       data-cls-check="bd-cyan myCheck" type="checkbox" data-caption="<?php if($eval->IsActive==0){echo "Deactivated";}else{echo "Active";} ?>">
+            <?php if ($eval->HasEnded == 0): ?>
+                <label>Status: </label>
+                <input id="StatusSwitch" type="checkbox" <?php if($eval->IsActive==1){echo "checked";} ?>
+                   data-role="switch"
+                   data-cls-switch="mySwitch"
+                   data-cls-caption="fg-cyan text-bold"
+                   data-cls-check="bd-cyan myCheck" type="checkbox" data-caption="<?php if($eval->IsActive==0){echo "Deactivated";}else{echo "Active";} ?>">
+            <?php endif; ?>
         </div>
         <div class="stub ml-auto">
-            <button type="button" id="<?php echo $eval->EvaluationID; ?>" class="button end bg-darkBlue fg-white" name="button">End Evaluation</button>
+            <?php if ($eval->HasEnded==0): ?>
+                <button type="button" id="<?php echo $eval->EvaluationID; ?>" class="button end bg-darkBlue fg-white" name="button">End Evaluation</button>
+            <?php endif; ?>
         </div>
     </div>
     <div class="row mt-3">
@@ -66,13 +70,21 @@
             <table id="tblEvaluationLog" class="table table-border striped cell-hover">
                 <thead>
                     <tr>
-                        <th>Evaluator</th>
-                        <th>NAS</th>
-                        <th>Date</th>
+                        <th>Log</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    <?php
+                        function secure_iterable($var)
+                        {
+                            return is_iterable($var) ? $var : array();
+                        }
+                     ?>
+                    <?php foreach (secure_iterable($evalres) as $row): ?>
+                        <tr>
+                            <td><strong><?php echo $row['userFname'].' '.$row['userLname']; ?></strong> has evaluated <strong><?php echo $row['nasFname'].' '.$row['nasLname']; ?></strong> on <?php echo date('h:i:s a m/d/Y', strtotime($row['Date'])); ?>.</td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -110,6 +122,40 @@
 
                 }
             });
+        });
+        $(".end").click(function () {
+            Metro.dialog.create({
+                title:"Are you sure you want to end this evaluation?",
+                content:"<p>This process can't be undone</p>",
+                actions:[
+                    {
+                        caption:"Yes",
+                        cls:"bg-darkRed fg-white js-dialog-close",
+                        onclick:function() {
+                            $.ajax({
+                                type:'ajax',
+                                method:'POST',
+                                url:'<?php echo base_url("index.php/Evaluation/endEvaluation"); ?>',
+                                data:{ID:$("#txtEvaluationID").val()},
+                                dataType:'json',
+                                success:function(response) {
+                                    if(response.success){
+                                        location.reload();
+                                    }
+                                },
+                                error:function() {
+
+                                }
+                            });
+                        }
+                    },
+                    {
+                        caption:"No",
+                        cls:"bg-darkBlue fg-white js-dialog-close"
+                    }
+                ]
+            })
+
         });
     });
 </script>

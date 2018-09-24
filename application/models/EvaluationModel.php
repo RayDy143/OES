@@ -67,6 +67,39 @@
                 return false;
             }
         }
+        public function checkUndoneEvaluation()
+        {
+            $where = array("HasEnded"=>0,"IsDeleted"=>0);
+            $this->db->where($where);
+            $query=$this->db->get('evaluation');
+            if($query->num_rows()>0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        public function endEvaluation($where)
+        {
+            $this->db->where($where);
+            $fields = array('DateEnded' => date('Y-m-d'),'IsActive'=>0,'HasEnded'=>1);
+            $this->db->update('evaluation', $fields);
+            if($this->db->affected_rows()>0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        public function getCurrentEvaluationID()
+        {
+            $where = array('IsDeleted' => 0,'IsActive'=>1,'HasEnded'=>0);
+            $this->db->where($where);
+            $query=$this->db->get('evaluation');
+            if($query->num_rows()>0){
+                return $query->row();
+            }else{
+                return false;
+            }
+        }
     }
 
  ?>

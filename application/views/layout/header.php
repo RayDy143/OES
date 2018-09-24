@@ -37,6 +37,7 @@
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/jquery.mCustomScrollbar.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/plugins/xlsx.full.min.js') ?>"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
+    <script src="<?php echo base_url(); ?>assets/plugins/printThis.js"></script>
     <script src="<?php echo base_url('assets/plugins/datatable.min.js'); ?>"></script>
     <title><?php echo $Title; ?></title>
 
@@ -126,7 +127,7 @@
                     </li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
                     <li class="title">Reports</li>
-                    <li><a href="#"><span class="mif-list icon"></span>Evaluation Result</a></li>
+                    <li><a href="<?php echo base_url('index.php/Evaluation/Results') ?>" class="<?php if(isset($evaluationresultsnav)){ echo $evaluationresultsnav; }?>"><span class="mif-list icon"></span>Evaluation Result</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>Renewal Remarks</a></li>
                 </ul>
             </div>

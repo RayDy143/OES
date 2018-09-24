@@ -23,7 +23,7 @@
     </div>
     <div class="row">
         <div class="cell-8">
-            <h4><?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?> Info</h4>
+            <h4><?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?></h4>
         </div>
     </div>
     <hr class="row thick bg-black drop-shadow">

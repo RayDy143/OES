@@ -146,8 +146,32 @@
             $fields = array('ScheduleDescription' => $this->input->post('txtAddSchedDescription'),'ShiftID' => $this->input->post('cmbAddSchedShift') );
             $data['id']=$this->SchedulerModel->addSchedule($fields);
             $data['success']=false;
-            if($data){
+            if($data['id']){
                 $data['success']=true;
+                $dayid = array(1,2,3,4,5,6);
+                if($this->input->post('cmbAddSchedShift')==1){
+                    $start = date("H:i", strtotime(str_replace(' ', '',"07:05 AM")));
+                    $end = date("H:i", strtotime(str_replace(' ', '',"12:05 AM")));
+                    foreach ($dayid as $id) {
+                        $dailyschedfields = array('DayID' => $id,
+                                        'StartTime' => $start,
+                                        'EndTime' => $end,
+                                        'ScheduleID' => $data['id']
+                                     );
+                        $query=$this->DailyScheduleModel->addDailySched($dailyschedfields);
+                    }
+                }else{
+                    $start = date("H:i", strtotime(str_replace(' ', '',"1:05 PM")));
+                    $end = date("H:i", strtotime(str_replace(' ', '',"6:45 PM")));
+                    foreach ($dayid as $id) {
+                        $dailyschedfields = array('DayID' => $id,
+                                        'StartTime' => $start,
+                                        'EndTime' => $end,
+                                        'ScheduleID' => $data['id']
+                                     );
+                        $query=$this->DailyScheduleModel->addDailySched($dailyschedfields);
+                    }
+                }
             }
             echo json_encode($data);
         }
@@ -198,7 +222,6 @@
                 $data['duplicate']=true;
             }else{
                 $query=$this->DailyScheduleModel->addDailySched($fields);
-
                 if($query){
                     $data['success']=true;
                 }

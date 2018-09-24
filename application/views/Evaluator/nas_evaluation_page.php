@@ -1,13 +1,16 @@
 <div class="row" style="height:100%;">
-    <div class="cell-4 bg-white win-shadow p-5">
+    <div class="cell-4 bg-white win-shadow p-5 mb-5" style="overflow:auto">
         <div class="row pl-5">
-            <div class="cell-4">
+            <div class="cell-12">
                 <div class="img-container thumbnail">
                     <img src="<?php echo base_url('assets/Uploads/Picture/').$nasprofile->Filename; ?>">
                 </div>
             </div>
             <input type="hidden" id="txtNasID" value="<?php echo $nasprofile->NasID; ?>">
-            <div class="cell-8">
+            <div class="stub mx-auto mt-3">
+                <strong>Scholar's Information</strong>
+            </div>
+            <div class="cell-8 mt-3">
                 <p>Name : <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?></p>
                 <p>Email : <?php echo $nasprofile->Email; ?></p>
                 <p>Address : <?php echo $nasprofile->Address; ?></p>
@@ -48,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="cell-8 bg-white win-shadow mb-14 p-3" style="overflow:auto;">
+    <div class="cell bg-white win-shadow mr-4 mb-14 p-3" style="overflow:auto;">
         <h4>Evaluation for <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?>.</h4>
         <div class="row"  id="evalContainer">
 
@@ -85,7 +88,7 @@
                                                                     +'<div class="page-content">'
                                                                         +'<div class="form-group">'
                                                                             +'<label>'+questionresponse.question[i].Question+'</label>'
-                                                                            +'<input id="'+questionresponse.question[i].QuestionID+'" class="questions" type="text" data-role="input"/>'
+                                                                            +'<input id="'+questionresponse.question[i].QuestionID+'" data-buttons-position="right" class="questions" value="3" type="text" data-max-value="5" data-step=".1" data-default-value="3"  data-fixed="1" data-min-value="0" data-role="spinner"/>'
                                                                         +'</div>'
 
                                                                     +'</div>'
@@ -124,14 +127,58 @@
             if(hasEmptyValues){
                 alert("Please make sure to fill out all fields.");
             }else{
-                var dsafs=$( ":text" )
-                .map(function() {
-                   var _qid=this.id;
-                   var _rating=this.value;
+                Metro.dialog.create({
+                    title:"Confirm submition.",
+                    content:"<p>Please confirm that you have already answered all the questions for the evaluation. Even if you didn't answer anything the system will going to submit the default values. <strong class='fg-red'>This process can't be undone.</strong></p>",
+                    actions:[
+                        {
+                            caption:"Submit",
+                            cls:"bg-darkBlue fg-white",
+                            onclick:function() {
+                                $( ":text" )
+                                .map(function() {
+                                   var _qid=this.id;
+                                   var _rating=this.value;
+                                   $.ajax({
+                                       type:'ajax',
+                                       method:'POST',
+                                       url:'<?php echo base_url("index.php/Evaluator/insertQuestionEvaluation"); ?>',
+                                       data:{QuestionID:_qid,Rating:_rating,NasID:$("#txtNasID").val()}
+                                   });
+                                });
+                                $.ajax({
+                                    type:'ajax',
+                                    method:'POST',
+                                    url:'<?php echo base_url("index.php/Evaluator/addEvaluationResult"); ?>',
+                                    data:{NasID:$("#txtNasID").val()},
+                                    dataType:'json',
+                                    success:function(response) {
+                                        if(response.success){
+                                            window.location="<?php echo base_url();?>index.php/Evaluator";
+                                        }
+                                    }
+                                });
+                            }
+                        },
+                        {
+                            caption:"Cancel",
+                            cls:"bg-darkRed fg-white js-dialog-close"
+                        }
+                    ]
                 });
+
             }
         });
 
+    });
+    $('body').on('keydown', '.questions', function(event){
+        if(event.which < 46 || event.which > 59) {
+            event.preventDefault();
+        } // prevent if not number/dot
+        if(event.which == 46
+        && $(this).val().indexOf('.') != -1) {
+            event.preventDefault();
+        } // prevent if already dot
     });
 </script>
 </body>

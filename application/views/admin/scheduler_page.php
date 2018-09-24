@@ -1,4 +1,4 @@
-<div class="cell bg-white p-3 ml-4 mr-6">
+<div class="cell bg-white p-3 ml-4 mr-4" style="overflow:auto">
     <div class="row">
         <a href="javascript:history.back();" class="button stub win-shadow bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
         <div class="stub ml-auto no-visible">
@@ -17,7 +17,7 @@
         <ul class="cell breadcrumbs" style="margin-bottom:0px;">
             <li class="page-item"><a href="<?php echo base_url('index.php/AdminStart'); ?>" class="page-link">Home</a></li>
             <li class="page-item"><a href="<?php echo base_url('index.php/Masterfile'); ?>" class="page-link">Masterfile</a></li>
-            <li class="page-item"><a href="<?php echo base_url('index.php/Scheduler'); ?>" class="page-link">Scheduler</a></li>
+            <li class="page-item"><a href="<?php echo base_url('index.php/Scheduler'); ?>" class="page-link">Schedule</a></li>
         </ul>
         <div class="stub ml-auto">
             <button class="button bg-darkBlue fg-white win-shadow" onclick="Metro.dialog.open('#AddNewScheduleDialog')" name="button">Add new schedule</button>
@@ -97,8 +97,8 @@
             </div>
         </div>
         <div class="dialog-actions">
-            <button type="button" class="button bg-darkRed fg-white place-right  js-dialog-close">Cancel</button>
-            <button type="submit" class="button place-right">Add</button>
+            <button type="button" class="button bg-darkRed fg-white place-right js-dialog-close">Cancel</button>
+            <button type="submit" class="button place-right js-dialog-close">Add</button>
         </div>
     </form>
 </div>
@@ -224,10 +224,12 @@
             data:$(this).serialize(),
             dataType:'json',
             success:function(response){
-                Metro.dialog.close("#AddNewScheduleDialog");
-                var infoboxcontent="<p>Successfully Added!</p>";
-                Metro.infobox.create(infoboxcontent,"success",{overlay:true});
-                getSchedule();
+                if(response.success){
+                    Metro.dialog.close("#AddNewScheduleDialog");
+                    var infoboxcontent="<p>Successfully Added!</p>";
+                    Metro.infobox.create(infoboxcontent,"success",{overlay:true});
+                    getSchedule();
+                }
             },
             error:function() {
                 var infoboxcontent="<p>System fatal error!</p>";
