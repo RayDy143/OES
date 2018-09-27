@@ -32,13 +32,36 @@
     </div>
     <hr class="row thick bg-black drop-shadow">
     <div class="row">
+        <div class="cell">
+            <label class="place-right mt-1" for="">Select Schoolyear:</label>
+        </div>
+        <div class="cell">
+            <select class="filter" id="cmbFilterSchoolyear">
+                <?php
+                    if(isset($schoolyear)){
+                        foreach ($schoolyear as $row) {
+                            echo '<option value="'.$row['Schoolyear'].'">'.$row['Schoolyear'].'</option>';
+                        }
+                    }
+                 ?>
+            </select>
+        </div>
+        <div class="cell">
+            <label class="place-right mt-1">Select Semester:</label>
+        </div>
+        <div class="cell">
+            <select class="filter" id="cmbFilterSemester">
+                <option value="First Semester">First Semester</option>
+                <option value="Second Semester">Second Semester</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
         <div data-role="progress" id="progress" data-type="line"></div>
         <div class="cell">
             <table class="table table-border cell-border cell-hover" id="tblWorkingDate">
                 <thead>
                     <tr>
-                        <th>Month</th>
-                        <th>Day</th>
                         <th>Date</th>
                         <th>Action</th>
                     </tr>
@@ -52,11 +75,31 @@
 </div>
 <div class="dialog" data-role="dialog" id="AddWorkingDateDialog" style="overflow:auto">
     <form id="frmAddWorkingDate" data-role="validator" data-on-validate-form="validateAddWorkingDate" action="javascript:">
-        <div class="dialog-title">Add new working dates.</div>
+        <div class="dialog-title">Add new working date(s).</div>
         <div class="dialog-content">
             <div class="row" >
+                <div class="cell-12 form-group">
+                    <label for="dtpAddDateYear">Schoolyear</label>
+                    <input data-validate="required" data-role="datepicker" id="dtpAddDateYear" name="dtpAddDateYear" data-day="false" data-month="false">
+                    <input type="hidden" name="dtpAddEvalYear1" id="dtpAddDateYear1">
+                    <input type="hidden" name="txtSY" id="txtSY">
+                    <input class="text-center" readonly type="text" id="txtAddDateYear" name="txtAddDateYear" data-day="false" data-month="false">
+                    <span class="invalid_feedback">Schoolyear is required.</span>
+                </div>
+                <div class="cell-12 form-group">
+                    <label for="cmbAddSemester">Semester</label>
+                    <select data-validate="required" data-role="select" id="cmbAddSemester" name="cmbAddSemester">
+                        <option value="First Semester">First Semester</option>
+                        <option value="Second Semester">Second Semester</option>
+                    </select>
+                    <span class="invalid_feedback">Semester is required.</span>
+                </div>
                 <div class="stub mx-auto">
-                    <div data-role="calendar" id="calendar" data-buttons="today, clear" data-multi-select="true"></div>
+                    <div data-role="calendar" data-input-format="yyyy-mm-dd" <?php if ($excludedate): ?>
+                        data-exclude="<?php foreach ($excludedate as $row) {
+                            echo $row['Date'].',';
+                        } ?>"
+                    <?php endif; ?> id="calendar" data-buttons="today, clear" data-multi-select="true"></div>
                 </div>
             </div>
         </div>
@@ -72,39 +115,86 @@
 <script>
     $(document).ready(function() {
         $("#tblWorkingDate").DataTable();
+        $("#dtpAddDateYear").change(function() {
+            var year=new Date($("#dtpAddDateYear").val());
+            $("#dtpAddDateYear1").val(year.getFullYear());
+            $("#txtAddDateYear").val(year.getFullYear()+1);
+            $("#txtSY").val(year.getFullYear()+"-"+(year.getFullYear()+1));
+        });
         getWorkingDates();
-        function getWorkingDates() {
+        $("#tblWorkingDate tbody").on('click','button.delete',function() {
+            var _id=$(this).attr('id');
             $.ajax({
                 type:'ajax',
-                url:'<?php echo base_url("index.php/Attendance/getWorkingDates") ?>',
+                method:'POST',
+                url:'<?php echo base_url("index.php/Attendance/removeWorkingDates"); ?>',
+                data:{ID:_id},
                 dataType:'json',
                 success:function(response) {
                     if(response.success){
-                        var _tableContent='';
-                        for (var i = 0; i < response.workingdates.length; i++) {
-                            _tableContent+='<tr>'
-                                                +'<td>'+response.workingdates[i].Month+'</td>'
-                                                +'<td>'+response.workingdates[i].Day+'</td>'
-                                                +'<td>'+response.workingdates[i].Date+'</td>'
-                                                +'<td><button id="Delete'+response.workingdates[i].WorkingDateID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
-                                           +'</tr>';
-                        }
-                        if($.fn.DataTable.isDataTable("#tblWorkingDate")){
-                            $("#tblWorkingDate").DataTable().destroy().clear();
-                        }
-                        $("#tblWorkingDate tbody").html(_tableContent);
-                        $("#tblWorkingDate").DataTable();
-                        $("#progress").hide();
+                        alert("Successfully Deleted!");
+                        location.reload();
                     }
                 }
-            })
-        }
+            });
+        });
+        $(".filter").change(function() {
+            getWorkingDates();
+        });
     });
+    function getWorkingDates() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Attendance/getWorkingDates") ?>',
+            data:{SY:$("#cmbFilterSchoolyear").val(),Semester:$("#cmbFilterSemester").val()},
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    var _tableContent='';
+                    for (var i = 0; i < response.workingdates.length; i++) {
+                        _tableContent+='<tr>'
+                                            +'<td>'+new Date(response.workingdates[i].Date).toDateString()+'</td>'
+                                            +'<td><button id="'+response.workingdates[i].WorkingDateID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1">REMOVE</button></div></td>'
+                                       +'</tr>';
+                    }
+                    if($.fn.DataTable.isDataTable("#tblWorkingDate")){
+                        $("#tblWorkingDate").DataTable().destroy().clear();
+                    }
+                    $("#tblWorkingDate tbody").html(_tableContent);
+                    $("#tblWorkingDate").DataTable({"aaSorting": []});
+                    $("#progress").hide();
+                }
+            }
+        })
+    }
     function validateAddWorkingDate() {
         var calendar = $("#calendar").data('calendar');
         var dates=calendar.getSelected();
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                              "July", "August", "September", "October", "November", "December"
+                            ];
+        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         for (var i = 0; i < dates.length; i++) {
-            
+            var date=new Date(dates[i]);
+            console.log(date);
+            var locale = "en-us";
+            var month=date.toLocaleString(locale, { month: "long" });
+            var day=days[date.getDay()];
+            var schoolyear=$("#txtSY").val();
+            $.ajax({
+                type:'ajax',
+                method:'POST',
+                url:'<?php echo base_url("index.php/Attendance/addWorkingDays"); ?>',
+                data:{Day:day,Month:month,Date:date.toLocaleDateString(),Schoolyear:schoolyear,Semester:$("#cmbAddSemester").val()},
+                dataType:'json',
+                success:function(response) {
+                    if(response.success){
+                        location.reload();
+                    }
+                }
+            });
+
         }
     }
 </script>

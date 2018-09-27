@@ -129,7 +129,7 @@
                         <a href="#" class="dropdown-toggle <?php if(isset($attendance)){echo $attendance;} ?>"><span class="mif-list icon"></span>Attendance</a>
                         <ul class="d-menu" data-role="dropdown" style="display: none;">
                             <li><a href="<?php echo base_url('index.php/Attendance/WorkingDate') ?>"><span class="icon"></span>Working Dates</a></li>
-                            <li><a href="#">DTR</a></li>
+                            <li><a href="<?php echo base_url('index.php/Attendance/DTR') ?>">DTR</a></li>
                         </ul>
                     </li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
