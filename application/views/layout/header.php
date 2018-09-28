@@ -66,17 +66,6 @@
             <a href="#" id="Brand" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
             <div class="app-bar-container ml-auto order-2">
                 <a href="<?php echo base_url('index.php/AdminStart') ?>" class="app-bar-item"><strong>Home</strong></a>
-                <a href="#" class="app-bar-item"><span class="mif-bell"></span></a>
-                <div class="app-bar-container">
-                    <a class="app-bar-item dropdown-toggle marker-light" href="#"><span class="mif-plus"></span></a>
-                    <ul class="d-menu place-right bg-darkBlue fg-white" data-role="dropdown">
-                        <li><a href="">Help</a></li>
-
-                        <li class="divider"></li>
-                        <li><a href="">Help</a></li>
-                    </ul>
-                </div>
-
                 <div class="app-bar-container">
                     <a class="app-bar-item dropdown-toggle marker-light pl-1 pr-5" href="#"><strong><?php echo $_SESSION['Firstname'].' '.$_SESSION['Lastname']; ?></strong>
                     </a>
@@ -100,7 +89,7 @@
                 <ul class="sidenav-m3">
                     <li class="title">Masterfile</li>
                     <li>
-                        <a id="sideUserAccounts" class="dropdown-toggle <?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts/AddImport') ?>"><span class="mif-home icon"></span>User Accounts</a>
+                        <a id="sideUserAccounts" class="dropdown-toggle <?php echo $useraccounts ?>" href="<?php echo base_url('index.php/UserAccounts/AddImport') ?>"><span class="mif-list icon"></span>User Accounts</a>
                         <ul class="d-menu" data-role="dropdown" style="display: none;">
                             <li><a href="<?php echo base_url('index.php/UserAccounts/Add'); ?>">Add User</a></li>
                             <li><a href="<?php echo base_url('index.php/UserAccounts/Import'); ?>">Import User</a></li>
@@ -134,6 +123,7 @@
                     </li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
                     <li class="title">Reports</li>
+                    <li><a href="#" class=""><span class="mif-list icon"></span>Monthly Allowance</a></li>
                     <li><a href="<?php echo base_url('index.php/Evaluation/Results') ?>" class="<?php if(isset($evaluationresultsnav)){ echo $evaluationresultsnav; }?>"><span class="mif-list icon"></span>Evaluation Result</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>Renewal Remarks</a></li>
                 </ul>

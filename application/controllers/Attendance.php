@@ -9,6 +9,12 @@
         {
             parent::__construct();
             $this->load->model("WorkingDatesModel");
+            $this->load->model("DTRModel");
+            $this->load->model("DailyScheduleModel");
+            $this->load->model("NasModel");
+            $this->load->model("NasAbsentModel");
+            $this->load->model("WorkingDatesModel");
+            $this->load->model("MonthlyImportedDTRModel");
         }
         public function WorkingDate()
         {
@@ -57,6 +63,8 @@
                             $data['department']="";
                             $data['scheduler']="";
                             $data['attendance']="active";
+                            $data['month']=$this->DTRModel->getMonth();
+                            $data['sy']=$this->DTRModel->getSchoolyear();
                             $this->load->view('layout/header',$data);
                             $this->load->view('admin/daily_time_record_page');
                         }else{
@@ -69,6 +77,122 @@
 			}else{
 				header('location:'.base_url('index.php/Login'));
 			}
+        }
+        public function uploadExcel()
+        {
+            $config['upload_path']='./assets/uploads/Excel';
+            $config['allowed_types']='xlsx|xlsm|xltx|xltm';
+            $config['file_name'] = $this->input->post("Filename");
+            $this->load->library('upload',$config);
+            $data['success']=false;
+            if($this->upload->do_upload('File')){
+                $upload=$this->upload->data();
+                $data['success']=true;
+                $data['filename']=$upload['file_name'];
+            }
+            echo json_encode($data);
+        }
+        public function getNasAttendance()
+        {
+            $where = array('IDNumber' => $this->input->post('IDNumber'),'Schoolyear'=>$this->input->post('Schoolyear'),'Semester'=>$this->input->post('Semester'),'Month'=>$this->input->post('Month') );
+
+        }
+        public function addDTR()
+        {
+            $time=$this->input->post('DateTime');
+            if($this->input->post('Type')=="Time in"){
+                $query=$this->DailyScheduleModel->getDailySchedByIDNumber($this->input->post('IDNumber'),$this->input->post('Day'));
+                if($query){
+                    $from=date("Y-m-d H:i", strtotime(str_replace('2018-07-02',' ','7/2/2018 '.$query->StartTime)));
+                    $value=date("Y-m-d H:i", strtotime(str_replace('2018-07-02',' ',$time)));
+                    $lackingmins=round((strtotime($value) - strtotime($from)) / 60,2);
+                    if($lackingmins<=35){
+                        if($lackingmins<0){
+                            $lackingmins=0;
+                        }
+                        $date = new DateTime($this->input->post('DateTime'));
+                        $fields = array(
+                            'Schoolyear' => $this->input->post('Schoolyear'),
+                            'Semester' => $this->input->post('Semester'),
+                            'Month' => $this->input->post('Month'),
+                            'Date'=>$date->format('Y-m-d H:i'),
+                            'Type'=>'Time in',
+                            'IDNumber'=>$this->input->post('IDNumber'),
+                            'NasBiometricID'=>$this->input->post('No'),
+                            'MinutesLacking'=>$lackingmins,
+                            'DateString'=>$date->format('Y-m-d')
+                         );
+                         if($this->DTRModel->checkDuplicateDate($this->input->post('IDNumber'),$date->format('Y-m-d H:i'),'Time in')){
+
+                         }else{
+                             $insertquery=$this->DTRModel->Insert($fields);
+                         }
+                    }
+                }
+            }else{
+                $query=$this->DailyScheduleModel->getDailySchedByIDNumber($this->input->post('IDNumber'),$this->input->post('Day'));
+                if($query){
+                    $from=date("Y-m-d H:i", strtotime(str_replace('2018-07-02',' ','7/2/2018 '.$query->EndTime)));
+                    $value=date("Y-m-d H:i", strtotime(str_replace('2018-07-02',' ',$time)));
+                    $lackingmins=round((strtotime($value) - strtotime($from)) / 60,2);
+                    if($lackingmins<5){
+                        $date = new DateTime($this->input->post('DateTime'));
+                        $fields = array(
+                            'Schoolyear' => $this->input->post('Schoolyear'),
+                            'Semester' => $this->input->post('Semester'),
+                            'Month' => $this->input->post('Month'),
+                            'Date'=>$date->format('Y-m-d H:i'),
+                            'Type'=>'Time out',
+                            'NasBiometricID'=>$this->input->post('No'),
+                            'IDNumber'=>$this->input->post('IDNumber'),
+                            'MinutesLacking'=>0,
+                            'DateString'=>$date->format('Y-m-d')
+                         );
+                         if($this->DTRModel->checkDuplicateDate($this->input->post('IDNumber'),$date->format('Y-m-d H:i'),'Time out')){
+
+                         }else{
+                             $insertquery=$this->DTRModel->Insert($fields);
+                         }
+                    }
+                }
+            }
+        }
+        public function checkAbsences()
+        {
+            $nasquery=$this->NasModel->getNas('All');
+            $where = array('Schoolyear' => $this->input->post('Schoolyear'),'Semester'=>$this->input->post('Semester'),'Month'=>$this->input->post('Month'));
+            foreach ($nasquery as $nasrow) {
+                $work=$this->WorkingDatesModel->GetBySchoolyearAndSemesterAndMonth($where);
+                foreach ($work as $workrow) {
+                    if($this->DTRModel->checkPresent($nasrow['IDNumber'],$workrow['Date'])){
+
+                    }else{
+                        $absentfields = array('Date' => $workrow['Date'],'IDNumber'=>$nasrow['IDNumber'],'Schoolyear' => $this->input->post('Schoolyear'),'Semester'=>$this->input->post('Semester'),'Month'=>$this->input->post('Month') );
+                        $this->NasAbsentModel->Insert($absentfields);
+                    }
+                }
+            }
+            $this->MonthlyImportedDTRModel->Insert($where);
+        }
+        public function CheckIfMonthImportExist()
+        {
+            $where = array('Schoolyear' => $this->input->post('Schoolyear'),'Semester'=>$this->input->post('Semester'),'Month'=>$this->input->post('Month') );
+            $query=$this->MonthlyImportedDTRModel->CheckIfExisted($where);
+            $data['success']=false;
+            if($query){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getDTR()
+        {
+            $where = array('Schoolyear' => $this->input->post('Schoolyear'),'Semester'=>$this->input->post('Semester'),'Month'=>$this->input->post('Month') );
+            $data['dtr']=$this->DTRModel->Get($where);
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
         }
         public function getWorkingDates()
         {

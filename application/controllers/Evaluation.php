@@ -122,7 +122,6 @@
                             $data['scheduler']="";
                             $data['department']="";
                             $data['evaluation']="active";
-                            $data['sy']=$this->SchoolyearModel->getSchoolyear();
                             $this->load->view('layout/header',$data);
                             $this->load->view('admin/manage_evaluation_page');
                         }else{

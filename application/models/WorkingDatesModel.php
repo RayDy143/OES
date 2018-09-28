@@ -27,6 +27,17 @@
                 return false;
             }
         }
+        public function GetBySchoolyearAndSemesterAndMonth($where)
+        {
+            $this->db->where($where);
+            $this->db->order_by("Date", "ASC");
+            $query=$this->db->get('workingdate');
+            if($query->num_rows()>0){
+                return $query->result_array();
+            }else{
+                return false;
+            }
+        }
         public function Insert($where,$fields)
         {
             if($this->IsDateExist($where)){

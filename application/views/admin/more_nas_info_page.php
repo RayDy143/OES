@@ -146,7 +146,77 @@
                      ?>
                 </div>
                 <div id="target_attendance">
+                    <div class="row">
+                        <div class="cell-12">
+                            <div class="mx-auto"
+                                 data-title-caption="DTR"
+                                 data-collapsible="true"
+                                 data-cls-title="bg-darkBlue fg-white" data-role="panel">
+                                 <div class="row">
+                                     <div class="cell">
+                                         <label class="place-right mt-1" for="">Schoolyear:</label>
+                                     </div>
+                                     <div class="stub">
+                                         <select class="filter" id="cmbAttendanceSchoolyear">
+                                             <?php
+                                                 if(isset($sy)){
+                                                     foreach ($sy as $row) {
+                                                         echo '<option value="'.$row['SY'].'">'.$row['SY'].'</option>';
+                                                     }
+                                                 }
+                                             ?>
+                                         </select>
+                                     </div>
+                                     <div class="cell">
+                                         <label class="place-right mt-1" for="">Semester :</label>
+                                     </div>
+                                     <div class="stub">
+                                         <select class="filter" id="cmbAttendaceSemester">
+                                             <option value="First Semester">First Semester</option>
+                                             <option value="Second Semester">Second Semester</option>
+                                         </select>
+                                     </div>
+                                     <div class="cell">
+                                         <label class="place-right mt-1" for="">Month:</label>
+                                     </div>
+                                     <div class="stub">
+                                         <select class="filter" id="cmbFilterMonth">
+                                             <?php
+                                                 if(isset($month)){
+                                                     foreach ($month as $row) {
+                                                         echo '<option value="'.$row['Month'].'">'.$row['Month'].'</option>';
+                                                     }
+                                                 }
+                                              ?>
+                                         </select>
+                                     </div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="cell-12">
+                                         <strong>Total Number of Lates: <span id="lblNumLates"></span></strong>
+                                     </div>
+                                     <div class="cell-12">
+                                         <strong>Total Number of Absences: <span id="lblNumAbsents"></span></strong>
+                                     </div>
+                                 </div>
+                                 <div class="row">
+                                     <div class="cell">
+                                         <table id="tblNasAttendance" class="table striped table-border cell-border mt-3">
+                                             <thead>
+                                                 <tr>
+                                                     <th>Date/Time</th>
+                                                     <th>Type</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
 
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="target_grades">
                     <div class="row">
@@ -194,6 +264,11 @@
 
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="stub mx-auto">
+                            <strong>Average: <span id="lblAve"></span></strong>
                         </div>
                     </div>
                 </div>
@@ -289,6 +364,7 @@
 		// 		snapOffset:65
     	// 	});
         // });
+        getNasAttendance();
         $("#tblNasGrade").DataTable();
         $("#btnAssign").click(function() {
             Metro.dialog.open("#AssignNewScheduleDialog");
@@ -304,6 +380,7 @@
         getNasGrades();
         $(".filter").change(function () {
             getNasGrades();
+            getNasAttendance();
         });
         $("#tblNasGrade tbody").on('click','button.edit',function() {
             var _stringId=$(this).attr('id');
@@ -443,6 +520,55 @@
             }
         });
     }
+    function getNasAttendance() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/getNasAttendance"); ?>',
+            data:{IDNumber:$("#IDNumber").val(),Schoolyear:$("#cmbAttendanceSchoolyear").val(),Semester:$("#cmbAttendaceSemester").val(),Month:$("#cmbFilterMonth").val()},
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    var _tableContent='';
+                    for (var i = 0; i < response.nasattendance.length; i++) {
+                        _tableContent+='<tr>'
+                                            +'<td>'+new Date(response.nasattendance[i].Date).toDateString()+" "+new Date(response.nasattendance[i].Date).toLocaleTimeString()+'</td>'
+                                            +'<td>'+response.nasattendance[i].Type+'</td>'
+                                       +'</tr>';
+                    }
+                    if($.fn.DataTable.isDataTable("#tblNasAttendance")){
+                        $("#tblNasAttendance").DataTable().destroy().clear();
+                    }
+                    $("#tblNasAttendance tbody").html(_tableContent);
+                    $("#tblNasAttendance").DataTable();
+                }
+            }
+        });
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/getNasLate"); ?>',
+            data:{IDNumber:$("#IDNumber").val(),Schoolyear:$("#cmbAttendanceSchoolyear").val(),Semester:$("#cmbAttendaceSemester").val(),Month:$("#cmbFilterMonth").val()},
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    $("#lblNumLates").text(response.late);
+                }
+            }
+        });
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/getNasAbsents"); ?>',
+            data:{IDNumber:$("#IDNumber").val(),Schoolyear:$("#cmbAttendanceSchoolyear").val(),Semester:$("#cmbAttendaceSemester").val(),Month:$("#cmbFilterMonth").val()},
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    $("#lblNumAbsents").text(response.absents);
+                }
+            }
+        });
+    }
     function validateAssignSchedule() {
         $.ajax({
             type:'ajax',
@@ -529,14 +655,20 @@
             success:function(response){
                 if(response.success){
                     var _tableContent='';
+                    var _totalGrade=0;
+                    var _totalGradeCount=0;
                     nasgradeData=response.nasgrades;
                     for (var i = 0; i < response.nasgrades.length; i++) {
+                        _totalGrade=parseFloat(_totalGrade)+parseFloat(response.nasgrades[i].Grade);
+                        _totalGradeCount++;
                         _tableContent+='<tr>'
                                              +'<td>'+response.nasgrades[i].Subject+'</td>'
                                              +'<td>'+response.nasgrades[i].Grade+'</td>'
                                              +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+response.nasgrades[i].NasGradesID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+response.nasgrades[i].NasGradesID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                                       +'</tr>';
                     }
+                    var _ave=(_totalGrade/_totalGradeCount);
+                    $("#lblAve").text(_ave);
                     if($.fn.DataTable.isDataTable("#tblNasGrade")){
                         $("#tblNasGrade").DataTable().clear().destroy();
                     }

@@ -26,6 +26,13 @@
                 return false;
             }
         }
+        public function getDailySchedByIDNumber($id,$day)
+        {
+            $query=$this->db->query("SELECT dailyschedule.StartTime,dailyschedule.EndTime FROM schedule inner join dailyschedule on schedule.ScheduleID=dailyschedule.ScheduleID inner join day on dailyschedule.DayID=day.DayID inner join nasschedule on schedule.ScheduleID=nasschedule.ScheduleID inner join nas on nasschedule.NasID=nas.NasID where nas.IDNumber='$id' and nasschedule.IsCurrent=1 and day.Day='$day'");
+            if($query->num_rows()>0){
+                return $query->row();
+            }
+        }
         public function delete($where){
             $this->db->where($where);
             $this->db->delete('dailyschedule');

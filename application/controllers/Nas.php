@@ -16,6 +16,8 @@
             $this->load->model("SchedulerModel");
             $this->load->model("NasUploadedPictureModel");
             $this->load->model("NasGradesModel");
+            $this->load->model("NasAbsentModel");
+            $this->load->model("DTRModel");
         }
         function Add(){
             if(isset($_SESSION['Email'])){
@@ -116,6 +118,8 @@
                             $data['department']="";
                             $data['evaluation']="";
                             $data['scheduler']="";
+                            $data['sy']=$this->DTRModel->getSchoolyear();
+                            $data['month']=$this->DTRModel->getMonth();
                             $data['dep']=$this->DepartmentModel->getDepartment("All");
                             $data['nasprofile']=$this->NASModel->getNasProfile($id);
                             $data['nasschedule']=$this->NasScheduleModel->getSpecificNasSchedule($id);
@@ -155,6 +159,45 @@
         public function getAllDepartment()
         {
             $data['dep']=$this->DepartmentModel->getDepartment('All');
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getNasAttendance()
+        {
+            $where = array(
+                'IDNumber' => $this->input->post('IDNumber'),
+                'Schoolyear' => $this->input->post('Schoolyear'),
+                'Semester' => $this->input->post('Semester'),
+                'Month' => $this->input->post('Month')
+             );
+            $data['nasattendance']=$this->DTRModel->getNasAttendance($where);
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getNasLate()
+        {
+            $data['late']=$this->DTRModel->getNumberOfLates($this->input->post('IDNumber'),$this->input->post('Schoolyear'),$this->input->post('Semester'),$this->input->post('Month'));
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
+        public function getNasAbsents()
+        {
+            $where = array(
+                'IDNUmber' => $this->input->post('IDNumber'),
+                'Schoolyear' => $this->input->post('Schoolyear'),
+                'Semester' => $this->input->post('Semester'),
+                'Month' => $this->input->post('Month'),
+            );
+            $data['absents']=$this->NasAbsentModel->getNasAbsences($where);
             $data['success']=false;
             if($data){
                 $data['success']=true;

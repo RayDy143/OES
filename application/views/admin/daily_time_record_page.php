@@ -38,9 +38,9 @@
         <div class="cell">
             <select class="filter" id="cmbFilterSchoolyear">
                 <?php
-                    if(isset($schoolyear)){
-                        foreach ($schoolyear as $row) {
-                            echo '<option value="'.$row['Schoolyear'].'">'.$row['Schoolyear'].'</option>';
+                    if(isset($sy)){
+                        foreach ($sy as $row) {
+                            echo '<option value="'.$row['SY'].'">'.$row['SY'].'</option>';
                         }
                     }
                  ?>
@@ -50,7 +50,7 @@
             <label class="place-right mt-1">Select Semester:</label>
         </div>
         <div class="cell">
-            <select class="filter" id="cmbFilterSemester">
+            <select class="filter" data-role="select" id="cmbFilterSemester">
                 <option value="First Semester">First Semester</option>
                 <option value="Second Semester">Second Semester</option>
             </select>
@@ -59,30 +59,26 @@
             <label class="place-right mt-1" for="">Select Month:</label>
         </div>
         <div class="cell">
-            <select class="filter" id="cmbFilterMonth">
-                <option value="January">January</option>
-                <option value="Febuary">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="September">October</option>
-                <option value="September">November</option>
-                <option value="September">December</option>
+            <select class="filter" data-role="select" id="cmbFilterMonth">
+                <?php
+                    if(isset($month)){
+                        foreach ($month as $row) {
+                            echo '<option value="'.$row['Month'].'">'.$row['Month'].'</td>';
+                        }
+                    }
+                 ?>
             </select>
         </div>
     </div>
     <div class="row">
         <div data-role="progress" id="progress" data-type="line"></div>
         <div class="cell">
-            <table class="table table-border cell-border cell-hover" id="tblDTR">
+            <table class="table table-border cell-border cell-hover mt-3" id="tblDTR">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Date</th>
-                        <th>Action</th>
+                        <th>Type</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -114,8 +110,26 @@
                     <span class="invalid_feedback">Semester is required.</span>
                 </div>
                 <div class="cell-12 form-group">
+                    <label for="cmbMonth">Month</label>
+                    <select data-role="select" id="cmbMonth">
+                        <option value="January">January</option>
+                        <option value="Febuary">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="September">October</option>
+                        <option value="September">November</option>
+                        <option value="September">December</option>
+                    </select>
+                </div>
+                <input type="hidden" name="Filename" id="txtFilename">
+                <div class="cell-12 form-group">
                     <label for="dtrFile">Select excel file.</label>
-                    <input type="file" data-role="file">
+                    <input type="file" data-role="file" id="dtrFile" name="File">
                 </div>
             </div>
         </div>
@@ -130,8 +144,139 @@
 
 <script>
     $(document).ready(function() {
-
+        getDTR();
+        $("#dtpAddDateYear").change(function() {
+            var year=new Date($("#dtpAddDateYear").val());
+            $("#dtpAddDateYear1").val(year.getFullYear());
+            $("#txtAddDateYear").val(year.getFullYear()+1);
+            $("#txtSY").val(year.getFullYear()+"-"+(year.getFullYear()+1));
+        });
+        $(".filter").change(function() {
+            getDTR();
+        });
     });
+    function validateImportDTR() {
+        $("#txtFilename").val($("#dtrFile")[0].files[0].name);
+        var importFormData=new FormData($("#frmImportDTR")[0]);
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Attendance/CheckIfMonthImportExist"); ?>',
+            data:{Schoolyear:$("#txtSY").val(),Semester:$("#cmbAddSemester").val(),Month:$("#cmbMonth").val()},
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    var infoboxcontent="<p>You've already import DTR for the month that you have selected. You will not be able to import again for that month.</p>";
+                    Metro.infobox.create(infoboxcontent,"alert",{overlay:true});
+                }else{
+                    $.ajax({
+                        type:'ajax',
+                        method:'POST',
+                        url:'<?php echo base_url("index.php/UserAccounts/uploadExcel") ?>',
+                        data:importFormData,
+                        contentType: false,
+                        processData: false,
+                        dataType:'json',
+                        success:function(uploadresponse){
+                            var _filename=uploadresponse.filename;
+                            importExcel({
+                                filename:"<?php echo base_url(); ?>assets/uploads/Excel/"+_filename,
+                                success:function(response2) {
+                                    var _excelData = response2;
+                                    var _length = _excelData.length;
+                                    for (var i = 0; i < _excelData.length; i++) {
+                                        var _excelRow=_excelData[i];
+                                        _excelRow.Schoolyear=$("#txtSY").val();
+                                        _excelRow.Semester=$("#cmbAddSemester").val();
+                                        var date=new Date(_excelRow.DateTime);
+                                        var locale = "en-us";
+                                        var month=date.toLocaleString(locale, { month: "long" });
+                                        _excelRow.Month=month;
+                                        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                        var day=days[date.getDay()];
+                                        _excelRow.Day=day;
+                                        $.ajax({
+                                            type:'ajax',
+                                            method:'POST',
+                                            url:'<?php echo base_url("index.php/Attendance/addDTR") ?>',
+                                            data:_excelRow
+                                        });
+                                    }
+                                    $.ajax({
+                                        type:'ajax',
+                                        method:'POST',
+                                        url:'<?php echo base_url("index.php/Attendance/checkAbsences"); ?>',
+                                        async:false,
+                                        data:{Schoolyear:$("#txtSY").val(),Semester:$("#cmbAddSemester").val(),Month:$("#cmbMonth").val()},
+                                        success:function() {
+                                            location.reload();
+                                        }
+                                    });
+                                }
+                            });
+                        },
+                    });
+                }
+            }
+        });
+    }
+    function getDTR() {
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Attendance/getDTR"); ?>',
+            data:{Schoolyear:$("#cmbFilterSchoolyear").val(),Semester:$("#cmbFilterSemester").val(),Month:$("#cmbFilterMonth").val()},
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    var _tableContent='';
+                    for (var i = 0; i < response.dtr.length; i++) {
+                        _tableContent+='<tr>'
+                                            +'<td>'+response.dtr[i].IDNumber+'</td>'
+                                            +'<td>'+new Date(response.dtr[i].Date).toDateString()+' '+new Date(response.dtr[i].Date).toLocaleTimeString()   +'</td>'
+                                            +'<td>'+response.dtr[i].Type+'</td>'
+                                      +'</tr>';
+                    }
+                    if($.fn.DataTable.isDataTable("#tblDTR")){
+                        $("#tblDTR").DataTable().clear().destroy();
+                    }
+                    $("#tblDTR tbody").html(_tableContent);
+                    $("#tblDTR").DataTable();
+                    $("#progress").hide();
+                }
+            },
+        });
+
+    }
+    function importExcel(o) {
+        /* set up XMLHttpRequest */
+        var url = o.filename;
+        var oReq = new XMLHttpRequest();
+        oReq.open("GET", url, true);
+        oReq.responseType = "arraybuffer";
+
+        oReq.onload = function(e) {
+            var arraybuffer = oReq.response;
+
+            /* convert data to binary string */
+            var data = new Uint8Array(arraybuffer);
+            var arr = new Array();
+            for(var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+            var bstr = arr.join("");
+
+            /* Call XLSX */
+            var workbook = XLSX.read(bstr, {type:"binary"});
+
+            /* DO SOMETHING WITH workbook HERE */
+            var first_sheet_name = workbook.SheetNames[0];
+            /* Get worksheet */
+            var worksheet = workbook.Sheets[first_sheet_name];
+            var data = XLSX.utils.sheet_to_json(worksheet,{raw:true});
+            if (typeof o.success) o.success(data);
+        }
+
+        oReq.send();
+    }
 </script>
 </body>
 </html>

@@ -65,17 +65,6 @@
             <a href="#" id="Brand" class="brand no-hover fg-white-hover order-1" style="font-size:25px;"><strong>OES-NAS</strong></a>
             <div class="app-bar-container ml-auto order-2">
                 <a href="<?php echo base_url('index.php/AdminStart') ?>" class="app-bar-item"><strong>Home</strong></a>
-                <a href="#" class="app-bar-item"><span class="mif-bell"></span></a>
-                <div class="app-bar-container">
-                    <a class="app-bar-item dropdown-toggle marker-light" href="#"><span class="mif-plus"></span></a>
-                    <ul class="d-menu place-right bg-darkBlue fg-white" data-role="dropdown">
-                        <li><a href="">Help</a></li>
-
-                        <li class="divider"></li>
-                        <li><a href="">Help</a></li>
-                    </ul>
-                </div>
-
                 <div class="app-bar-container">
                     <a class="app-bar-item dropdown-toggle marker-light pl-1 pr-5" href="#"><strong><?php echo $_SESSION['Firstname'].' '.$_SESSION['Lastname']; ?></strong>
                     </a>

@@ -48,6 +48,11 @@
             </div>
             <hr class="row thin bg-black">
             <div class="row">
+                <div class="cell-12">
+                    <strong>List of Evaluator and Scholar belong in this Department.</strong>
+                </div>
+            </div>
+            <div class="row">
                 <div class="cell">
                     <table data-role="table" data-pagenation="true" id="tblDepartmentEvaluatorAndScholars" class="table table-border striped cell-hover">
                         <thead>

@@ -6,7 +6,7 @@
     {
         public function getSchoolyear($nasid)
         {
-            $query=$this->db->query("SELECT DISTINCT Schoolyear FROM nasgrades where NasID='$nasid'");
+            $query=$this->db->query("SELECT DISTINCT Schoolyear FROM nasgrades where NasID='$nasid' and IsDeleted=0");
             if($query->num_rows()>0){
                 return $query->result_array();
             }else{
