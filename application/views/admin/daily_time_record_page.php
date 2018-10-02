@@ -104,26 +104,26 @@
                 <div class="cell-12 form-group">
                     <label for="cmbAddSemester">Semester</label>
                     <select data-validate="required" data-role="select" id="cmbAddSemester" name="cmbAddSemester">
-                        <option value="First Semester">First Semester</option>
-                        <option value="Second Semester">Second Semester</option>
+                        <?php
+                            if(isset($semwork)){
+                                foreach ($semwork as $row) {
+                                    echo '<option value="'.$row['Semester'].'">'.$row['Semester'].'</option>';
+                                }
+                            }
+                         ?>
                     </select>
                     <span class="invalid_feedback">Semester is required.</span>
                 </div>
                 <div class="cell-12 form-group">
                     <label for="cmbMonth">Month</label>
                     <select data-role="select" id="cmbMonth">
-                        <option value="January">January</option>
-                        <option value="Febuary">February</option>
-                        <option value="March">March</option>
-                        <option value="April">April</option>
-                        <option value="May">May</option>
-                        <option value="June">June</option>
-                        <option value="July">July</option>
-                        <option value="August">August</option>
-                        <option value="September">September</option>
-                        <option value="September">October</option>
-                        <option value="September">November</option>
-                        <option value="September">December</option>
+                        <?php
+                            if(isset($monthwork)){
+                                foreach ($monthwork as $row) {
+                                    echo '<option value="'.$row['Month'].'">'.$row['Month'].'</option>';
+                                }
+                            }
+                         ?>
                     </select>
                 </div>
                 <input type="hidden" name="Filename" id="txtFilename">
@@ -198,6 +198,7 @@
                                         $.ajax({
                                             type:'ajax',
                                             method:'POST',
+                                            async:false,
                                             url:'<?php echo base_url("index.php/Attendance/addDTR") ?>',
                                             data:_excelRow
                                         });
@@ -205,17 +206,15 @@
                                     $.ajax({
                                         type:'ajax',
                                         method:'POST',
-                                        url:'<?php echo base_url("index.php/Attendance/checkAbsences"); ?>',
                                         async:false,
-                                        data:{Schoolyear:$("#txtSY").val(),Semester:$("#cmbAddSemester").val(),Month:$("#cmbMonth").val()},
-                                        success:function() {
-                                            location.reload();
-                                        }
+                                        url:'<?php echo base_url("index.php/Attendance/checkAbsensces"); ?>',
+                                        data:{Schoolyear:$("#txtSY").val(),Semester:$("#cmbAddSemester").val(),Month:$("#cmbMonth").val()}
                                     });
                                 }
                             });
                         },
                     });
+
                 }
             }
         });

@@ -1,58 +1,82 @@
-
-<div class="cell bg-white p-3 ml-4 mr-4" style="overflow:auto;">
+<div class="cell mr-4 p-5" style="overflow:auto">
     <div class="row">
-        <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
-        <div class="stub ml-auto no-visible">
-            <div class="row">
-                <h5 class="cell mt-3">Days left para defend:</h5>
-                <div class="cell" data-role="countdown"  data-date="09/25/2018"
-                     data-days="1"
-                     data-hours="2"
-                     data-minutes="3"
-                     data-seconds="4"></div>
-            </div>
-
-        </div>
-    </div>
-    <div class="row">
-        <ul class="cell breadcrumbs" style="margin-bottom:0px;">
-            <li class="page-item"><a href="<?php echo base_url('index.php/AdminStart'); ?>" class="page-link">Home</a></li>
-            <li class="page-item"><a href="#" class="page-link">Monitor</a></li>
-            <li class="page-item"><a href="#" class="page-link">Evaluation</a></li>
-        </ul>
-    </div>
-    <div class="row">
-        <div class="cell-8">
-            <h4>NAS Evaluation Results</h4>
-        </div>
-    </div>
-    <hr class="row thick bg-black drop-shadow">
-    <hr class="thick">
-    <div class="row mt-3">
         <div class="cell">
-            <table id="tblEvaluationResults" data-role="table" class="table table-border striped cell-hover">
-                <thead>
-                    <tr>
-                        <th>NAS</th>
-                        <th>Evaluator</th>
-                        <th>Mean</th>
-                        <th>Mean Interpretation</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <label class="place-right mt-1" for="">Select Schoolyear:</label>
+        </div>
+        <div class="cell">
+            <select class="filter" id="cmbFilterSchoolyear">
+                <?php
+                    if(isset($sy)){
+                        foreach ($sy as $row) {
+                            echo '<option value="'.$row['SY'].'">'.$row['SY'].'</option>';
+                        }
+                    }
+                 ?>
+            </select>
+        </div>
+        <div class="cell">
+            <label class="place-right mt-1">Select Semester:</label>
+        </div>
+        <div class="cell">
+            <select class="filter" data-role="select" id="cmbFilterSemester">
+                <option value="First Semester">First Semester</option>
+                <option value="Second Semester">Second Semester</option>
+            </select>
+        </div>
+        <div class="cell">
+            <label class="place-right mt-1" for="">Select Month:</label>
+        </div>
+        <div class="cell">
+            <select class="filter" data-role="select" id="cmbFilterMonth">
+                <?php
+                    if(isset($month)){
+                        foreach ($month as $row) {
+                            echo '<option value="'.$row['Month'].'">'.$row['Month'].'</td>';
+                        }
+                    }
+                 ?>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mx-auto print win-shadow pt-5 pl-15 pr-15 pb-10" style="width:768px;">
+            <div class="printThis">
+                <img src="<?php echo base_url('assets/report/banner.png') ?>" style="width:100%;">
+                <p class="text-secondary text-center"><strong>Non-Academic Scholars Monthly Allowance</strong></p>
+                <p class="text-secondary text-center m-0"><strong>Schoolyear <span id="lblSY"></span> <span id="lblSem"></span> Month of <span id="lblMonth"></span></strong></p>
+                <div id="resultContainer">
+                    <table id="tblAllowance" class="table table-border compact cell-border mt-5">
+                        <thead>
+                            <tr>
+                                <th>Scholar</th>
+                                <th>Lacking Minutes</th>
+                                <th>Lowest Grade</th>
+                                <th>Evaluation</th>
+                                <th>Remarks</th>
+                                <th>No of units.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="stub ml-auto">
+            <button type="button" class="button bg-darkBlue fg-white drop-shadow" id="btnPrint" name="button">Print</button>
         </div>
     </div>
 </div>
-</div>
-
-<script>
-    $(document).ready(function(){
-        
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btnPrint").click(function() {
+            $(".printThis").printThis();
+        });
+        $(".filter").change(function () {
+            getNas();
+        });
     });
 </script>
-</body>
-</html>

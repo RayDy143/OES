@@ -70,6 +70,10 @@
                                         <label for="Address">Address</label>
                                         <textarea data-validate="required" type="text" data-role="textarea" id="Address" name="Address"><?php echo $nasprofile->Address ?></textarea>
                                     </div>
+                                    <div class="cell-lg-12 cell-md-12 cell-sm-12 form-group">
+                                        <label for="JobDescription">Job Description</label>
+                                        <textarea data-validate="required" type="text" data-role="textarea" id="JobDescription" name="JobDescription"><?php echo $nasprofile->JobDescription ?></textarea>
+                                    </div>
                                     <div class="cell-lg-6 cell-md-12 cell-sm-12 form-group">
                                         <label for="Birthdate">Birthdate</label>
                                         <input data-validate="required" type="text" data-value="<?php echo $nasprofile->Birthdate ?>" data-role="datepicker" id="Birthdate" name="Birthdate">
@@ -90,6 +94,17 @@
                                                     }
                                                 }
                                              ?>
+                                        </select>
+                                    </div>
+                                    <div class="cell-lg-6 cell-md-12 cell-sm-12 form-group">
+                                        <label for="TuitionFee">Tuition Fee</label>
+                                        <input type="number" name="TuitionFee" value="<?php echo $nasprofile->TuitionFee; ?>" id="TuitionFee">
+                                    </div>
+                                    <div class="cell-lg-6 cell-md-12 cell-sm-12 form-group">
+                                        <label for="cmbStatus">Status</label>
+                                        <select class="cmbStatus" name="cmbStatus">
+                                            <option value="Active" <?php if($nasprofile->Status=="Active"){echo 'selected';} ?>>Active</option>
+                                            <option value="Terminated" <?php if($nasprofile->Status=="Terminated"){echo 'selected';} ?>>Terminated</option>
                                         </select>
                                     </div>
                                 </div>
@@ -552,7 +567,7 @@
             dataType:'json',
             success:function(response) {
                 if(response.success){
-                    $("#lblNumLates").text(response.late);
+                    $("#lblNumLates").text(response.late.Late+" minute(s)");
                 }
             }
         });
@@ -564,7 +579,7 @@
             dataType:'json',
             success:function(response) {
                 if(response.success){
-                    $("#lblNumAbsents").text(response.absents);
+                    $("#lblNumAbsents").text(response.absents+" day(s)");
                 }
             }
         });

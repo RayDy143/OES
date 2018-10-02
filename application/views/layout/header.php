@@ -123,8 +123,8 @@
                     </li>
                     <li><a id="sideUserDeparment" class="<?php echo $department ?>" href="<?php echo base_url('index.php/Department'); ?>"><span class="mif-list icon"></span>Department</a></li>
                     <li class="title">Reports</li>
-                    <li><a href="#" class=""><span class="mif-list icon"></span>Monthly Allowance</a></li>
-                    <li><a href="<?php echo base_url('index.php/Evaluation/Results') ?>" class="<?php if(isset($evaluationresultsnav)){ echo $evaluationresultsnav; }?>"><span class="mif-list icon"></span>Evaluation Result</a></li>
+                    <li><a href="<?php echo base_url('index.php/MonthlyAllowance'); ?>" class="<?php if(isset($allowancenav)){echo $allowancenav;} ?>"><span class="mif-list icon"></span>Monthly Allowance</a></li>
+                    <li><a href="<?php echo base_url('index.php/Evaluation/Results'); ?>" class="<?php if(isset($evaluationresultsnav)){ echo $evaluationresultsnav; }?>"><span class="mif-list icon"></span>Evaluation Result</a></li>
                     <li><a href="#"><span class="mif-list icon"></span>Renewal Remarks</a></li>
                 </ul>
             </div>

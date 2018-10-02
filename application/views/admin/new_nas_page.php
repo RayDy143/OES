@@ -63,6 +63,10 @@
                                     <label for="Address">Address</label>
                                     <textarea data-validate="required" type="text" data-role="textarea" id="Address" name="Address"></textarea>
                                 </div>
+                                <div class="cell-lg-12 cell-md-12 cell-sm-12 form-group">
+                                    <label for="JobDescription">Job Description</label>
+                                    <textarea data-validate="required" type="text" data-role="textarea" id="JobDescription" name="JobDescription"></textarea>
+                                </div>
                                 <div class="cell-lg-6 cell-md-12 cell-sm-12 form-group">
                                     <label for="Birthdate">Birthdate</label>
                                     <input data-validate="required" type="text" data-role="datepicker" id="Birthdate" name="Birthdate">
@@ -79,6 +83,11 @@
                                          ?>
                                     </select>
                                 </div>
+                                <div class="cell-lg-6 cell-md-12 cell-sm-12 form-group">
+                                    <label for="TuitionFee">Tuition Fee</label>
+                                    <input type="number" name="TuitionFee" id="TuitionFee">
+                                </div>
+                                
                             </div>
                         </div>
                         <div class="cell-lg-4 cell-md-12 cell-sm-12 mt-1">

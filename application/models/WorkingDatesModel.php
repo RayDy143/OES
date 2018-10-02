@@ -70,6 +70,24 @@
                 return false;
             }
         }
+        public function getSemester()
+        {
+            $query=$this->db->query("SELECT DISTINCT(Semester) as Semester from workingdate where IsDeleted=0");
+            if($query->num_rows()>0){
+                return $query->result_array();
+            }else{
+                return false;
+            }
+        }
+        public function getMonth()
+        {
+            $query=$this->db->query("SELECT DISTINCT(Month) as Month from workingdate where IsDeleted=0");
+            if($query->num_rows()>0){
+                return $query->result_array();
+            }else{
+                return false;
+            }
+        }
         public function Delete($where)
         {
             $fields = array('IsDeleted' => 1);

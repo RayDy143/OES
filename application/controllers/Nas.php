@@ -227,6 +227,8 @@
                 'Lastname' => $this->input->post('Lastname'),
                 'Email' => $this->input->post('Email'),
                 'Address' => $this->input->post('Address'),
+                'JobDescription' => $this->input->post('JobDescription'),
+                'TuitionFee' => $this->input->post('TuitionFee'),
                 'ContactNumber' => $this->input->post('ContactNumber'),
                 'Birthdate' => $this->input->post('Birthdate'),
                 'DepartmentID' => $this->input->post('DepartmentID')
@@ -320,9 +322,12 @@
                             'Lastname' => $this->input->post('Lastname'),
                             'Email' => $this->input->post('Email'),
                             'Address' => $this->input->post('Address'),
+                            'JobDescription' => $this->input->post('JobDescription'),
+                            'TuitionFee' => $this->input->post('TuitionFee'),
                             'Birthdate' => $this->input->post('Birthdate'),
                             'ContactNumber' => $this->input->post('ContactNumber'),
                             'DepartmentID' => $this->input->post('Department'),
+                            'Status' => $this->input->post('cmbStatus'),
                             );
             $nasid=$this->NASModel->update($where,$fields);
             $data['success']=false;
@@ -373,6 +378,8 @@
                                     ,'Middlename' => $this->input->post('Middlename')
                                     ,'Lastname' => $this->input->post('Lastname')
                                     ,'Email' => $this->input->post('Email')
+                                    ,'JobDescription' => $this->input->post('JobDescription')
+                                    ,'TuitionFee' => $this->input->post('TuitionFee')
                                     ,'Address' => $this->input->post('Address')
                                     ,'Birthdate' => $this->input->post('Birthdate')
                                     ,'ContactNumber' => $this->input->post('ContactNumber')
@@ -414,6 +421,8 @@
                                             ,'Lastname' => $this->input->post('Lastname')
                                             ,'Email' => $this->input->post('Email')
                                             ,'Address' => $this->input->post('Address')
+                                            ,'JobDescription' => $this->input->post('JobDescription')
+                                            ,'TuitionFee' => $this->input->post('TuitionFee')
                                             ,'Birthdate' => $this->input->post('Birthdate')
                                             ,'ContactNumber' => $this->input->post('ContactNumber')
                                             ,'DepartmentID' => $this->input->post('Department')

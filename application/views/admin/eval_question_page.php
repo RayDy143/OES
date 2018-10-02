@@ -260,7 +260,7 @@
                                             +'<td>'+_question[i].QuestionID+'</td>'
                                             +'<td>'+_question[i].Question+'</td>'
                                             +'<td>'+_question[i].Category+'</td>'
-                                            +'<td><div data-role="buttongroup" class="row"><button id="Edit'+_question[i].QuestionID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+_question[i].QuestionID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                            +'<td><div data-role="buttongroup" class="row"><button id="Edit'+_question[i].QuestionID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-pencil"></button><button id="Delete'+_question[i].QuestionID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                                       +'</tr>';
                     }
                     if($.fn.DataTable.isDataTable("#tblQuestion")){
