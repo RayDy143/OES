@@ -85,6 +85,7 @@
                             $data['evaluation']="";
                             $data['dep']=$this->DepartmentModel->getDepartment("All");
                             $data['utype']=$this->UserTypeModel->getUserType();
+                            $data['unverifieduser']=$this->UserAccountModel->getUnverifiedUser();
                             $this->load->view('layout/header',$data);
                             $this->load->view('admin/view_user_accounts_page',$data);
                         }else{

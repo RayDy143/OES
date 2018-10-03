@@ -70,6 +70,11 @@
             <button type="button" class="button bg-darkBlue fg-white drop-shadow" id="btnPrint" name="button">Print</button>
         </div>
     </div>
+    <div class="info-box" data-role="infobox" id="loader" data-type="warning">
+        <div class="info-box-content">
+            Loading..
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -78,8 +83,15 @@
         });
         $(".filter").change(function () {
             getNas();
+            $('#ani').addClass("ani-flash");
         });
         $('#ani').addClass("ani-flash");
+    });
+    $(document).ajaxStart(function(){
+        $('#loader').data('infobox').open();
+    });
+    $(document).ajaxComplete(function(){
+        $('#loader').data('infobox').close();
     });
     getNas();
     function getNas() {

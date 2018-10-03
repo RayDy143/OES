@@ -13,7 +13,7 @@
 			$query=$this->db->get('user');*/
 			$uid=$_SESSION['UserID'];
 			if($roleid=="All" && $departmentid=="All"){
-				$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID right join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserID!='$uid'");
+				$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID right join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserID!='$uid' and useruploadedpicture.IsCurrent=1");
 				if($query->num_rows()>0){
 					return $query->result_array();
 				}else{
@@ -21,21 +21,21 @@
 				}
 			}else{
 				if($roleid=="All" && $departmentid!="All"){
-					$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$departmentid' and useraccount.UserID!='$uid'");
+					$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$departmentid' and useraccount.UserID!='$uid' and useruploadedpicture.IsCurrent=1");
 					if($query->num_rows()>0){
 						return $query->result_array();
 					}else{
 						return false;
 					}
 				}else if($roleid!="All" && $departmentid=="All"){
-					$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserTypeID='$roleid' and useraccount.UserID!='$uid'");
+					$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and useraccount.UserTypeID='$roleid' and useraccount.UserID!='$uid' and useruploadedpicture.IsCurrent=1");
 					if($query->num_rows()>0){
 						return $query->result_array();
 					}else{
 						return false;
 					}
 				}else if($roleid!="All" && $departmentid!="All"){
-					$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$departmentid' and usertype.UserTypeID='$roleid' and useraccount.UserID!='$uid'");
+					$query=$this->db->query("SELECT * from uploadedpicture right join useruploadedpicture on uploadedpicture.UploadedPictureID=useruploadedpicture.UploadedPictureID right join useraccount on useruploadedpicture.UserID=useraccount.UserID inner join usertype on useraccount.UserTypeID=usertype.UserTypeID inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted!='1' and department.DepartmentID='$departmentid' and usertype.UserTypeID='$roleid' and useraccount.UserID!='$uid' useruploadedpicture.IsCurrent=1");
 					if($query->num_rows()>0){
 						return $query->result_array();
 					}else{
@@ -43,6 +43,10 @@
 					}
 				}
 			}
+		}
+		public function getUnverifiedUser()
+		{
+			return $this->db->query('SELECT * FROM useraccount inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted=0 and useraccount.Status="Unverified"')->result_array();
 		}
 		function ValidateAccount($userid){
 			$query=$this->db->query("UPDATE useraccount set Status='Verified' where UserID='$userid'");

@@ -269,98 +269,97 @@
             <span class="tile-group-title">Masterfiles</span>
 
             <div class="tile-container">
-
-                <a href="<?php echo base_url('index.php/UserAccounts/Add'); ?>" class="tile bg-indigo fg-white" data-role="tile">
+                <a href="<?php echo base_url('index.php/UserAccounts/View'); ?>" class="tile bg-indigo fg-white" data-role="tile">
                     <div class="tile-content iconic">
-                        <span></span>
+                        <span><img src="<?php echo base_url('assets/Icons/user.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">User Accounts</span>
                 </a>
 
-                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                <a href="<?php echo base_url('index.php/Nas/View'); ?>" class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/nas1.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">NAS</span>
-                </div>
-                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                </a>
+                <a href="<?php echo base_url('index.php/Attendance/DTR'); ?>" class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/dtr.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">Import DTR</span>
-                </div>
-                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                </a>
+                <a href="<?php echo base_url('index.php/User/Import'); ?>" class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/importusers.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">Import User</span>
-                </div>
-                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                </a>
+                <a href="<?php echo base_url('index.php/Nas/Import'); ?>" class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/importnas.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">Import NAS</span>
-                </div>
-                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                </a>
+                <a href="<?php echo base_url('index.php/Evaluation/Question'); ?>" class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/questionnaire.png') ?>" class="icon"></span>
                     </div>
-                    <span class="tile-label">Import Question</span>
-                </div>
+                    <span class="tile-label">Import Questionnaire</span>
+                </a>
             </div>
         </div>
 
         <div class="tile-group double">
             <span class="tile-group-title">Manage</span>
             <div class="tile-container">
-                <div class="tile-wide bg-darkRed" data-role="tile" data-effect="slideLeft">
+                <a href="<?php echo base_url('index.php/Scheduler'); ?>" class="tile-wide bg-darkRed fg-white" data-role="tile" data-effect="slideLeft">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/schedule.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">Schedule</span>
-                </div>
-                <div class="tile bg-darkRed" data-role="tile" data-effect="slideLeft">
+                </a>
+                <a href="<?php echo base_url('index.php/Attendance/WorkingDate'); ?>" class="tile bg-darkRed fg-white" data-role="tile" data-effect="slideLeft">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/attendance.png') ?>" class="icon"></span>
                     </div>
-                    <span class="tile-label">Attendance</span>
-                </div>
-                <div class="tile bg-darkRed" data-role="tile" data-effect="slideLeft">
+                    <span class="tile-label">Working Dates</span>
+                </a>
+                <a href="<?php echo base_url('index.php/Department'); ?>" class="tile fg-white bg-darkRed" data-role="tile" data-effect="slideLeft">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/department.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">Department</span>
-                </div>
-                <div class="tile-wide bg-darkRed" data-role="tile" data-effect="slideLeft">
+                </a>
+                <a href="<?php echo base_url('index.php/Evaluation/Manage'); ?>" class="tile-wide fg-white bg-darkRed" data-role="tile" data-effect="slideLeft">
                     <div class="tile-content iconic">
-                        <span class="icon"></span>
+                        <span class="icon"><img src="<?php echo base_url('assets/Icons/evaluation.png') ?>" class="icon"></span>
                     </div>
                     <span class="tile-label">Evaluation</span>
-                </div>
+                </a>
             </div>
         </div>
 
         <div class="tile-group one">
             <span class="tile-group-title">Reports</span>
 
-            <div class="tile-wide bg-blue" data-role="tile">
+            <a href="<?php echo base_url('index.php/MonthlyAllowance'); ?>" class="tile-wide fg-white bg-blue" data-role="tile">
                 <div class="tile-content iconic">
-
+                    <img src="<?php echo base_url('assets/Icons/salary.png') ?>" class="icon">
                 </div>
                 <span class="tile-label">Monthy Allowance</span>
-            </div>
-            <div class="tile-wide bg-darkBlue" data-role="tile">
+            </a>
+            <a href="<?php echo base_url('index.php/Evaluation/Results'); ?>" class="tile-wide fg-white bg-darkBlue" data-role="tile">
                 <div class="tile-content iconic">
-
+                    <img src="<?php echo base_url('assets/Icons/results.png') ?>" class="icon">
                 </div>
                 <span class="tile-label">Evaluation Results</span>
-            </div>
-            <div class="tile-wide bg-green" data-role="tile">
+            </a>
+            <a href="<?php echo base_url('index.php/RenewRemarks'); ?>" class="tile-wide bg-green fg-white" data-role="tile">
                 <div class="tile-content iconic">
-
+                    <img src="<?php echo base_url('assets/Icons/renewal.png') ?>" class="icon">
                 </div>
                 <span class="tile-label">Renewal Remarks</span>
-            </div>
+            </a>
         </div>
     </div>
 </body>

@@ -75,7 +75,7 @@
                                 <img src="<?php echo base_url('assets/uploads/Picture/').$_SESSION['Filename'];?>">
                             </div>
                         </li>
-                        <li><a href="">My profile</a></li>
+                        <li><a href="<?php echo base_url('index.php/MyProfile') ?>">My profile</a></li>
                         <li class="divider"></li>
                         <li><a href="<?php echo base_url('index.php/Login/Logout'); ?>">Log out</a></li>
                     </ul>

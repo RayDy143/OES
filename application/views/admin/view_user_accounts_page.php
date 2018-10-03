@@ -59,6 +59,11 @@
     <div class="d-flex flex-justify-center" id="activity">
         <div data-role="progress" id="progress" class="mr-3" data-type="line"></div>
     </div>
+    <div class="row">
+        <div class="cell">
+            <p><strong>Verified User</strong></p>
+        </div>
+    </div>
     <div class="row" id="userContainer">
         <div class="cell mr-3">
             <table id="tblUsers" class="table striped table-border cell-border">
@@ -68,12 +73,38 @@
                         <th>User ID</th>
                         <th>Email</th>
                         <th>Department</th>
-                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
 
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell">
+            <p><strong>Unverified User</strong></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="cell mr-3">
+            <table class="table striped table-border cell-border">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($unverifieduser as $row): ?>
+                        <tr>
+                            <td><?php echo $row['UserID'] ?></td>
+                            <td><?php echo $row['Email'] ?></td>
+                            <td><?php echo $row['DepartmentName'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -101,7 +132,6 @@
                                                 +'<td>'+_user[i].UserID+'</td>'
                                                 +'<td>'+_user[i].Email+'</td>'
                                                 +'<td>'+_user[i].DepartmentName+'</td>'
-                                                +'<td>'+_user[i].Status+'</td>'
                                                 +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+_user[i].UserID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+_user[i].UserID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                                           +'</tr>';
                         }else{
@@ -110,7 +140,6 @@
                                                 +'<td>'+_user[i].UserID+'</td>'
                                                 +'<td>'+_user[i].Email+'</td>'
                                                 +'<td>'+_user[i].DepartmentName+'</td>'
-                                                +'<td>'+_user[i].Status+'</td>'
                                                 +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+_user[i].UserID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+_user[i].UserID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
                                           +'</tr>';
                         }
