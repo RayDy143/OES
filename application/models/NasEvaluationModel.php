@@ -13,10 +13,10 @@
                 return false;
             }
         }
-        public function getMean($userid,$nasid,$evalid)
+        public function getMean($userid,$nasid,$evalid,$catid)
         {
-            $query=$this->db->query("Select ROUND(AVG(Rating),1) as Mean from nasevaluation where UserID='$userid' and NasID='$nasid' and EvaluationID='$evalid'");
-            return $query->row();
+            $query=$this->db->query("Select Rating as Mean from nasevaluation inner join question on nasevaluation.QuestionID=question.QuestionID inner join category on question.CategoryID=category.CategoryID where UserID='$userid' and NasID='$nasid' and EvaluationID='$evalid' and category.CategoryID='$catid'");
+            return $query->result_array();
         }
         public function hasEvaluatedNas($where)
         {

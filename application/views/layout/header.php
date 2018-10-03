@@ -125,6 +125,6 @@
                     <li class="title">Reports</li>
                     <li><a href="<?php echo base_url('index.php/MonthlyAllowance'); ?>" class="<?php if(isset($allowancenav)){echo $allowancenav;} ?>"><span class="mif-list icon"></span>Monthly Allowance</a></li>
                     <li><a href="<?php echo base_url('index.php/Evaluation/Results'); ?>" class="<?php if(isset($evaluationresultsnav)){ echo $evaluationresultsnav; }?>"><span class="mif-list icon"></span>Evaluation Result</a></li>
-                    <li><a href="#"><span class="mif-list icon"></span>Renewal Remarks</a></li>
+                    <li><a href="<?php echo base_url('index.php/RenewRemarks'); ?>" class="<?php if(isset($renewremarksnav)){echo $renewremarksnav;}  ?>"><span class="mif-list icon "></span>Renewal Remarks</a></li>
                 </ul>
             </div>

@@ -139,6 +139,11 @@
         </div>
     </form>
 </div>
+<div class="info-box" data-role="infobox" id="loader" data-type="warning">
+    <div class="info-box-content">
+        Loading..
+    </div>
+</div>
 </div>
 </div>
 
@@ -155,7 +160,14 @@
             getDTR();
         });
     });
+    $(document).ajaxStart(function(){
+        $('#loader').data('infobox').open();
+    });
+    $(document).ajaxStop(function(){
+        $('#loader').data('infobox').close();
+    });
     function validateImportDTR() {
+        $('#loader').data('infobox').open();
         $("#txtFilename").val($("#dtrFile")[0].files[0].name);
         var importFormData=new FormData($("#frmImportDTR")[0]);
         $.ajax({
@@ -208,7 +220,10 @@
                                         method:'POST',
                                         async:false,
                                         url:'<?php echo base_url("index.php/Attendance/checkAbsensces"); ?>',
-                                        data:{Schoolyear:$("#txtSY").val(),Semester:$("#cmbAddSemester").val(),Month:$("#cmbMonth").val()}
+                                        data:{Schoolyear:$("#txtSY").val(),Semester:$("#cmbAddSemester").val(),Month:$("#cmbMonth").val()},
+                                        success:function() {
+                                            location.reload();
+                                        }
                                     });
                                 }
                             });

@@ -18,7 +18,7 @@
 					return false;
 				}
 			}else{
-				$query=$this->db->query("SELECT * from nas inner join department on nas.DepartmentID=department.DepartmentID left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where department.DepartmentID='$id' and nas.IsDeleted=0 and nasuploadedpicture.IsCurrent=1 nas.Status='Active'");
+				$query=$this->db->query("SELECT * from nas inner join department on nas.DepartmentID=department.DepartmentID left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where department.DepartmentID='$id' and nas.IsDeleted=0 and nasuploadedpicture.IsCurrent=1 and nas.Status='Active'");
 				if($query){
 					return $query->result_array();
 				}else{

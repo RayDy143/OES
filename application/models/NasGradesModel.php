@@ -13,6 +13,15 @@
                 return false;
             }
         }
+        public function getLowest($id,$sy,$sem)
+        {
+            $query=$this->db->query("SELECT MAX(Grade) as Grade FROM nasgrades where NasID='$id' and Schoolyear='$sy' and Semester='$sem' and IsDeleted=0");
+            if($query->num_rows()>0){
+                return $query->row();
+            }else{
+                return false;
+            }
+        }
         public function importGrade($fields)
         {
             $this->db->insert('nasgrades',$fields);

@@ -213,6 +213,9 @@
                                      <div class="cell-12">
                                          <strong>Total Number of Absences: <span id="lblNumAbsents"></span></strong>
                                      </div>
+                                     <div class="cell-12">
+                                         <strong>Total Number of Undertime: <span id="lblNumUnderTime"></span></strong>
+                                     </div>
                                  </div>
                                  <div class="row">
                                      <div class="cell">
@@ -567,7 +570,27 @@
             dataType:'json',
             success:function(response) {
                 if(response.success){
-                    $("#lblNumLates").text(response.late.Late+" minute(s)");
+                    if(response.late.Late==null){
+                        $("#lblNumLates").text("0 minute(s)");
+                    }else{
+                        $("#lblNumLates").text(response.late.Late+" minute(s)");
+                    }
+                }
+            }
+        });
+        $.ajax({
+            type:'ajax',
+            method:'POST',
+            url:'<?php echo base_url("index.php/Nas/getNasUndertime"); ?>',
+            data:{IDNumber:$("#IDNumber").val(),Schoolyear:$("#cmbAttendanceSchoolyear").val(),Semester:$("#cmbAttendaceSemester").val(),Month:$("#cmbFilterMonth").val()},
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    if(response.undertime.Undertime==null){
+                        $("#lblNumUnderTime").text("0 minute(s)");
+                    }else{
+                        $("#lblNumUnderTime").text(response.undertime.Undertime+" minute(s)");
+                    }
                 }
             }
         });
@@ -650,6 +673,7 @@
                             var infoboxcontent="<p>"+_importedrows+" rows imported successfully. "+_unimportedrows+" failed.</p>";
                             Metro.infobox.create(infoboxcontent,"info",{overlay:true});
                             getNasGrades();
+                            location.reload();
                         }
                     });
                 }

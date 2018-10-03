@@ -261,7 +261,6 @@
         <h1 class="tile-area-title">Admin-Start</h1>
         <div class="tile-area-controls">
             <a href="<?php echo base_url('index.php/MyProfile') ?>" class="image-button icon-right bg-transparent fg-dark bg-hover-red no-border"><span class="sub-header no-margin text-dark"><?php echo $_SESSION['Firstname'].' '.$_SESSION['Lastname']; ?></span> <span class="icon mif-user"></span></a>
-            <button class="square-button bg-transparent fg-dark bg-hover-red no-border" onclick="showCharms('#charmSearch')"><span class="mif-search"></span></button>
             <button class="square-button bg-transparent fg-dark bg-hover-red no-border" onclick="showCharms('#charmSettings')"><span class="mif-cog"></span></button>
             <a href="#" onclick="ShowDialog()" class="square-button bg-transparent fg-dark bg-hover-red no-border"><span class="mif-switch"></span></a>
         </div>
@@ -284,83 +283,83 @@
                     </div>
                     <span class="tile-label">NAS</span>
                 </div>
-                <div class="tile-large bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='http://gmail.com'">
+                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
                     <div class="tile-content iconic">
                         <span class="icon"></span>
                     </div>
-                    <span class="tile-label">Evaluation Components</span>
+                    <span class="tile-label">Import DTR</span>
+                </div>
+                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                    <div class="tile-content iconic">
+                        <span class="icon"></span>
+                    </div>
+                    <span class="tile-label">Import User</span>
+                </div>
+                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                    <div class="tile-content iconic">
+                        <span class="icon"></span>
+                    </div>
+                    <span class="tile-label">Import NAS</span>
+                </div>
+                <div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='<?php echo base_url(); ?>index.php/NAS'">
+                    <div class="tile-content iconic">
+                        <span class="icon"></span>
+                    </div>
+                    <span class="tile-label">Import Question</span>
                 </div>
             </div>
         </div>
 
         <div class="tile-group double">
-            <span class="tile-group-title">Reports</span>
+            <span class="tile-group-title">Manage</span>
             <div class="tile-container">
                 <div class="tile-wide bg-darkRed" data-role="tile" data-effect="slideLeft">
                     <div class="tile-content iconic">
                         <span class="icon"></span>
                     </div>
-                    <span class="tile-label">Allowance</span>
+                    <span class="tile-label">Schedule</span>
+                </div>
+                <div class="tile bg-darkRed" data-role="tile" data-effect="slideLeft">
+                    <div class="tile-content iconic">
+                        <span class="icon"></span>
+                    </div>
+                    <span class="tile-label">Attendance</span>
+                </div>
+                <div class="tile bg-darkRed" data-role="tile" data-effect="slideLeft">
+                    <div class="tile-content iconic">
+                        <span class="icon"></span>
+                    </div>
+                    <span class="tile-label">Department</span>
                 </div>
                 <div class="tile-wide bg-darkRed" data-role="tile" data-effect="slideLeft">
                     <div class="tile-content iconic">
                         <span class="icon"></span>
                     </div>
-                    <span class="tile-label">Renewal Remarks</span>
+                    <span class="tile-label">Evaluation</span>
                 </div>
-                <div class="tile-wide bg-darkRed" data-role="tile" data-effect="slideLeft">
-                    <div class="tile-content iconic">
-                        <span class="icon"></span>
-                    </div>
-                    <span class="tile-label">No of Units</span>
-                </div>
-
             </div>
         </div>
 
         <div class="tile-group one">
-            <span class="tile-group-title">Import files</span>
+            <span class="tile-group-title">Reports</span>
 
-            <div class="tile-small bg-blue" data-role="tile">
+            <div class="tile-wide bg-blue" data-role="tile">
                 <div class="tile-content iconic">
 
                 </div>
-                <span class="tile-label">User</span>
+                <span class="tile-label">Monthy Allowance</span>
             </div>
-            <div class="tile-small bg-darkBlue" data-role="tile">
+            <div class="tile-wide bg-darkBlue" data-role="tile">
                 <div class="tile-content iconic">
 
                 </div>
-                <span class="tile-label">NAS</span>
+                <span class="tile-label">Evaluation Results</span>
             </div>
-            <div class="tile bg-green" data-role="tile">
+            <div class="tile-wide bg-green" data-role="tile">
                 <div class="tile-content iconic">
 
                 </div>
-                <span class="tile-label">Grade</span>
-            </div>
-            <div class="tile bg-red" data-role="tile">
-                <div class="tile-content iconic">
-
-                </div>
-                <span class="tile-label">Attendance</span>
-            </div>
-        </div>
-        <div class="tile-group double">
-            <span class="tile-group-title">Other</span>
-            <div class="tile-container">
-                <div class="tile bg-teal fg-white" data-role="tile">
-                    <div class="tile-content iconic">
-                        <span class="icon mif-pencil"></span>
-                    </div>
-                    <span class="tile-label">User Logs</span>
-                </div>
-                <div class="tile bg-darkGreen fg-white" data-role="tile">
-                    <div class="tile-content iconic">
-                        <span class="icon mif-shopping-basket"></span>
-                    </div>
-                    <span class="tile-label">File Manager</span>
-                </div>
+                <span class="tile-label">Renewal Remarks</span>
             </div>
         </div>
     </div>

@@ -39,7 +39,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="mx-auto print win-shadow pt-5 pl-15 pr-15 pb-10" style="width:768px;">
+        <div class="mx-auto print win-shadow pt-5 pl-15 pr-15 pb-10" style="width:768px;" id="ani">
             <div class="printThis">
                 <img src="<?php echo base_url('assets/report/banner.png') ?>" style="width:100%;">
                 <p class="text-secondary text-center"><strong>Non-Academic Scholars Monthly Allowance</strong></p>
@@ -49,11 +49,12 @@
                         <thead>
                             <tr>
                                 <th>Scholar</th>
-                                <th>Lacking Minutes</th>
-                                <th>Lowest Grade</th>
-                                <th>Evaluation</th>
-                                <th>Remarks</th>
-                                <th>No of units.</th>
+                                <th>Absents</th>
+                                <th>Lates</th>
+                                <th>Undertime</th>
+                                <th>Total Deduction</th>
+                                <th>Base Allowance</th>
+                                <th>Recievable</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -78,5 +79,120 @@
         $(".filter").change(function () {
             getNas();
         });
+        $('#ani').addClass("ani-flash");
     });
+    getNas();
+    function getNas() {
+        $.ajax({
+            type:'ajax',
+            url:'<?php echo base_url("index.php/MonthlyAllowance/getNas"); ?>',
+            dataType:'json',
+            success:function(response) {
+                if(response.success){
+                    var _tablecontent='';
+                    for (var i = 0; i < response.nas.length; i++) {
+                        var _deduction=0;
+                        var _totalDeduction=0;
+                        var _nasAbsents=0;
+                        var _naslate=0;
+                        var _nasundertime=0;
+                        var _nasid=response.nas[i].IDNumber;
+                        var _totalMonthDays=0;
+                        var _recievable=0;
+                        var _tuition=response.nas[i].TuitionFee;
+                        $.ajax({
+                            type:'ajax',
+                            method:'POST',
+                            url:'<?php echo base_url("index.php/Nas/getNasAbsents"); ?>',
+                            data:{IDNumber:_nasid,Schoolyear:$("#cmbFilterSchoolyear").val(),Semester:$("#cmbFilterSemester").val(),Month:$("#cmbFilterMonth").val()},
+                            dataType:'json',
+                            async:false,
+                            success:function(response) {
+                                if(response.success){
+                                    _nasAbsents=response.absents;
+                                }
+                            }
+                        });
+                        $.ajax({
+                            type:'ajax',
+                            method:'POST',
+                            url:'<?php echo base_url("index.php/Nas/getNasLate"); ?>',
+                            data:{IDNumber:_nasid,Schoolyear:$("#cmbFilterSchoolyear").val(),Semester:$("#cmbFilterSemester").val(),Month:$("#cmbFilterMonth").val()},
+                            dataType:'json',
+                            async:false,
+                            success:function(response) {
+                                if(response.success){
+                                    if(response.late.Late!=null){
+                                        _naslate=response.late.Late;
+                                    }else{
+                                        _naslate=0;
+                                    }
+                                }
+                            }
+                        });
+                        $.ajax({
+                            type:'ajax',
+                            method:'POST',
+                            url:'<?php echo base_url("index.php/Nas/getNasUndertime"); ?>',
+                            data:{IDNumber:$("#IDNumber").val(),Schoolyear:$("#cmbAttendanceSchoolyear").val(),Semester:$("#cmbAttendaceSemester").val(),Month:$("#cmbFilterMonth").val()},
+                            dataType:'json',
+                            success:function(response) {
+                                if(response.success){
+                                    if(response.undertime.Undertime==null){
+
+                                    }else{
+                                        var _nasundertime=response.undertime.Undertime;
+                                    }
+                                }
+                            }
+                        });
+                        $.ajax({
+                            type:'ajax',
+                            method:'POST',
+                            url:'<?php echo base_url("index.php/Nas/getNasAbsents"); ?>',
+                            data:{IDNumber:_nasid,Schoolyear:$("#cmbFilterSchoolyear").val(),Semester:$("#cmbFilterSemester").val(),Month:$("#cmbFilterMonth").val()},
+                            dataType:'json',
+                            async:false,
+                            success:function(response) {
+                                if(response.success){
+                                    _nasAbsents=response.absents;
+                                }
+                            }
+                        });
+                        $.ajax({
+                            type:'ajax',
+                            method:'POST',
+                            url:'<?php echo base_url("index.php/MonthlyAllowance/getTotalMonthDays"); ?>',
+                            data:{IDNumber:_nasid,Schoolyear:$("#cmbFilterSchoolyear").val(),Semester:$("#cmbFilterSemester").val(),Month:$("#cmbFilterMonth").val()},
+                            dataType:'json',
+                            async:false,
+                            success:function(response) {
+                                if(response.success){
+                                    _totalMonthDays=response.totalmonthdays.length;
+                                }
+                            }
+                        });
+                        _deduction=((_tuition/6)/(_totalMonthDays*4))/60;
+                        _totalDeduction=_deduction*(((_nasAbsents*4)*60)+parseFloat(_naslate)+parseFloat(_nasundertime));
+                        _recievable=(500-_totalDeduction);
+                        _tablecontent+='<tr>'
+                                            +'<td>'+response.nas[i].Firstname+' '+response.nas[i].Lastname+'</td>'
+                                            +'<td>'+_nasAbsents+' days </td>'
+                                            +'<td>'+((_naslate!=null)?_naslate:0)+' minute(s) </td>'
+                                            +'<td>'+((_nasundertime!=null)?_nasundertime:0)+' minute(s) </td>'
+                                            +'<td> Php. '+_totalDeduction.toFixed(1)+'</td>'
+                                            +'<td>Php. 500</td>'
+                                            +'<td>'+((_recievable.toFixed(1)<0)?'<strong class="fg-red">Php. '+_recievable.toFixed(1)+'</strong>':'Php. '+_recievable.toFixed(1))+'</td>'
+                                      +'</tr>';
+                    }
+                    $("#tblAllowance tbody").html(_tablecontent);
+                    $("#lblSY").text($("#cmbFilterSchoolyear").val());
+                    $("#lblSem").text($("#cmbFilterSemester").val());
+                    $("#lblMonth").text($("#cmbFilterMonth").val());
+
+                    $('#ani').removeClass("ani-flash");
+                }
+            }
+        })
+    }
 </script>

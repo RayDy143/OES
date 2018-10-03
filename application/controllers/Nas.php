@@ -189,6 +189,15 @@
             }
             echo json_encode($data);
         }
+        public function getNasUndertime()
+        {
+            $data['undertime']=$this->DTRModel->getUndertimeMinutes($this->input->post('IDNumber'),$this->input->post('Schoolyear'),$this->input->post('Semester'),$this->input->post('Month'));
+            $data['success']=false;
+            if($data){
+                $data['success']=true;
+            }
+            echo json_encode($data);
+        }
         public function getNasAbsents()
         {
             $where = array(

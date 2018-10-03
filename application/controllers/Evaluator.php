@@ -95,9 +95,25 @@
         }
         public function addEvaluationResult()
         {
-            $getMean=$this->NasEvaluationModel->getMean($_SESSION['UserID'],$this->input->post('NasID'),$_SESSION['evaluationid']);
-            $mean=$getMean->Mean;
-            $fields = array('UserID' => $_SESSION['UserID'],'Mean'=>$mean,'NasID'=>$this->input->post('NasID'),'EvaluationID'=> $_SESSION['evaluationid']);
+            $mean=0;
+            $meancount=0;
+            $totalmean=0;
+            $totalmeancount=0;
+            $cat=$this->CategoryModel->getCategory();
+            foreach ($cat as $row) {
+                $getMean=$this->NasEvaluationModel->getMean($_SESSION['UserID'],$this->input->post('NasID'),$_SESSION['evaluationid'],$row['CategoryID']);
+                foreach ($getMean as $meanrow) {
+                    $mean+=$meanrow['Mean'];
+                    $meancount++;
+                }
+                $mean=($mean/$meancount);
+                $meancount=0;
+                $totalmean=$totalmean+$mean;
+                $totalmeancount++;
+                $mean=0;
+            }
+            $totalmean=$totalmean/$totalmeancount;
+            $fields = array('UserID' => $_SESSION['UserID'],'Mean'=>round($totalmean,2),'NasID'=>$this->input->post('NasID'),'EvaluationID'=> $_SESSION['evaluationid']);
             $query=$this->EvaluationResultsModel->Insert($fields);
             $data['success']=false;
             if($query){

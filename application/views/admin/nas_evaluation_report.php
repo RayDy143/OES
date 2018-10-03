@@ -1,9 +1,9 @@
 <div class="cell mr-4 p-5" style="overflow:auto">
     <div class="row">
-        <div class="mx-auto print win-shadow pt-5 pl-15 pr-15 pb-10" style="width:768px;">
+        <div class="mx-auto print win-shadow pt-5 pl-15 pr-15 pb-10" style="width:768px;" id="ani">
             <div class="printThis">
                 <img src="<?php echo base_url('assets/report/banner.png') ?>" style="width:100%;">
-                <p class="text-secondary text-center"><strong>Non - Academic Scholar Evaluation (<?php echo $evaldata->Semester; ?> <?php echo $evaldata->Schoolyear; ?>)</strong></p>
+                <p class="text-secondary text-center"><strong>Non - Academic Scholar Evaluation Result(<?php echo $evaldata->Semester; ?> <?php echo $evaldata->Schoolyear; ?>)</strong></p>
                 <p class="text-secondary text-center m-0"><strong>Scholar: <?php echo $nasprofile->Firstname.' '.$nasprofile->Lastname; ?></strong></p>
                 <p>Criteria</p>
                 <div id="resultContainer">
@@ -62,6 +62,10 @@
         $("#btnPrint").click(function() {
             $(".printThis").printThis();
         });
+        $('#ani').addClass("ani-pass");
+        setTimeout(function(){
+            $('#ani').removeClass("ani-pass");
+        }, 1000);
         getNasEvaluationCategoryResult();
         function getNasEvaluationCategoryResult() {
             $.ajax({
@@ -117,8 +121,8 @@
                                     +'</div>';
                         }
                         $("#resultContainer").html(_content);
-                        $("#lblTotaAverage").text(totalEquvalentPercentage.toFixed(1));
-                        $("#lblTotaEqui").text(Math.round((totalEquvalentPercentage/totalEquvalentPercentageCount)*10)/10);
+                        $("#lblTotaAverage").text(totalEquvalentPercentage.toFixed(2));
+                        $("#lblTotaEqui").text(Math.round((totalEquvalentPercentage/totalEquvalentPercentageCount)*100)/100);
                     }
                 }
             });

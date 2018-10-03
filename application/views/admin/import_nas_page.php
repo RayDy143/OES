@@ -1,7 +1,7 @@
-<div class="cell bg-white p-3 ml-4">
+<div class="cell bg-white p-3 ml-4 mt-4" style="overflow:auto;">
     <div class="row">
         <a href="javascript:history.back();" class="button stub bg-red fg-white"><span class="mif-arrow-left"></span> Go Back</a>
-        <div class="stub ml-auto no-visible">
+        <div class="stub ml-auto">
             <div class="row">
                 <h5 class="cell mt-3">Days left para defend:</h5>
                 <div class="cell" data-role="countdown"  data-date="09/25/2018"

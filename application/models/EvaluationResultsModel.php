@@ -40,6 +40,15 @@
                 return false;
             }
         }
+        public function getNasEvaluation($nasid,$sy,$sem)
+        {
+            $query=$this->db->query("SELECT AVG(Mean) as Mean from evaluationresults inner join evaluation on evaluationresults.EvaluationID=evaluation.EvaluationID where evaluationresults.NasID='$nasid' and evaluation.Schoolyear='$sy' and evaluation.Semester='$sem'");
+            if($query->num_rows()>0){
+                return $query->row();
+            }else{
+                return false;
+            }
+        }
     }
 
  ?>

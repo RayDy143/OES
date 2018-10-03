@@ -17,7 +17,7 @@
     <div class="row">
         <ul class="cell breadcrumbs" style="margin-bottom:0px;">
             <li class="page-item"><a href="<?php echo base_url('index.php/AdminStart'); ?>" class="page-link">Home</a></li>
-            <li class="page-item"><a href="#" class="page-link">Monitor</a></li>
+            <li class="page-item"><a href="#" class="page-link">Reports</a></li>
             <li class="page-item"><a href="#" class="page-link">Evaluation</a></li>
         </ul>
     </div>
@@ -75,7 +75,7 @@
                                         echo '<td>'.$row['Mean'].'</td>';
                                         echo '<td>Unsatisfactory / Seldom meets the target</td>';
                                         echo '<td>'.date('h:i:s a m/d/Y', strtotime($row['Date'])).'</td>';
-                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View More</button></div></td>';
+                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View Report</button></div></td>';
                                     echo '</tr>';
                                 }else if($row['Mean']>=3.6 and $row['Mean']<=4.0){
                                     echo '<tr>';
@@ -84,7 +84,7 @@
                                         echo '<td>'.$row['Mean'].'</td>';
                                         echo '<td>Below Satisfactory / Meets 70%-85% if target</td>';
                                         echo '<td>'.date('h:i:s a m/d/Y', strtotime($row['Date'])).'</td>';
-                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View More</button></div></td>';
+                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View Report</button></div></td>';
                                 }else if($row['Mean']>=4.1 and $row['Mean']<=4.5){
                                     echo '<tr>';
                                         echo '<td>'.$row['nasFname'].' '.$row['nasLname'].'</td>';
@@ -92,7 +92,7 @@
                                         echo '<td>'.$row['Mean'].'</td>';
                                         echo '<td>Satisfactory / Meets 86% - 100%</td>';
                                         echo '<td>'.date('h:i:s a m/d/Y', strtotime($row['Date'])).'</td>';
-                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View More</button></div></td>';
+                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View Report</button></div></td>';
                                     echo '</tr>';
                                 }else if($row['Mean']>=4.6 and $row['Mean']<=4.9){
                                     echo '<tr>';
@@ -101,7 +101,7 @@
                                         echo '<td>'.$row['Mean'].'</td>';
                                         echo '<td>Above Satisfactory / Mostly meets target & above target</td>';
                                         echo '<td>'.date('h:i:s a m/d/Y', strtotime($row['Date'])).'</td>';
-                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View More</button></div></td>';
+                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View Report</button></div></td>';
                                     echo '</tr>';
                                 }else if($row['Mean']==5.0){
                                     echo '<tr>';
@@ -110,7 +110,7 @@
                                         echo '<td>'.$row['Mean'].'</td>';
                                         echo '<td>Excellent/ Most of the time above target</td>';
                                         echo '<td>'.date('h:i:s a m/d/Y', strtotime($row['Date'])).'</td>';
-                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View More</button></div></td>';
+                                        echo '<td><div data-role="buttongroup" class="mx-auto"><button data-nasid="'.$row['NasID'].'" data-userid="'.$row['UserID'].'" data-evalid="'.$row['EvaluationID'].'"  class="button edit small bg-darkBlue fg-white ml-1 mr-1">View Report</button></div></td>';
                                     echo '</tr>';
                                 }
                             }

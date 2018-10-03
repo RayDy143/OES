@@ -128,7 +128,7 @@
                 alert("Please make sure to fill out all fields.");
             }else{
                 Metro.dialog.create({
-                    title:"Confirm submition.",
+                    title:"Confirm submission.",
                     content:"<p>Please confirm that you have already answered all the questions for the evaluation. Even if you didn't answer anything the system will going to submit the default values. <strong class='fg-red'>This process can't be undone.</strong></p>",
                     actions:[
                         {
@@ -142,6 +142,7 @@
                                    $.ajax({
                                        type:'ajax',
                                        method:'POST',
+                                       async:false,
                                        url:'<?php echo base_url("index.php/Evaluator/insertQuestionEvaluation"); ?>',
                                        data:{QuestionID:_qid,Rating:_rating,NasID:$("#txtNasID").val()}
                                    });
@@ -149,6 +150,7 @@
                                 $.ajax({
                                     type:'ajax',
                                     method:'POST',
+                                    async:false,
                                     url:'<?php echo base_url("index.php/Evaluator/addEvaluationResult"); ?>',
                                     data:{NasID:$("#txtNasID").val()},
                                     dataType:'json',

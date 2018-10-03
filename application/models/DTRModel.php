@@ -62,6 +62,15 @@
                 return 0;
             }
         }
+        public function getUndertimeMinutes($id,$sy,$sem,$month)
+        {
+            $query=$this->db->query("SELECT SUM(MinutesLacking) as Undertime FROM dtr where IDNumber='$id' and Schoolyear='$sy' and Semester='$sem' and Month='$month' and MinutesLacking!=0 and Type='Time out'");
+            if($query->num_rows()>0){
+                return $query->row();
+            }else{
+                return 0;
+            }
+        }
         public function getSchoolyear()
         {
             $query=$this->db->query("SELECT DISTINCT(Schoolyear) as SY from dtr");
