@@ -7,14 +7,14 @@
 	{
 		public function getDepartment($id){
 			if($id=="All"){
-				$query=$this->db->query('SELECT * FROM department inner join location on department.LocationID=location.LocationID where IsDeleted=0 and DepartmentName!="Admin"');
+				$query=$this->db->query('SELECT * FROM department inner join location on department.LocationID=location.LocationID where department.IsDeleted=0 and DepartmentName!="Admin"');
 				if($query->num_rows()>0){
 					return $query->result_array();
 				}else{
 					return false;
 				}
 			}else{
-				$query=$this->db->query("SELECT * FROM department inner join location on department.LocationID=location.LocationID where IsDeleted=0 and DepartmentName!='Admin' and location.LocationID='$id'");
+				$query=$this->db->query("SELECT * FROM department inner join location on department.LocationID=location.LocationID where department.IsDeleted=0 and DepartmentName!='Admin' and location.LocationID='$id'");
 				if($query->num_rows()>0){
 					return $query->result_array();
 				}else{
@@ -59,7 +59,7 @@
 			}
 		}
 		public function getDepartmentNas($id){
-			$query=$this->db->query("SELECT * FROM nas left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where DepartmentID='$id' and IsDeleted!=1 and nasuploadedpicture.IsCurrent=1");
+			$query=$this->db->query("SELECT * FROM nas left join nasuploadedpicture on nas.NasID=nasuploadedpicture.NasID left join uploadedpicture on nasuploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where DepartmentID='$id' and nas.IsDeleted!=1 and nasuploadedpicture.IsCurrent=1");
 			if($query->num_rows()>0){
 				return $query->result_array();
 			}else{

@@ -246,7 +246,7 @@
             $data['success']=false;
             if($nasid){
                 $data['success']=true;
-                $this->NasUploadedPictureModel->insertProfile($nasid,50);
+                $this->NasUploadedPictureModel->insertProfile($nasid,77);
             }
             echo json_encode($data);
         }

@@ -48,7 +48,6 @@
           data-clear-invalid="2000"
           data-on-error-form="invalidForm"
           data-on-validate-form="validateForm">
-        <span class="mif-vpn-lock mif-4x place-right" style="margin-top: -10px;"></span>
         <h2 class="text-light">Login to OES</h2>
         <hr class="thin mt-4 mb-4 bg-white">
         <div class="form-group">
@@ -58,8 +57,8 @@
             <input type="password" name="Password" data-role="input" data-prepend="<span class='mif-key'>" placeholder="Enter your password..." data-validate="required minlength=6">
         </div>
         <div class="form-group mt-10">
-            <input type="checkbox" data-role="checkbox" data-caption="Remember me" class="place-right">
             <button type="submit" class="button primary">Login</button>
+            <button type="button" class="button bg-darkRed fg-white place-right" name="btnForgotPass">Forgot Password</button>
         </div>
     </form>
 
@@ -73,8 +72,8 @@
                     </div>
                 </div>
                 <div class="dialog-actions">
-                    <a class="button alert place-right" href="javascript:history.back()">Disagree</a>
-                    <button id="btnVerify" class="button primary place-right">Agree</button>
+                    <a class="button alert place-right" href="javascript:history.back()">Abort</a>
+                    <button id="btnVerify" class="button primary place-right">Verfiy</button>
                 </div>
             </form>
         </div>

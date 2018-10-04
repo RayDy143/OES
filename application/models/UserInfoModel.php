@@ -18,7 +18,7 @@
 			}
 		}
 		function getUserInfo($id){
-			$query=$this->db->query("Select * from userinfo inner join useraccount on userinfo.UserID=useraccount.UserID left join useruploadedpicture on useraccount.UserID=useruploadedpicture.UserID left join uploadedpicture on useruploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where useraccount.UserID='$id' and useruploadedpicture.IsCurrent=1");
+			$query=$this->db->query("Select * from userinfo inner join useraccount on userinfo.UserID=useraccount.UserID left join useruploadedpicture on useraccount.UserID=useruploadedpicture.UserID left join uploadedpicture on useruploadedpicture.UploadedPictureID=uploadedpicture.UploadedPictureID where useraccount.UserID='$id'");
 			if($query){
 				return $query->result_array();
 			}else{
