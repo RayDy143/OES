@@ -173,8 +173,9 @@
                                 _remarks="Recommendation for renewal";
                                 if(_lackingminutes<=1680&&_lowestgrade<=1.5&&_evaluationmean>=4.6){
                                     _units=24;
+                                }else{
+                                    _units=21;
                                 }
-                                _units=21;
                             }
                             if(_lackingminutes>8400||_lowestgrade>2.5||_evaluationmean<4.1){
                                 _remarks="Under probation";
@@ -186,6 +187,7 @@
                             }
                             if(_lackingminutes>=12000||_lowestgrade>=3.0||_evaluationmean<=3.5){
                                 _remarks="<strong class='fg-red'>Recommendation for termination</strong>";
+                                _units=0;
                             }
                             _tablecontent+='<tr>'
                                                 +'<td>'+response.nas[i].Firstname+' '+response.nas[i].Lastname+'</td>'

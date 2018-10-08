@@ -106,13 +106,13 @@
                       <div class="cell">
                           <div class="form-group">
                               <label for="Password">Password</label>
-                              <input data-validate="required" type="password" id="txtPassword" name="Password" value="">
+                              <input data-validate="required minlength=8" type="password" id="txtPassword" name="Password" value="">
                           </div>
                       </div>
                       <div class="cell">
                           <div class="form-group">
                               <label for="ConfirmPassword">Confirm Password</label>
-                              <input data-validate="required" type="password" id="txtConfirmPassword" name="ConfirmPassword" value="">
+                              <input data-validate="required equals=Password minlength=8" type="password" id="txtConfirmPassword" name="ConfirmPassword" value="">
                           </div>
                       </div>
                   </div>
@@ -129,7 +129,7 @@
     <script src="<?php echo base_url(); ?>assets/metro/js/jquery-3.3.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
     <script>
-    
+
         function invalidForm(){
             var form  = $(this);
             form.addClass("ani-ring");

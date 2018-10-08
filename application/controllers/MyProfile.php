@@ -33,6 +33,7 @@
 				header('location:'.base_url('index.php/Login'));
 			}
         }
+
         function uploadProfilePic($file){
 			$config['upload_path']= './assets/uploads/Picture';
             $config['allowed_types']= 'gif|jpg|png|jpeg|JPG|JPEG';
@@ -56,7 +57,7 @@
                              'ContactNumber' => $this->input->post('ContactNumber')
                          );
 			if($this->uploadProfilePic('ProfilePic')){
-                
+
 			}
             $whereinfo = array('UserID' => $_SESSION['UserID'] );
             $data['data']=$this->UserInfoModel->editInfo($fields,$whereinfo);
@@ -68,6 +69,23 @@
             }
 			echo json_encode($data);
 		}
+        public function changePassword()
+        {
+            $oldpass = array('Password' => $this->input->post('OlpPass'),'UserID'=>$_SESSION['UserID']);
+            $where = array('UserID'=>$_SESSION['UserID'] );
+            $fields = array('Password'=>$this->input->post('NewPass'));
+            $data['success']=false;
+            $data['isPassValid']=false;
+            if($this->UserAccountModel->checkPassword($oldpass)){
+                $data['isPassValid']=true;
+
+                $query=$this->UserAccountModel->changePass($where,$fields);
+                if($query){
+                    $data['success']=true;
+                }
+            }
+            echo json_encode($data);
+        }
     }
 
  ?>

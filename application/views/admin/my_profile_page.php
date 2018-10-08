@@ -174,16 +174,16 @@
                         </div>
                         <div class="cell-12 form-group">
                             <label for="NewPass">New password</label>
-                            <input data-validate="required" type="password" name="NewPass" id="NewPass">
+                            <input data-validate="required minlength=8" type="password" name="NewPass" id="NewPass">
                             <span class="invalid_feedback">
-                               New Password is Required
+                               New Password is Required and must be greater than 7 characters.
                            </span>
                         </div>
                         <div class="cell-12 form-group">
-                            <label for="CNewPass">Retyp new password</label>
-                            <input data-validate="required equals=NewPass" type="password" name="CNewPass" id="CNewPass">
+                            <label for="CNewPass">Retype new password</label>
+                            <input data-validate="required equals=NewPass minlength=8" type="password" name="CNewPass" id="CNewPass">
                             <span class="invalid_feedback">
-                               Password didnt match
+                               Password didnt match and must be greater than 7 characters.
                            </span>
                         </div>
                     </div>
@@ -239,7 +239,22 @@
 
         }
         function validateChangePass() {
-            alert('sdafas');
+            $.ajax({
+                type:'ajax',
+                method:'POST',
+                url:'<?php echo base_url("index.php/MyProfile/changePassword") ?>',
+                data:$(this).serialize(),
+                dataType:'json',
+                success:function(response) {
+                    if(response.isPassValid){
+                        if(response.success){
+                            alert("Successfully changed!");
+                        }
+                    }else{
+                        alert("Old password error!");
+                    }
+                }
+            })
         }
     </script>
 </body>

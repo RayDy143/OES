@@ -58,7 +58,7 @@
         </div>
         <div class="form-group mt-10">
             <button type="submit" class="button primary">Login</button>
-            <button type="button" class="button bg-darkRed fg-white place-right" name="btnForgotPass">Forgot Password</button>
+            <!-- <button type="button" class="button bg-darkRed fg-white place-right" name="btnForgotPass">Forgot Password</button> -->
         </div>
     </form>
 

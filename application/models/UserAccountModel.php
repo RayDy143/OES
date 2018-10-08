@@ -44,6 +44,26 @@
 				}
 			}
 		}
+		public function checkPassword($where)
+		{
+			$this->db->where($where);
+			$query=$this->db->get('useraccount');
+			if($query->num_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		public function changePass($where,$fields)
+		{
+			$this->db->where($where);
+			$this->db->update('useraccount',$fields);
+			if($this->db->affected_rows()>0){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		public function getUnverifiedUser()
 		{
 			return $this->db->query('SELECT * FROM useraccount inner join department on useraccount.DepartmentID=department.DepartmentID where useraccount.IsDeleted=0 and useraccount.Status="Unverified"')->result_array();
