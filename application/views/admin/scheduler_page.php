@@ -201,7 +201,7 @@
                                     +'<td >'+_sched[i].ScheduleDescription+'</td>'
                                     +'<td>'+_sched[i].Shift+'</td>'
                                     +'<td>'+_total+'</td>'
-                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url(); ?>index.php/Scheduler/Manage/'+_sched[i].ScheduleID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-pencil"></a><button id="Delete'+_sched[i].ScheduleID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url(); ?>index.php/Scheduler/Manage/'+_sched[i].ScheduleID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-pencil"> EDIT</a><button id="Delete'+_sched[i].ScheduleID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"> DELETE</button></div></td>'
                               +'</tr>';
                     }
                     if($.fn.DataTable.isDataTable("#tblSchedule")){

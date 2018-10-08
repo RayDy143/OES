@@ -81,9 +81,9 @@
                 <div class="cell-12 form-group">
                     <label for="dtpAddDateYear">Schoolyear</label>
                     <input data-validate="required" data-role="datepicker" id="dtpAddDateYear" name="dtpAddDateYear" data-day="false" data-month="false">
-                    <input type="hidden" name="dtpAddEvalYear1" id="dtpAddDateYear1">
-                    <input type="hidden" name="txtSY" id="txtSY">
-                    <input class="text-center" readonly type="text" id="txtAddDateYear" name="txtAddDateYear" data-day="false" data-month="false">
+                    <input data-validate="required" type="hidden" name="dtpAddEvalYear1" id="dtpAddDateYear1">
+                    <input data-validate="required" type="hidden" name="txtSY" id="txtSY">
+                    <input data-validate="required" class="text-center" readonly type="text" id="txtAddDateYear" name="txtAddDateYear" data-day="false" data-month="false">
                     <span class="invalid_feedback">Schoolyear is required.</span>
                 </div>
                 <div class="cell-12 form-group">

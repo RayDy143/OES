@@ -96,9 +96,9 @@
                 <div class="cell-12 form-group">
                     <label for="dtpAddDateYear">Schoolyear</label>
                     <input data-validate="required" data-role="datepicker" id="dtpAddDateYear" name="dtpAddDateYear" data-day="false" data-month="false">
-                    <input type="hidden" name="dtpAddEvalYear1" id="dtpAddDateYear1">
-                    <input type="hidden" name="txtSY" id="txtSY">
-                    <input class="text-center" readonly type="text" id="txtAddDateYear" name="txtAddDateYear" data-day="false" data-month="false">
+                    <input data-validate="required" type="hidden" name="dtpAddEvalYear1" id="dtpAddDateYear1">
+                    <input data-validate="required" type="hidden" name="txtSY" id="txtSY">
+                    <input data-validate="required" class="text-center" readonly type="text" id="txtAddDateYear" name="txtAddDateYear" data-day="false" data-month="false">
                     <span class="invalid_feedback">Schoolyear is required.</span>
                 </div>
                 <div class="cell-12 form-group">
@@ -164,7 +164,7 @@
         $('#loader').data('infobox').open();
     });
     $(document).ajaxStop(function(){
-        $('#loader').data('infobox').close();
+
     });
     function validateImportDTR() {
         $('#loader').data('infobox').open();
@@ -222,6 +222,7 @@
                                         url:'<?php echo base_url("index.php/Attendance/checkAbsensces"); ?>',
                                         data:{Schoolyear:$("#txtSY").val(),Semester:$("#cmbAddSemester").val(),Month:$("#cmbMonth").val()},
                                         success:function() {
+                                            $('#loader').data('infobox').close();
                                             location.reload();
                                         }
                                     });
@@ -243,6 +244,7 @@
             dataType:'json',
             success:function(response) {
                 if(response.success){
+                    $('#loader').data('infobox').close();
                     var _tableContent='';
                     for (var i = 0; i < response.dtr.length; i++) {
                         _tableContent+='<tr>'

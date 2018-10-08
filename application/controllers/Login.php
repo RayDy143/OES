@@ -81,7 +81,7 @@
 		  'wordwrap' => TRUE
 		);
 		$verifycode = uniqid();
-		$messagecontent='Hello '.$_SESSION['Email'].' Use this code to verify you account. '.$verifycode;
+		$messagecontent='Hello '.$_SESSION['Email'].' Use this code to verify your account. '.$verifycode;
 		$to_email=$_SESSION['Email'];
 		$data = array('Code' => $verifycode,'UserID'=>$_SESSION['UserID'] );
 		$this->UserVerificationCodeModel->InsertCode($data);
@@ -90,7 +90,7 @@
 		$this->email->from('alfeche492@gmail.com', 'Raymundo Alfeche');
 		$this->email->to($to_email);
 
-		$this->email->subject('Online Evalution System for Non-Academic Scholars Accoutn Verification');
+		$this->email->subject('Online Evalution System for Non-Academic Scholars Account Verification');
 		$this->email->message($messagecontent);
 
 		$this->email->send();

@@ -4,7 +4,7 @@
             <label class="place-right mt-1" for="">Select Schoolyear:</label>
         </div>
         <div class="cell">
-            <select class="filter" id="cmbFilterSchoolyear">
+            <select data-role="select" class="filter" id="cmbFilterSchoolyear">
                 <?php
                     if(isset($sy)){
                         foreach ($sy as $row) {

@@ -193,7 +193,7 @@
                                             +'<td>'+_department[i].Name+'</td>'
                                             +'<td>'+getTotalDepartmentEvaluator(_department[i].DepartmentID)+'</td>'
                                             +'<td>'+getTotalDepartmentNas(_department[i].DepartmentID)+'</td>'
-                                            +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url(); ?>index.php/Department/Manage/'+_department[i].DepartmentID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-info"></a><button id="Delete'+_department[i].DepartmentID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                            +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url(); ?>index.php/Department/Manage/'+_department[i].DepartmentID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-info"> MANAGE</a><button id="Delete'+_department[i].DepartmentID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"> DELETE</button></div></td>'
 
                                       +'</tr>'
                     }

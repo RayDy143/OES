@@ -195,7 +195,7 @@
                                             +'<td>'+new Date(response.eval[i].StartingDate).toLocaleDateString()+'</td>'
                                             +'<td>'+((response.eval[i].DateEnded==null)?'TBD':new Date(response.eval[i].DateEnded).toLocaleDateString())+'</td>'
                                             +'<td>'+((response.eval[i].IsActive==0)?'Deactivated':'Active')+'</td>'
-                                            +'<td><div data-role="buttongroup" class="mx-auto"><a href="<?php echo base_url('index.php/Evaluation/Monitor/'); ?>'+response.eval[i].EvaluationID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></a><button id="Delete'+response.eval[i].EvaluationID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                            +'<td><div data-role="buttongroup" class="mx-auto"><a href="<?php echo base_url('index.php/Evaluation/Monitor/'); ?>'+response.eval[i].EvaluationID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"> MONITOR</a><button id="Delete'+response.eval[i].EvaluationID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"> DELETE</button></div></td>'
                                       +'</tr>';
                     }
                     if($.fn.DataTable.isDataTable("#tblEvaluation")){

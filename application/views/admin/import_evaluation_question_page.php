@@ -78,7 +78,6 @@
 		// 		snapOffset:65
     	// 	});
         // });
-    $("#tblQuestion").DataTable();
         $('#txtFile').change(function (e) {
              $("#txtFilename").val($("#txtFile")[0].files[0].name);
              var importFormData=new FormData($("#frmImport")[0]);
@@ -106,7 +105,7 @@
                                                         +'<td>'+_excelData[i].Category+'</td>'
                                                    +'</tr>';
                                  }
-                                 if ($.fn.DataTable.isDataTable("#tblImportUser")) {
+                                 if ($.fn.DataTable.isDataTable("#tblQuestion")) {
                                    $('#tblQuestion').DataTable().clear().destroy();
                                  }
                                  $("#tblQuestion tbody").html(_tableContent);

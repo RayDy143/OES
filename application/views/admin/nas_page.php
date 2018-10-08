@@ -141,7 +141,7 @@
                                     +'<td>'+_nas[i].IDNumber+'</td>'
                                     +'<td>'+_nas[i].Firstname+' '+_nas[i].Lastname+'</td>'
                                     +'<td>'+_nas[i].DepartmentName+'</td>'
-                                    +'<td><div data-role="buttongroup" class="row"><a href="<?php echo base_url('index.php/Nas/Info/'); ?>'+_nas[i].NasID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-pencil"></a><button id="Delete'+_nas[i].NasID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                    +'<td><div data-role="buttongroup" class="row pr-5 pl-5"><a href="<?php echo base_url('index.php/Nas/Info/'); ?>'+_nas[i].NasID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-pencil"> MANAGE</a><button id="Delete'+_nas[i].NasID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"> DELETE</button></div></td>'
                                +'</tr>'
                     }
                     if ($.fn.DataTable.isDataTable("#tblNas")) {

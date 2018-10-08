@@ -132,7 +132,7 @@
                                                 +'<td>'+_user[i].UserID+'</td>'
                                                 +'<td>'+_user[i].Email+'</td>'
                                                 +'<td>'+_user[i].DepartmentName+'</td>'
-                                                +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+_user[i].UserID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"></button><button id="Delete'+_user[i].UserID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                                +'<td><div data-role="buttongroup" class="mx-auto"><button id="Edit'+_user[i].UserID+'" class="button edit small bg-darkBlue fg-white ml-1 mr-1 mif-info"> INFO</button><button id="Delete'+_user[i].UserID+'" class="button delete small bg-darkRed fg-white ml-1 mr-1 mif-bin"> DELETE</button></div></td>'
                                           +'</tr>';
                         }else{
                             _tableContent+='<tr>'

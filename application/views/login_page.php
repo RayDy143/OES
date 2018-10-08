@@ -41,14 +41,14 @@
         }
     </style>
 </head>
-<body class="h-vh-100 bg-brandColor2">
-    <form id="frmLogin" class="login-form bg-white p-6 mx-auto border bd-default win-shadow"
+<body class="h-vh-100 bg-brandColor2" style="background-image:url('<?php echo base_url('assets/') ?>Login backgrounds.png');background-size:0100%, cover;">
+    <form id="frmLogin" class="login-form bg-dark p-6 mx-auto border bd-default win-shadow"
           data-role="validator"
           action="javascript:"
           data-clear-invalid="2000"
           data-on-error-form="invalidForm"
           data-on-validate-form="validateForm">
-        <h2 class="text-light">Login to OES</h2>
+        <h2 class="fg-white">Login to OES</h2>
         <hr class="thin mt-4 mb-4 bg-white">
         <div class="form-group">
             <input type="text" name="Email" data-role="input" data-prepend="<span class='mif-envelop'>" placeholder="Enter your email..." data-validate="required email">
@@ -57,8 +57,8 @@
             <input type="password" name="Password" data-role="input" data-prepend="<span class='mif-key'>" placeholder="Enter your password..." data-validate="required minlength=6">
         </div>
         <div class="form-group mt-10">
-            <button type="submit" class="button primary">Login</button>
-            <!-- <button type="button" class="button bg-darkRed fg-white place-right" name="btnForgotPass">Forgot Password</button> -->
+            <button type="submit" class="button bg-brandColor2 fg-white">Login</button>
+            <button type="button" class="button bg-darkRed fg-white place-right" name="btnForgotPass">Forgot Password</button>
         </div>
     </form>
 
@@ -72,12 +72,17 @@
                     </div>
                 </div>
                 <div class="dialog-actions">
-                    <a class="button alert place-right" href="javascript:history.back()">Abort</a>
+                    <button class="button alert place-right js-dialog-close" onclick="location.reload()">Abort</button>
                     <button id="btnVerify" class="button primary place-right">Verfiy</button>
                 </div>
             </form>
         </div>
 
+        <div class="info-box" data-role="infobox" id="loader" data-type="warning">
+            <div class="info-box-content">
+                Loading..
+            </div>
+        </div>
     <script src="<?php echo base_url(); ?>assets/metro/js/jquery-3.3.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/metro/js/metro.js"></script>
     <script>
@@ -133,6 +138,11 @@
             });
         }
         $(document).ready(function(){
+            var form  = $($('#frmLogin'));
+            form.addClass("ani-pass");
+            setTimeout(function(){
+                form.removeClass("ani-pass");
+            }, 1000);
             $('#btnVerify').click(function(){
                 $.ajax({
                     type: 'ajax',

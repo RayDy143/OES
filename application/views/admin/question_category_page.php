@@ -165,7 +165,7 @@ var catData=[];
                         _tableContent+='<tr>'
                                            +'<td>'+cat[i].CategoryID+'</td>'
                                            +'<td>'+cat[i].Category+'</td>'
-                                           +'<td><div data-role="buttongroup" class="row"><button id="Edit'+cat[i].CategoryID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-pencil"></button><button id="Delete'+cat[i].CategoryID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"></button></div></td>'
+                                           +'<td><div data-role="buttongroup" class="row"><button id="Edit'+cat[i].CategoryID+'" class="button edit small cell bg-darkBlue fg-white ml-1 mr-1 mif-pencil"> EDIT</button><button id="Delete'+cat[i].CategoryID+'" class="button delete cell small bg-darkRed fg-white ml-1 mr-1 mif-bin"> DELETE</button></div></td>'
                                        +'</tr>';
                     }
                     if($.fn.DataTable.isDataTable("#tblQuestionCategory")){

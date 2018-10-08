@@ -4,7 +4,7 @@
             <label class="place-right mt-1" for="">Select Schoolyear:</label>
         </div>
         <div class="cell">
-            <select class="filter" id="cmbFilterSchoolyear">
+            <select data-role="select" class="filter" id="cmbFilterSchoolyear">
                 <?php
                     if(isset($sy)){
                         foreach ($sy as $row) {
@@ -186,7 +186,7 @@
                                 _units="<strong class='fg-red'>Pending</strong>";
                             }
                             if(_lackingminutes>=12000||_lowestgrade>=3.0||_evaluationmean<=3.5){
-                                _remarks="<strong class='fg-red'>Recommendation for termination</strong>";
+                                _remarks="<strong class='fg-red'>Subject for termination</strong>";
                                 _units=0;
                             }
                             _tablecontent+='<tr>'
